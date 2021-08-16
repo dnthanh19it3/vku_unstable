@@ -40,14 +40,14 @@ class ZaloAPI extends Controller
         $msgBuilder->withUserId($user_id);
         $msgBuilder->withText("");
 
-        $actionOpenUrl = $msgBuilder->buildActionOpenURL('https://www.google.com');
-        $msgBuilder->withElement('Open Link Google', 'https://img.icons8.com/bubbles/2x/google-logo.png', 'Search engine', $actionOpenUrl);
+        $actionOpenUrl = $msgBuilder->buildActionOpenURL('http://www.vku.udn.vn');
+        $msgBuilder->withElement('Đại học CNTT và Truyền thông Việt Hàn', 'http://vku.udn.vn/nhaphoc2020/thutuc_nhaphoc.jpg', 'Trang chủ', $actionOpenUrl);
 
         $actionQueryShow = $msgBuilder->buildActionQueryShow('Xem điểm sinh viên');
-        $msgBuilder->withElement('Xem điểm', 'https://www.computerhope.com/jargon/q/query.jpg', '', $actionQueryShow);
+        $msgBuilder->withElement('Xem điểm sinh viên', 'https://firebasestorage.googleapis.com/v0/b/myvku-e6298.appspot.com/o/paper.png?alt=media&token=76404974-e310-45fc-923c-47b8101d6466', '', $actionQueryShow);
 
         $actionQueryHide = $msgBuilder->buildActionQueryHide('Xem học phí đã đóng');
-        $msgBuilder->withElement('Query Xem học phí sinh viêni', 'https://www.computerhope.com/jargon/q/query.jpg', '', $actionQueryHide);
+        $msgBuilder->withElement('Tra cứu học phí', 'https://firebasestorage.googleapis.com/v0/b/myvku-e6298.appspot.com/o/invoice.png?alt=media&token=e84e0019-25a5-4a4d-9095-256beb5716af', '', $actionQueryHide);
 
         $actionOpenPhone = $msgBuilder->buildActionOpenPhone('0919018791');
         $msgBuilder->withElement('Open Phone', 'https://cdn.iconscout.com/icon/premium/png-256-thumb/phone-275-123408.png', '', $actionOpenPhone);
