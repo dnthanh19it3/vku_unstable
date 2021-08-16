@@ -84,7 +84,7 @@ class ZaloAPI extends Controller
 
         $content_key = $data->message->text;
 
-        switch ($content_key):
+        switch ($content_key) {
             case "#phuhuynh":
                 $this->chamSocPhuHuynh($data->sender->id);
                 break;
@@ -94,8 +94,7 @@ class ZaloAPI extends Controller
             case "#tuyensinh":
                 $this->guiTinNhanText($data->sender->id);
                 break;
-
-
+        }
 
         return response(200);
     }
