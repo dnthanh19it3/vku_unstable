@@ -62,7 +62,7 @@ class ZaloAPI extends Controller
         dd($result);
     }
     function callback(Request $request){
-        $store = DB::table('table_zalo_callback')->insert(['body' => $request->message->text]);
+        $store = DB::table('table_zalo_callback')->insert(['body' => $request->getContent()]);
         return response(200);
     }
 }
