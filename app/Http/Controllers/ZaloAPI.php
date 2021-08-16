@@ -36,7 +36,7 @@ class ZaloAPI extends Controller
 
     public function guiTinNhanText($user_id)
     {
-        $msgBuilder = new MessageBuilder('list');
+        $msgBuilder = new MessageBuilder('text');
         $msgBuilder->withUserId($user_id);
         $msgBuilder->withText('Tính năng này đang được xây dựng và sẽ sớm có mặt trên cổng thôn tin VKU!');
 
@@ -90,8 +90,8 @@ class ZaloAPI extends Controller
         switch ($content_key) {
             case "#tuyensinh":
             case "#sinhvien":
-//                DB::table('table_zalo_callback')->insert(['body' => $this->guiTinNhanText($data->sender->id)]);
-            DB::table('table_zalo_callback')->insert(['body' => $this->chamSocPhuHuynh($data->sender->id)]);
+                DB::table('table_zalo_callback')->insert(['body' => $this->guiTinNhanText($data->sender->id)]);
+//            DB::table('table_zalo_callback')->insert(['body' => $this->chamSocPhuHuynh($data->sender->id)]);
                 break;
             case "#phuhuynh":
                 DB::table('table_zalo_callback')->insert(['body' => $this->chamSocPhuHuynh($data->sender->id)]);
