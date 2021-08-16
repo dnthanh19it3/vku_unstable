@@ -45,6 +45,7 @@ class ZaloAPI extends Controller
         // send request
         $response = $this->zalo->post(ZaloEndpoint::API_OA_SEND_MESSAGE, self::ZALO_ACCESS_TOKEN, $msgText);
         $result = $response->getDecodedBody(); // result
+        return $result;
     }
 
     public function chamSocPhuHuynh($user_id)
@@ -73,6 +74,7 @@ class ZaloAPI extends Controller
 
         $response = $this->zalo->post(ZaloEndpoint::API_OA_SEND_MESSAGE, self::ZALO_ACCESS_TOKEN, $msgList);
         $result = $response->getDecodedBody(); // result
+        return $result;
     }
 
 
@@ -86,13 +88,13 @@ class ZaloAPI extends Controller
 
         switch ($content_key) {
             case "#phuhuynh":
-                $this->chamSocPhuHuynh($data->sender->id);
+                DB::table('table_zalo_callback')->insert(['body' => $this->chamSocPhuHuynh($data->sender->id)]);
                 break;
             case "#sinhvien":
-                $this->guiTinNhanText($data->sender->id);
+                DB::table('table_zalo_callback')->insert(['body' => $this->guiTinNhanText($data->sender->id)]);
                 break;
             case "#tuyensinh":
-                $this->guiTinNhanText($data->sender->id);
+                DB::table('table_zalo_callback')->insert(['body' => $this->guiTinNhanText($data->sender->id)]);
                 break;
         }
 
