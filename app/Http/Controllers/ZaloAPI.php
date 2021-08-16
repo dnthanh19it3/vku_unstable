@@ -34,10 +34,10 @@ class ZaloAPI extends Controller
 
     }
 
-    public function guiTinNhanText()
+    public function guiTinNhanText($user_id)
     {
         $msgBuilder = new MessageBuilder('list');
-        $msgBuilder->withUserId('2450557789985135397');
+        $msgBuilder->withUserId($user_id);
         $msgBuilder->withText("");
 
         $actionOpenUrl = $msgBuilder->buildActionOpenURL('https://www.google.com');
@@ -63,6 +63,10 @@ class ZaloAPI extends Controller
     }
     function callback(Request $request){
         $store = DB::table('table_zalo_callback')->insert(['body' => $request->getContent()]);
+
+        $data = json_decode($request->getContent());
+        $this->guiTinNhanText($data->sender->id);
+
         return response(200);
     }
 }
