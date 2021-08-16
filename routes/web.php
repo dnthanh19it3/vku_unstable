@@ -135,5 +135,4 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
 Route::prefix('zalo_api')->group(function (){
     Route::get('get_follower', 'ZaloAPI@getDanhSachTheoDoi');
     Route::get('send_msg_text', 'ZaloAPI@guiTinNhanText');
-    Route::post('callback', 'ZaloAPI@callback');
 });
