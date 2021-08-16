@@ -38,6 +38,19 @@ class ZaloAPI extends Controller
     {
         $msgBuilder = new MessageBuilder('list');
         $msgBuilder->withUserId($user_id);
+        $msgBuilder->withText('Tính năng này đang được xây dựng và sẽ sớm có mặt trên cổng thôn tin VKU!');
+
+
+        $msgText = $msgBuilder->build();
+        // send request
+        $response = $this->zalo->post(ZaloEndpoint::API_OA_SEND_MESSAGE, self::ZALO_ACCESS_TOKEN, $msgText);
+        $result = $response->getDecodedBody(); // result
+    }
+
+    public function chamSocPhuHuynh($user_id)
+    {
+        $msgBuilder = new MessageBuilder('list');
+        $msgBuilder->withUserId($user_id);
         $msgBuilder->withText("");
 
         $actionOpenUrl = $msgBuilder->buildActionOpenURL('http://www.vku.udn.vn');
@@ -57,15 +70,32 @@ class ZaloAPI extends Controller
 
 
         $msgList = $msgBuilder->build();
+
         $response = $this->zalo->post(ZaloEndpoint::API_OA_SEND_MESSAGE, self::ZALO_ACCESS_TOKEN, $msgList);
         $result = $response->getDecodedBody(); // result
-        dd($result);
     }
+
+
+
     function callback(Request $request){
         $store = DB::table('table_zalo_callback')->insert(['body' => $request->getContent()]);
 
         $data = json_decode($request->getContent());
-        $this->guiTinNhanText($data->sender->id);
+
+        $content_key = $data->message->text;
+
+        switch ($content_key):
+            case "#phuhuynh":
+                $this->chamSocPhuHuynh($data->sender->id);
+                break;
+            case "#sinhvien":
+                $this->guiTinNhanText($data->sender->id);
+                break;
+            case "#tuyensinh":
+                $this->guiTinNhanText($data->sender->id);
+                break;
+
+
 
         return response(200);
     }
