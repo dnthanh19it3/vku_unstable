@@ -88,12 +88,12 @@ class ZaloAPI extends Controller
         DB::table('table_zalo_callback')->insert(['body' => $content_key]);
 
         switch ($content_key) {
-            case "#phuhuynh":
-                DB::table('table_zalo_callback')->insert(['body' => $this->chamSocPhuHuynh($data->sender->id)]);
-                break;
             case "#tuyensinh":
             case "#sinhvien":
                 DB::table('table_zalo_callback')->insert(['body' => $this->guiTinNhanText($data->sender->id)]);
+                break;
+            case "#phuhuynh":
+                DB::table('table_zalo_callback')->insert(['body' => $this->chamSocPhuHuynh($data->sender->id)]);
                 break;
         }
 
