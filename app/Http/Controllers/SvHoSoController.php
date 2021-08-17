@@ -42,38 +42,34 @@ class SvHosoController extends Controller
     }
 
     public function suahosoStore(Request $request){
-            $values1 = [
-                'dienthoai' => $request->dienthoai,
-                'dienthoaigiadinh' => $request->dienthoaigiadinh,
-            ];
+
             if($request->encoded_avatar){
                 $values3 = [
                     'avatar_temp' => $this->blobAvatarUpload($request->encoded_avatar, session('masv')),
                     'ma_bhyt'=> $request->ma_bhyt,
-                    'facebook' => $request->facebook
+                    'facebook' => $request->facebook,
+                    'dienthoai' => $request->dienthoai,
+                    'dienthoaigiadinh' => $request->dienthoaigiadinh
                 ];
             } else {
                 $values3 = [
                     'facebook' => $request->facebook,
-                    'ma_bhyt'=> $request->ma_bhyt
+                    'ma_bhyt'=> $request->ma_bhyt,
+                    'dienthoai' => $request->dienthoai,
+                    'dienthoaigiadinh' => $request->dienthoaigiadinh
                 ];
             }
 
-
-        foreach($values1 as $key => $value){
-            if(is_null($value)){
-                unset($values1[$key]);
-            }
-        }
         foreach($values3 as $key => $value){
             if(is_null($value)){
                 unset($values3[$key]);
             }
         }
-        $result1 = DB::table('table_sinhvien')->where('masv', session('masv'))->update($values1);
+
         $result3 = DB::table('table_sinhvien_chitiet')->where('masv', session('masv'))->update($values3);
 
-        if($result1 == 1 || $result3 == 1){
+
+        if($result3 == 1){
             if(isset($values3['avatar_temp'])){
                 pushNotifyTimeline(1, session('masv'), 'Hồ sơ', 'Cập nhật ảnh hồ sơ', 'Ảnh hồ sơ mới được cập nhật và chờ duyệt', Carbon::now());
             } else {
