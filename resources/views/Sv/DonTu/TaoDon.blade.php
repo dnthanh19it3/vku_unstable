@@ -14,22 +14,22 @@
     </div>
     <div class="applicant-content">
         <h6>Phòng đào tạo</h6>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 0])
+        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 1])
         <hr/>
         <h6>Phòng công tác sinh viên</h6>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 1])
+        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 2])
         <hr/>
         <h6>Phòng khảo thí</h6>
         <hr/>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 2])
+        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 3])
         <h6>Phòng kế hoạch tài chính</h6>
         <hr/>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 3])
-        <h6>Đoàn thanh niên</h6>
         @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 4])
+        <h6>Đoàn thanh niên</h6>
+        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 5])
         <hr/>
         <h6>Phòng khoa học công nghệ</h6>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 5])
+        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 6])
     </div>
 </div>
 @endsection
