@@ -21,35 +21,19 @@
                         </div>
                     </div>
                     </form>
-                    <table class="table table-bordered table-hover dataTable" id="dataTable" width="100%" cellspacing="0"
-                        role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                    <table class="table table-striped jambo_table bulk_action">
                         <thead>
-                            <tr role="row">
-                                <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                                    aria-sort="ascending" aria-label="Name: activate to sort column descending"
-                                    style="width:30px;">STTT
+                            <tr role="headings">
+                                <th class="column-title">STTT
                                 </th>
-                                <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                                    aria-sort="ascending" aria-label="Name: activate to sort column descending" style="">Tên
+                                <th class="column-title">Tên
                                     đơn
                                 </th>
-                                <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                                    aria-sort="ascending" aria-label="Name: activate to sort column descending"
-                                    style="width:120px;">Thời gian xử lý
+                                <th class="column-title">Thời gian xử lý
                                 </th>
-                                <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                                    aria-sort="ascending" aria-label="Name: activate to sort column descending"
-                                    style="width:160px">Hành động
+                                <th class="column-title">Hành động
                                 </th>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th rowspan="1" colspan="1">STT</th>
-                                <th rowspan="1" colspan="1">Tên hồ sơ</th>
-                                <th rowspan="1" colspan="1">Thời gian xử lý</th>
-                                <th rowspan="1" colspan="1">Hành động</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             @php
                                 $i = 0;

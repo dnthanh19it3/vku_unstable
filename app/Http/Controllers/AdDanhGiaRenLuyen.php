@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Imports\RenLuyenImport;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdDanhGiaRenLuyen extends Controller
 {
@@ -17,7 +17,7 @@ class AdDanhGiaRenLuyen extends Controller
     {
         $array = Excel::toArray(new RenLuyenImport, $request->file('excel_file'));
         $array_excel_data = array();
-        $regex_hocky = "/HK[1-2]\s20..-20../";
+        $regex_hocky = "/HK(\d)\s*(\d*)-(\d*)/";
         $regex_kyhoc = "/HK([1-2])/";
         $regex_namhoc = "/(HK)/";
         $array_hocky = array();
@@ -30,26 +30,29 @@ class AdDanhGiaRenLuyen extends Controller
                 array_push($array_excel_data, $item);
             }
         }
+
         session(['excel_data' =>$array_excel_data]);
+
+
         foreach ($array[0][6] as $key => $value){
-            if(preg_match_all($regex_hocky, $value)){
+            if($key > 4 && $value != null){
+                $output = null;
+                preg_match_all($regex_hocky, $value, $output);
+                $hocky = $output[1];
+                $nambatdau = $output[2];
+                $namketthuc = $output[3];
 
-                $hocky = substr($value, 2, 1);
-                $nambatdau = substr($value, 4, 4);
-                $namketthuc = substr($value, 9, 4);
 
-                $namhoc_key = DB::table('table_namhoc_hocky')
-                    ->where('nambatdau', $nambatdau)
-                    ->where('namketthuc', $namketthuc)
-                    ->where('hocky', $hocky)
-                    ->first();
-                if($namhoc_key != null){
                     $array_hocky[$key]['text'] = $value;
-                    $array_hocky[$key]['key'] = $namhoc_key->namhoc_key;
-                }
+                    $array_hocky[$key]['namhoc'] = $nambatdau[0]."-".$namketthuc[0];
+                    $array_hocky[$key]['hocky'] = $hocky[0];
             }
 
         }
+
+
+
+
 
         for($i = 7; $i < sizeof($array[0]); $i++){
             $item = $array[0][$i];
@@ -67,45 +70,34 @@ class AdDanhGiaRenLuyen extends Controller
             'array_lop' => $array_lop
         ]);
     }
+
+
     function  commitData(Request $request){
         $excel_data = session('excel_data');
         $hocky_data = session('hocky_data');
-        $lop_loc = $request->lop;
-        $output = array();
-        $excel_data_temp = array();
 
-        // Lọc
-        // Lọc theo lớp
-        if(!in_array( "all", $lop_loc)){
-            foreach ($lop_loc as $key => $item){
-                foreach ($excel_data as $key_excel => $excel_item){
-                    if($excel_item[4] == $item){
-                        array_push($excel_data_temp, $excel_item);
-                    }
-                }
-            }
-            $excel_data = $excel_data_temp;
-        }
+
+
+        $output = array();
+
+
 
 
         //Du lieu theo ca nhan
         foreach ($excel_data as $key => $sinhvien_data){
-            //Du lieu theo cot
-            if($request->hocky == "all"){
-                foreach ($hocky_data as $hocky_excelkey => $hocky){
-                    if($sinhvien_data[$hocky_excelkey] != null){
-                        array_push($output, [
-                            'masv' => $sinhvien_data[1],
-                            'namhoc_key' => $hocky['key'],
-                            'diem' => $sinhvien_data[$hocky_excelkey],
-                            'xeploai' => xepLoai($sinhvien_data[$hocky_excelkey])
-                        ]);
-                    }
+            foreach ($hocky_data as $hocky_excelkey => $hocky){
+                if($sinhvien_data[$hocky_excelkey] != null){
+                    array_push($output, [
+                        'masv' => $sinhvien_data[1],
+                        'namhoc' => $hocky['namhoc'],
+                        'hocky' => $hocky['hocky'],
+                        'diem' => $sinhvien_data[$hocky_excelkey],
+                        'xeploai' => xepLoai($sinhvien_data[$hocky_excelkey])
+                    ]);
                 }
-            } else {
-
             }
         }
+
 
 
         $insert_count= 0;
@@ -124,7 +116,8 @@ class AdDanhGiaRenLuyen extends Controller
 
             $check_exist = DB::table('table_danhgiarenluyen')
                 ->where('masv', $item['masv'])
-                ->where('namhoc_key', $item['namhoc_key'])
+                ->where('namhoc', $item['namhoc'])
+                ->where('hocky', $item['hocky'])
                 ->first();
             if($check_exist != null){
                 if($request->capnhat){
@@ -166,52 +159,65 @@ class AdDanhGiaRenLuyen extends Controller
         ]);
     }
     function xemDiemRenluyen(Request $request){
-        $diemrenluyen_chung = null;
-        $diemrenluyen_hocky = null;
-        $diemrenluyen_chung_ds = null;
+        $hocky = null;
+        $namhoc = null;
+        $danhsach = null;
+        $lop_dangchon = null;
         $lop = DB::table('table_lopsh')->get();
-        $hocky = DB::table('table_danhgiarenluyen')
-            ->join('table_namhoc_hocky', 'table_danhgiarenluyen.namhoc_key', '=', 'table_namhoc_hocky.namhoc_key')
-            ->join('table_sinhvien', 'table_danhgiarenluyen.masv', '=', 'table_sinhvien.masv')
-            ->where('table_sinhvien.lopsh_id', '=', $request->lop)
-            ->select(['table_danhgiarenluyen.namhoc_key', 'table_namhoc_hocky.hocky','table_namhoc_hocky.nambatdau','table_namhoc_hocky.namketthuc'])
-            ->groupBy('table_danhgiarenluyen.namhoc_key')
-            ->get();
 
-        $stmt = DB::table('table_danhgiarenluyen')
-            ->join('table_sinhvien', 'table_danhgiarenluyen.masv', '=', 'table_sinhvien.masv')
-            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id');
+        $sinhvien = DB::table('table_sinhvien')->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id');
+
+//        $stmt = DB::table('table_danhgiarenluyen')
+//            ->join('table_sinhvien', 'table_danhgiarenluyen.masv', '=', 'table_sinhvien.masv')
+//            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id');
 
         if(isset($request->lop)){
-            $stmt = $stmt->where('table_sinhvien.lopsh_id', '=', $request->lop);
+            $namhoc = DB::table('table_danhgiarenluyen')
+                ->join('table_sinhvien', 'table_danhgiarenluyen.masv', '=', 'table_sinhvien.masv')
+                ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
+                ->where('table_lopsh.id', 'like', $request->lop)
+                ->distinct()
+                ->get('table_danhgiarenluyen.namhoc');
+
+        }
+        if(isset($request->lop) && isset($request->hocky) && isset($request->namhoc)){
+            $danhsach = DB::table('table_danhgiarenluyen')
+                ->join('table_sinhvien', 'table_danhgiarenluyen.masv', '=', 'table_sinhvien.masv')
+                ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
+                ->where('table_lopsh.id', '=', $request->lop)
+                ->where('table_danhgiarenluyen.namhoc', '=', $request->namhoc)
+                ->where('table_danhgiarenluyen.hocky', '=', $request->hocky)
+                ->get();
         }
 
-        if($request->hocky != "all"){
-            $diemrenluyen_hocky = $stmt
-                ->where('table_danhgiarenluyen.namhoc_key', '=', $request->hocky)
-                ->get();
-        } elseif($request->hocky == "all") {
-//            $diemrenluyen_chung = DB::select("select `table_sinhvien`.`hodem`, `table_sinhvien`.`ten`, `table_sinhvien`.`masv`, `table_lopsh`.`tenlop` from `table_danhgiarenluyen` inner join `table_sinhvien` on `table_danhgiarenluyen`.`masv` = `table_sinhvien`.`masv` inner join `table_lopsh` on `table_sinhvien`.`lopsh_id` = `table_lopsh`.`id` where `table_sinhvien`.`lopsh_id` = $request->lop group by `table_sinhvien`.`masv`");
-            $diemrenluyen_chung = $stmt->get();
-            $diemrenluyen_chung_ds = $stmt
-                ->select('table_sinhvien.hodem','table_sinhvien.ten','table_sinhvien.masv','table_lopsh.tenlop')
-                ->groupBy('table_sinhvien.masv')
-                ->get();
 
-//            dd($diemrenluyen_chung);
-            /*
-             * Go to your config/database.php folder. In mysql configuration array, change strict => true to strict => false, and everything will work nicely.
-             * */
-        }
+
+
+
+//        if(isset($request->lop)){
+//            $sinhvien
+//                ->where('table_lopsh.tenlop', 'like', '17BA')
+//                ->get(['table_sinhvien.masv', 'table_sinhvien.masv', 'table_sinhvien.hodem', 'table_sinhvien.ten']);
+//            }
+        //            $stmt = $stmt->where('table_sinhvien.lopsh_id', '=', $request->lop);
+
+//        $danhsachdiem = ($stmt->get(['table_sinhvien.masv','table_sinhvien.hodem', 'table_sinhvien.ten', 'table_lopsh.tenlop', 'table_danhgiarenluyen.diem', 'table_danhgiarenluyen.namhoc', 'table_danhgiarenluyen.hocky']));
+
+//        foreach ((array) $sinhvien as $key1 => $value1){
+//            foreach ($danhsachdiem as $key2 => $value2){
+//                if('$value1->masv == $value20->masv'){
+//                    $value1["Học kỳ" . $value2->hocky . "Năm học " . $value2->namhoc] = $value2;
+//                }
+//            }
+//        }
 
         return view('admin.DiemRenLuyen.XemDiem')->with([
             'lop' => $lop,
+            'namhoc' => $namhoc,
             'lop_dangchon' => $request->lop,
-            'hocky' => $hocky,
-            'hocky_dangchon' => $request->hocky,
-            'diemrenluyen_hocky' => $diemrenluyen_hocky,
-            'diemrenluyen_chung' => $diemrenluyen_chung,
-            'diemrenluyen_chung_ds' => $diemrenluyen_chung_ds
+            'danhsach' => $danhsach,
+            'selected_namhoc' => $request->namhoc,
+            'selected_hocky' => $request->hocky
         ]);
     }
 }

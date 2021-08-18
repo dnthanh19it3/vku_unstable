@@ -44,6 +44,7 @@
                                     <th>
                                         <div class="icheckbox_flat-green" style="position: relative;"><input type="checkbox" id="check-all" class="flat" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
                                     </th>
+                                    <th class="column-title">STT</th>
                                     <th class="column-title">Mã sinh viên</th>
                                     <th class="column-title">Họ và tên</th>
                                     <th class="column-title">Giới tính</th>
@@ -66,6 +67,7 @@
                                             <div class="icheckbox_flat-green" style="position: relative;"><input type="checkbox" class="flat" name="table_records" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
                                         </td>
                                         <td class=" ">{{$key+1}}</td>
+                                        <td>{{$item->masv}}</td>
                                         <td class=" ">{{$item->hodem . ' ' .$item->ten}}</td>
                                         <td class=" ">{{$item->gioitinh = 0 ? "Nữ" : "Nam"}}</i></td>
                                         <td class=" ">{{$item->tenlop}}</td>

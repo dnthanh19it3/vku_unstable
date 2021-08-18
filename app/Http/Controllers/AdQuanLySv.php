@@ -53,7 +53,6 @@ class AdQuanLySv extends Controller
         $anhdatailen = DB::table('table_sinhvien_anhcu')->where('masv', '=', $masv)->get();
         $timeline = DB::table('table_sinhvien_timeline')->where('masv', $masv)->orderBy('thoigian', 'DESC')->get();
         $renluyen = DB::table('table_danhgiarenluyen')
-            ->join('table_namhoc_hocky', 'table_danhgiarenluyen.namhoc_key', '=', 'table_namhoc_hocky.namhoc_key')
             ->where('table_danhgiarenluyen.masv', $masv)
             ->get();
         if (isset($sinhvien->avatar)) {

@@ -135,7 +135,6 @@ class SvHosoController extends Controller
         $timeline = DB::table('table_sinhvien_timeline')->where('masv', session('masv'))->orderBy('thoigian', 'DESC')->get();
 
         $renluyen = DB::table('table_danhgiarenluyen')
-            ->join('table_namhoc_hocky', 'table_danhgiarenluyen.namhoc_key', '=', 'table_namhoc_hocky.namhoc_key')
             ->where('table_danhgiarenluyen.masv', session('masv'))
             ->get();
 

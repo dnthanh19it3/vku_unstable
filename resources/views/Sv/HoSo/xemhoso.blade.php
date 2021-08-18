@@ -316,8 +316,8 @@
                                         <thead>
                                         <tr class="headings">
                                             <th class="column-title">STT</th>
-                                            <th class="column-title">Học kì</th>
                                             <th class="column-title">Năm học</th>
+                                            <th class="column-title">Học kì</th>
                                             <th class="column-title">Điểm</th>
                                             <th class="column-title">Xếp loại</th>
                                         </tr>
@@ -330,8 +330,8 @@
                                         @forelse($renluyen as $item)
                                             <tr role="row" class="odd">
                                                 <td class="sorting_1">{{ $i += 1 }}</td>
-                                                <td>{{ $item->hocky}}</td>
-                                                <td>{{ $item->nambatdau.'-'.$item->namketthuc }}</td>
+                                                <td>{{ $item->namhoc}}</td>
+                                                <td>{{ $item->hocky }}</td>
                                                 <td>{{ $item->diem }}</td>
                                                 <td>{{ $item->xeploai }}</td>
                                             </tr>
@@ -339,7 +339,7 @@
                                             <tr>
                                                 <td colspan="7">
                                                     <div class="alert alert-danger">
-                                                       Chưa có đánh giá rèn luyện
+                                                        Chưa có đánh giá rèn luyện
                                                     </div>
                                                 </td>
                                             </tr>

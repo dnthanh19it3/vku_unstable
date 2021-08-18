@@ -195,7 +195,7 @@ class AdDonTuController extends Controller
             }
         }
 
-        return ($danhsachdon);
+        return $danhsachdon;
     }
 
     // View xem hồ sơ
