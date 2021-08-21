@@ -23,11 +23,18 @@ class AdDonTuController extends Controller
     */
 
     //View thêm đơn
-    function themDonIndex()
+    function themDonIndex(Request $request)
     {
         $filedList = DB::table('table_maudon_chitiet')->get();
         $fileType = DB::table('table_maudon_loai')->get();
         $phongban = DB::table('table_phongban')->get();
+
+        if(isset($request->add)){
+            session()->push('stack', $request->add);
+        }
+        if(isset($request->reset)){
+            session()->forget('stack');
+        }
         return view('Admin/DonTu/TaoDon')->with([
             'listTruong' => $filedList,
             'fileType' => $fileType,
@@ -60,6 +67,21 @@ class AdDonTuController extends Controller
             'donvi_id' => $request->donvi_id
         ];
         $response1 = DB::table('table_maudon')->insertGetId($value1);
+        pushNotify($response1);
+        return redirect()->back();
+    }
+    function maudonUpdate(Request $request, $mau_id)
+    {
+        $value1 = [
+            'tenmaudon' => $request->tenmaudon,
+            'truong' => $request->truong,
+            'dieukhoan' => $request->dieukhoan,
+            'thoigianxuly' => $request->thoigianxuly,
+            'loai_id' => $request->loai_id,
+            'mota' => $request->mota,
+            'donvi_id' => $request->donvi_id
+        ];
+        $response1 = DB::table('table_maudon')->where('maudon_id', $mau_id)->update($value1);
         pushNotify($response1);
         return redirect()->back();
     }

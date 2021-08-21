@@ -42,6 +42,12 @@
                         <li><a href="{{route("admin.danhgiarenluyen.xem")}}"> Xem </a></li>
                     </ul>
                 </li>
+                <li><a><i class="fa fa-home"></i> Quản lý họp lớp <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{{route("ad.hoplop.listhoplop")}}"> Tổng hợp kết quả </a></li>
+                        <li><a href="{{route("ad.hoplop.tonghopphanhoi")}}"> Tổng hợp phản hồi </a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
 

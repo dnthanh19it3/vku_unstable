@@ -55,10 +55,18 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-12">
-                                <input type="text" name="truong" id="truong" hidden>
-                                <h6>Trường dữ liệu</h6>
+                                <input type="text" name="truong" id="truong" hidden="true">
+                                <a href="?reset=1">Hello</a>
                                 <ol id="listTruongSelected">
-
+                                    @if(session('stack') !== null)
+                                        @foreach(session('stack') as $key1 => $value1)
+                                            @foreach($listTruong as $key2 => $value2)
+                                                @if($value2->id == $value1)
+                                                    <li>{{$value2->tentruong}}</li>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
+                                    @endif
                                 </ol>
                             </div>
                         </div>
@@ -161,6 +169,7 @@
 
 @section('custom-script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -204,7 +213,8 @@
                 var textnode = document.createTextNode(item.tentruong); // Create a text node
                 node.setAttribute("role", "button");
                 node.setAttribute("value", item.id);
-                node.setAttribute("onClick", "themTruong(" + item.id +")");
+                node.setAttribute("onClick", "themTruong(" + item.id + ",'" + item.tentruong +
+                    "')");
                 node.appendChild(textnode); // Append the text to <li>
                 parentdiv.append(node);
             }
@@ -228,7 +238,8 @@
                     var textNode = document.createTextNode(rs.tentruong);
                     liNode.setAttribute('role', 'button');
                     liNode.setAttribute("id", "node" + rs.id);
-                    liNode.setAttribute("onClick", "themTruong("+rs.id+")");
+                    liNode.setAttribute("onClick", "themTruong(" + rs.id + ",'" + rs.tentruong +
+                        "')");
                     $('#tentruong').val('');
                     liNode.appendChild(textNode);
                     reload();
@@ -243,80 +254,19 @@
         });
     </script>
     <script type="text/javascript">
-        var listtruong = [];
+        var listtruong = '';
         var truong = $('#truong');
         var listtruongContainer = $('#listtruongContainer');
 
-        function themTruong(truongid) {
-            listtruong.push(truongid);
-            renderDaChon();
-        }
-        function xoaTruong(truongid) {
-            for(let i = 0; i < listtruong.length; i++){
-                if ( listtruong[i] === truongid) {
-                    listtruong.splice(i, 1);
-                }
-            }
-            renderDaChon();
-        }
-        function renderDaChon(){
-            $('#listTruongSelected').empty();
-            var ajaxList;
-            $.ajax({
-                url: '{{ route('ajax_searchtruong') }}',
-                type: "GET",
-                dataType: 'text',
-                data: {
-                    name: ""
-                }
-            }).done(function(result) {
-                ajaxList = JSON.parse(result);
-                for ( let i = 0; i < listtruong.length; i++){
-                    for (let k = 0; k < ajaxList.length; k++){
-                        if(ajaxList[k].id == listtruong[i]){
-                            // add node to selected list
-                            var linode = document.createElement('li');
-                            var node = document.createTextNode(ajaxList[k].tentruong);
-                            let upBtn = document.createElement('button');
-                            let deleteBtn = document.createElement('button');
-                            deleteBtn.setAttribute('onclick', 'xoaTruong('+ ajaxList[k].id +')');
-                            deleteBtn.setAttribute('type', 'button');
-                            deleteBtn.innerHTML = "<i class='fas fa-trash'></i>";
-                            deleteBtn.classList.add("btn");
-                            deleteBtn.classList.add("btn-sm");
-                            deleteBtn.classList.add("btn-primary");
-                            deleteBtn.classList.add("ml-1");
-
-                            upBtn.setAttribute('onclick', 'xoaTruong('+ ajaxList[k].id +')');
-                            upBtn.setAttribute('type', 'button');
-                            upBtn.innerHTML = "+";
-                            upBtn.classList.add("btn");
-                            upBtn.classList.add("btn-sm");
-                            upBtn.classList.add("btn-primary");
-
-                            linode.appendChild(node);
-                            linode.appendChild(deleteBtn);
-                            // linode.appendChild(upBtn);
-
-                            $('#listTruongSelected').append(linode);
-                        }
-                    }
-                }
-            });
-            arrayToString();
-        }
-        function arrayToString(){
-            let truong = $("#truong");
-            let string = "";
-            for ( let i = 0; i < listtruong.length; i++){
-                if(string == ""){
-                    string += listtruong[i];
-                } else {
-                    string += "," + listtruong[i]
-                }
-            }
-            console.log(string);
-            truong.val(string);
+        function themTruong(truongid, tentruong) {
+            listtruong = listtruong += truongid + ',';
+            truong.val(listtruong);
+            $('#node' + truongid).remove();
+            // add node to selected list
+            var linode = document.createElement('li');
+            var node = document.createTextNode(tentruong);
+            linode.appendChild(node);
+            $('#listTruongSelected').append(linode);
         }
     </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>

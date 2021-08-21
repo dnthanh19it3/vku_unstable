@@ -1,0 +1,501 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+$mobile-width: 480px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin mobile { @media (max-width: #{$mobile-width - 1px}) {
+  @content;
+}
+}
+
+@mixin tablet { @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+  @content;
+}
+}
+
+@mixin desktop {   @media (min-width: #{$desktop-width}) {
+  @content;
+}
+}
+
+* {
+  font-family:system-ui;
+}
+a.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.1;
+}
+
+.custom-file-container {
+  label {
+    font-size: 12px;
+  }
+}
+
+.listtruong {
+  height: 300px;
+  ul {
+    padding: 8px 16px;
+    list-style: none;
+    overflow: scroll;
+    width: 100%;
+    height: 100%;
+    li {
+      display:block;
+      font-size: 14px;
+      font-weight:400;
+    }
+  }
+}
+
+.hoso_block{
+  .title{
+    display: block;
+    font-size: 16px;
+    width: 50%;
+    height: auto;
+  }
+  .content{
+    display: block;
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+.profile_img_side {
+  object-fit: cover;
+  width: 50px !important;
+  height: 50px !important;
+}
+.profile-leftpanel {
+  background: #fff;
+  padding: 16px;
+  ul{
+    margin-top: 3px;
+    padding: 0;
+    li{
+      list-style: none;
+      font-size: 16px;
+      padding: 8px;
+      margin-bottom: 3px;
+    }
+    li:hover & li:visited{
+      background-color: #CCD0D7;
+    }
+    .selected {
+      background-color: #CCD0D7;
+      color: #000;
+      a {
+        color: #0c5460;
+      }
+    }
+  }
+}
+.profile-mainpanel{
+  background: #fff;
+  padding: 16px;
+}
+
+//Danh sach don sv
+.danhsachdon {
+  display: block;
+  li {
+    font-size: 14px;
+    width: 50%;
+    list-style: none;
+    counter-increment: my-awesome-counter;
+    display: inline-block;
+    width: 40%;
+    @include mobile {
+      width: 100%;
+    }
+    @include tablet {
+      width: 100%;
+    }
+    a {
+      font-weight: 500;
+    }
+  }
+  li::before {
+    content: counter(my-awesome-counter);
+    //background: #1abb9c;
+    background: #65aee0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 2rem;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+    margin-bottom: 4px;
+  }
+
+}
+
+.list-widget-container {
+  display: block;
+  padding: 0;
+  margin: 4px 4px 4px 0px;
+  li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    a {
+      display: block;
+      font-size: 16px;
+      padding: 4px 8px;
+      min-width: 100px;
+      text-align: center;
+    }
+    a.current {
+      border-bottom: 3px solid #00ba94;
+      font-weight: 500;
+    }
+
+  }
+
+}
+//Đơn timeline CSS
+
+.tracking-detail {
+  padding:3rem 0
+}
+#tracking {
+  margin-bottom:1rem
+}
+[class*=tracking-status-] p {
+  margin:0;
+  font-size:1.1rem;
+  color:#fff;
+  text-transform:uppercase;
+  text-align:center
+}
+[class*=tracking-status-] {
+  padding:1.6rem 0
+}
+.tracking-status-intransit {
+  background-color:#65aee0
+}
+.tracking-status-outfordelivery {
+  background-color:#f5a551
+}
+.tracking-status-deliveryoffice {
+  background-color:#f7dc6f
+}
+.tracking-status-delivered {
+  background-color:#4cbb87
+}
+.tracking-status-attemptfail {
+  background-color:#b789c7
+}
+.tracking-status-error,.tracking-status-exception {
+  background-color:#d26759
+}
+.tracking-status-expired {
+  background-color:#616e7d
+}
+.tracking-status-pending {
+  background-color:#ccc
+}
+.tracking-status-inforeceived {
+  background-color:#214977
+}
+.tracking-list {
+  border:1px solid #e5e5e5
+}
+.tracking-item {
+  border-left:1px solid #e5e5e5;
+  position:relative;
+  padding:2rem 1.5rem .5rem 2.5rem;
+  font-size:.9rem;
+  margin-left:3rem;
+  min-height:5rem
+}
+.tracking-item:last-child {
+  padding-bottom:4rem
+}
+.tracking-item .tracking-date {
+  margin-bottom:.5rem
+}
+.tracking-item .tracking-date span {
+  color:#888;
+  font-size:85%;
+  padding-left:.4rem
+}
+.tracking-item .tracking-content {
+  padding:.5rem .8rem;
+  background-color:#f4f4f4;
+  border-radius:.5rem
+}
+.tracking-item .tracking-content span {
+  display:block;
+  color:#888;
+  font-size:85%
+}
+.tracking-item .tracking-icon {
+  line-height:2.6rem;
+  position:absolute;
+  left:-1.3rem;
+  width:2.6rem;
+  height:2.6rem;
+  text-align:center;
+  border-radius:50%;
+  font-size:1.1rem;
+  background-color:#fff;
+  color:#fff
+}
+.tracking-item .tracking-icon.status-sponsored {
+  background-color:#f68
+}
+.tracking-item .tracking-icon.status-delivered {
+  background-color:#4cbb87
+}
+.tracking-item .tracking-icon.status-outfordelivery {
+  background-color:#f5a551
+}
+.tracking-item .tracking-icon.status-deliveryoffice {
+  background-color:#f7dc6f
+}
+.tracking-item .tracking-icon.status-attemptfail {
+  background-color:#b789c7
+}
+.tracking-item .tracking-icon.status-exception {
+  background-color:#d26759
+}
+.tracking-item .tracking-icon.status-inforeceived {
+  background-color:#214977
+}
+.tracking-item .tracking-icon.status-intransit {
+  color:#e5e5e5;
+  border:1px solid #e5e5e5;
+  font-size:.6rem
+}
+@media(min-width:992px) {
+  .tracking-item {
+    margin-left:10rem
+  }
+  .tracking-item .tracking-date {
+    position:absolute;
+    left:-10rem;
+    width:7.5rem;
+    text-align:right
+  }
+  .tracking-item .tracking-date span {
+    display:block
+  }
+  .tracking-item .tracking-content {
+    padding:0;
+    background-color:transparent
+  }
+}
+//Đơn từ
+.applicant-cover {
+  display: block;
+  width: 100%;
+  padding: 40px;
+  background-color: #65aee0;
+}
+.img-paper{
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 60px;
+  margin-left: 16px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+.thongtindon {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  width: 100%;
+  height: auto;
+  align-items: flex-start;
+  justify-content: center;
+}
+.thongtindon-phai {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  width: 100%;
+  height: 100%;
+  align-items: flex-end;
+  justify-content: center;
+  color: white;
+}
+.applicant-content {
+  background-color: #fff;
+  padding: 40px
+}
+
+.vien-net-dut {
+  border-bottom: 1px dashed #CCD0D7;
+}
+.marterial-shadow {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+
+// Admin xem đơn
+
+.title_danhmuc {
+  padding-left: 1rem;
+  text-transform: uppercase;
+}
+.title_danhmuc-grey {
+  border-left: 3px solid grey;
+}
+.title_danhmuc-blue {
+  border-left: 3px solid #65aee0;
+}
+.title_danhmuc-orange {
+  border-left: 3px solid #ffc107;
+}
+.title_danhmuc-red {
+  border-left: 3px solid #dc3545;
+}
+// Item đơn
+
+.itemdon {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 3px;
+  border-radius: 5px;
+  padding: 8px;
+  .dinhdanh {
+    flex-grow: 3;
+    .tennguoinop {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .tendon {
+      font-size: 14px;
+      padding-left: 12px;
+    }
+  }
+  .thongtin {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-grow: 0;
+    width: 100px;
+  }
+}
+.itemdon-normal {
+  background-color: #f9f9f9;
+}
+.itemdon-warm {
+  background-color: rgba(255, 193, 7, 0.15);
+}
+.itemdon-danger {
+  background-color: rgba(220, 53, 69, 0.15);
+}
+.itemdon:hover{
+  background-color: #f5f5f5;
+}
+//Hop lop
+.list_thang {
+  margin: 8px 16px 8px 16px;
+  padding: 0;
+  list-style: none;
+  li {
+    display: block;
+    font-size: 16px;
+    padding: 4px;
+    margin-bottom: 3px;
+    h6 {
+      display: inline-block;
+    }
+  }
+  .hoanthanh {
+    border-left: 3px solid #4cbb87;
+  }
+  .choxacminh {
+    border-left: 3px solid #65aee0;
+  }
+  .thieu {
+    border-left: 3px solid #dc3545;
+  }
+  .chuadenhan {
+    border-left: 3px solid #bcbcbc;
+  }
+}
+
+// Phan hoi CSS
+.phan-hoi-info {
+  display: block;
+  .ma-phan-hoi {
+    font-size: 24px;
+    display: block;
+  }
+  .trang-thai-badge {
+    display: inline-block;
+    border-radius: 30px;
+    padding: 4px 8px;
+  }
+  .trang-thai-badge-open {
+    color: #0b7ec4;
+    border: 1px solid #0b7ec4;
+  }
+  .trang-thai-badge-open::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+  .trang-thai-badge-close::before {
+    font-family: "Font Awesome 5 Free"; font-weight: 400; content: "\f1ea";
+  }
+  .trang-thai-badge-close {
+    color: #a80f00;
+    border: 1px solid #a80f00;
+  }
+  .trang-thai-badge-close::before {
+    font-family: "Font Awesome 5 Free"; font-weight: 400; content: "\f1ea";
+  }
+  .lop {
+    font-size: 16px;
+    font-weight: 500;
+    display: inline-block;
+  }
+}
+.phan-hoi-content {
+  .gopy-lop {
+    padding: 8px 16px;
+    border-left: 2px solid #e6e9ed;
+    .phan-hoi-nha-truong {
+      .content {
+        margin-left: 1.5rem;
+      }
+    }
+  }
+}
+
+#listTruongSelected {
+  margin-left: 0;
+  padding: 16px 8px;
+  li {
+    display: inline-block;
+    width: fit-content;
+    block-size: fit-content;
+    height: auto;
+    padding: 4px 8px;
+    margin-right: 8px;
+    color: white;
+    border-radius: 99px;
+    background-color: #0b7ec4;
+    margin-bottom: 1rem;
+    button {
+      background-color: white;
+      color: #0b7ec4;
+      border-radius: 99px;
+    }
+  }
+}

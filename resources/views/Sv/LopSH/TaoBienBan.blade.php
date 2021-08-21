@@ -4,6 +4,7 @@
 @endsection
 @section('body')
     <div class="row">
+        </div>
         <div class="col-md-12">
             <div class="x_panel">
                 <div class="x_title">
@@ -22,6 +23,7 @@
                                             <i class="fa fa-calendar"></i>
                                         </div>
                                     </div>
+                                    <input id="thang" name="thang" type="text" class="form-control" hidden value="{{$thang}}">
                                     <input id="thoigianhop" name="thoigianhop" type="datetime-local" class="form-control">
                                 </div>
                             </div>
@@ -66,4 +68,29 @@
             </div>
         </div>
     </div>
+@endsection
+@section('custom-script')
+    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create( document.querySelector('#chuongtrinh' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector( '#noidung' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector( '#gopy' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+        ClassicEditor
+            .create( document.querySelector( '#nhanxet_gvcn' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
 @endsection

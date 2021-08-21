@@ -1,5 +1,6 @@
-@import url(https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap);
-* {
+@import url(https://fonts.googleapis.com/css2?family=Quicksand:wght@300;
+
+400;500;600;700&display=swap);* {
   font-family: system-ui;
 }
 
@@ -16,6 +17,7 @@ a.disabled {
 .listtruong {
   height: 300px;
 }
+
 .listtruong ul {
   padding: 8px 16px;
   list-style: none;
@@ -23,6 +25,7 @@ a.disabled {
   width: 100%;
   height: 100%;
 }
+
 .listtruong ul li {
   display: block;
   font-size: 14px;
@@ -35,6 +38,7 @@ a.disabled {
   width: 50%;
   height: auto;
 }
+
 .hoso_block .content {
   display: block;
   font-size: 20px;
@@ -52,23 +56,28 @@ a.disabled {
   background: #fff;
   padding: 16px;
 }
+
 .profile-leftpanel ul {
   margin-top: 3px;
   padding: 0;
 }
+
 .profile-leftpanel ul li {
   list-style: none;
   font-size: 16px;
   padding: 8px;
   margin-bottom: 3px;
 }
+
 li:hover .profile-leftpanel ul li:visited {
   background-color: #CCD0D7;
 }
+
 .profile-leftpanel ul .selected {
   background-color: #CCD0D7;
   color: #000;
 }
+
 .profile-leftpanel ul .selected a {
   color: #0c5460;
 }
@@ -81,6 +90,7 @@ li:hover .profile-leftpanel ul li:visited {
 .danhsachdon {
   display: block;
 }
+
 .danhsachdon li {
   font-size: 14px;
   width: 50%;
@@ -89,19 +99,23 @@ li:hover .profile-leftpanel ul li:visited {
   display: inline-block;
   width: 40%;
 }
+
 @media (max-width: 479px) {
   .danhsachdon li {
     width: 100%;
   }
 }
+
 @media (min-width: 768px) and (max-width: 1023px) {
   .danhsachdon li {
     width: 100%;
   }
 }
+
 .danhsachdon li a {
   font-weight: 500;
 }
+
 .danhsachdon li::before {
   content: counter(my-awesome-counter);
   background: #65aee0;
@@ -121,11 +135,13 @@ li:hover .profile-leftpanel ul li:visited {
   padding: 0;
   margin: 4px 4px 4px 0px;
 }
+
 .list-widget-container li {
   display: inline-block;
   margin: 0;
   padding: 0;
 }
+
 .list-widget-container li a {
   display: block;
   font-size: 16px;
@@ -133,6 +149,7 @@ li:hover .profile-leftpanel ul li:visited {
   min-width: 100px;
   text-align: center;
 }
+
 .list-widget-container li a.current {
   border-bottom: 3px solid #00ba94;
   font-weight: 500;
@@ -178,7 +195,8 @@ li:hover .profile-leftpanel ul li:visited {
   background-color: #b789c7;
 }
 
-.tracking-status-error, .tracking-status-exception {
+.tracking-status-error,
+.tracking-status-exception {
   background-color: #d26759;
 }
 
@@ -201,8 +219,8 @@ li:hover .profile-leftpanel ul li:visited {
 .tracking-item {
   border-left: 1px solid #e5e5e5;
   position: relative;
-  padding: 2rem 1.5rem 0.5rem 2.5rem;
-  font-size: 0.9rem;
+  padding: 2rem 1.5rem .5rem 2.5rem;
+  font-size: .9rem;
   margin-left: 3rem;
   min-height: 5rem;
 }
@@ -212,19 +230,19 @@ li:hover .profile-leftpanel ul li:visited {
 }
 
 .tracking-item .tracking-date {
-  margin-bottom: 0.5rem;
+  margin-bottom: .5rem;
 }
 
 .tracking-item .tracking-date span {
   color: #888;
   font-size: 85%;
-  padding-left: 0.4rem;
+  padding-left: .4rem;
 }
 
 .tracking-item .tracking-content {
-  padding: 0.5rem 0.8rem;
+  padding: .5rem .8rem;
   background-color: #f4f4f4;
-  border-radius: 0.5rem;
+  border-radius: .5rem;
 }
 
 .tracking-item .tracking-content span {
@@ -277,7 +295,7 @@ li:hover .profile-leftpanel ul li:visited {
 .tracking-item .tracking-icon.status-intransit {
   color: #e5e5e5;
   border: 1px solid #e5e5e5;
-  font-size: 0.6rem;
+  font-size: .6rem;
 }
 
 @media (min-width: 992px) {
@@ -301,6 +319,7 @@ li:hover .profile-leftpanel ul li:visited {
     background-color: transparent;
   }
 }
+
 .applicant-cover {
   display: block;
   width: 100%;
@@ -315,27 +334,46 @@ li:hover .profile-leftpanel ul li:visited {
   padding: 16px;
   border-radius: 60px;
   margin-left: 16px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 .thongtindon {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   margin-left: 16px;
   width: 100%;
   height: auto;
-  align-items: flex-start;
-  justify-content: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .thongtindon-phai {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   margin-left: 16px;
   width: 100%;
   height: 100%;
-  align-items: flex-end;
-  justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   color: white;
 }
 
@@ -349,7 +387,8 @@ li:hover .profile-leftpanel ul li:visited {
 }
 
 .marterial-shadow {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 .title_danhmuc {
@@ -374,32 +413,61 @@ li:hover .profile-leftpanel ul li:visited {
 }
 
 .itemdon {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
   margin-bottom: 3px;
   border-radius: 5px;
   padding: 8px;
 }
+
 .itemdon .dinhdanh {
-  flex-grow: 3;
+  -webkit-box-flex: 3;
+      -ms-flex-positive: 3;
+          flex-grow: 3;
 }
+
 .itemdon .dinhdanh .tennguoinop {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   font-size: 16px;
   font-weight: 500;
 }
+
 .itemdon .dinhdanh .tendon {
   font-size: 14px;
   padding-left: 12px;
 }
+
 .itemdon .thongtin {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  flex-grow: 0;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
   width: 100px;
 }
 
@@ -424,24 +492,119 @@ li:hover .profile-leftpanel ul li:visited {
   padding: 0;
   list-style: none;
 }
+
 .list_thang li {
   display: block;
   font-size: 16px;
   padding: 4px;
   margin-bottom: 3px;
 }
+
 .list_thang li h6 {
   display: inline-block;
 }
+
 .list_thang .hoanthanh {
   border-left: 3px solid #4cbb87;
 }
+
 .list_thang .choxacminh {
   border-left: 3px solid #65aee0;
 }
+
 .list_thang .thieu {
   border-left: 3px solid #dc3545;
 }
+
 .list_thang .chuadenhan {
   border-left: 3px solid #bcbcbc;
 }
+
+.phan-hoi-info {
+  display: block;
+}
+
+.phan-hoi-info .ma-phan-hoi {
+  font-size: 24px;
+  display: block;
+}
+
+.phan-hoi-info .trang-thai-badge {
+  display: inline-block;
+  border-radius: 30px;
+  padding: 4px 8px;
+}
+
+.phan-hoi-info .trang-thai-badge-open {
+  color: #0b7ec4;
+  border: 1px solid #0b7ec4;
+}
+
+.phan-hoi-info .trang-thai-badge-open::before {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+.phan-hoi-info .trang-thai-badge-close::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 400;
+  content: "\F1EA";
+}
+
+.phan-hoi-info .trang-thai-badge-close {
+  color: #a80f00;
+  border: 1px solid #a80f00;
+}
+
+.phan-hoi-info .trang-thai-badge-close::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 400;
+  content: "\F1EA";
+}
+
+.phan-hoi-info .lop {
+  font-size: 16px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.phan-hoi-content .gopy-lop {
+  padding: 8px 16px;
+  border-left: 2px solid #e6e9ed;
+}
+
+.phan-hoi-content .gopy-lop .phan-hoi-nha-truong .content {
+  margin-left: 1.5rem;
+}
+
+#listTruongSelected {
+  margin-left: 0;
+  padding: 16px 8px;
+}
+
+#listTruongSelected li {
+  display: inline-block;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  block-size: -webkit-fit-content;
+  block-size: -moz-fit-content;
+  block-size: fit-content;
+  height: auto;
+  padding: 4px 8px;
+  margin-right: 8px;
+  color: white;
+  border-radius: 99px;
+  background-color: #0b7ec4;
+  margin-bottom: 1rem;
+}
+
+#listTruongSelected li button {
+  background-color: white;
+  color: #0b7ec4;
+  border-radius: 99px;
+}
+

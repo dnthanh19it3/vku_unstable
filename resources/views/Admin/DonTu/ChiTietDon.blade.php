@@ -62,8 +62,7 @@
             </div>
         </div>
         <!-- start project-detail sidebar -->
-        <div class="col-md-4 col-sm-3  ">
-
+        <div class="col-md-4">
            @if(!$don->hoanthanh == 1)
                 <div class="row">
                     <div class="col-12 p-3">
@@ -84,7 +83,6 @@
                     </div>
                 </div>
                     @endif
-
             <div class="row">
                 <div class="col-md-12 col-lg-12">
                     <div id="tracking-pre"></div>
@@ -112,13 +110,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
-        <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Launch demo modal
-            </button>
-
+    </div>
     <!-- Modal -->
         <div class="modal bd-example-modal-lg fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -130,8 +123,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <iframe id="iframe_preview" src=''  width='100%' height='600px' frameborder='0'></iframe>
-{{--                        https://view.officeapps.live.com/op/embed.aspx?src=http://vku.udn.vn/uploads/2021/08/08/1628389623_1628247038_64-K%E1%BA%BF%20ho%E1%BA%A1ch%20Th%E1%BB%B1c%20t%E1%BA%ADp%20Doanh%20nghi%E1%BB%87p%20K19%20(1).doc--}}
+                        <iframe id="iframe_preview" src=''  width='100%' height='600px'></iframe>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -140,8 +132,6 @@
                 </div>
             </div>
         </div>
-{{--    Backup --}}
-    <!-- Modal -->
         {{-- Modal duyệt và hẹn nhận --}}
         <div class="modal fade" id="modalBosung" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
              aria-hidden="true">
@@ -167,7 +157,6 @@
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Quay lại</button>
                         <button class="btn btn-primary" type="submit">Xác nhận</button>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>

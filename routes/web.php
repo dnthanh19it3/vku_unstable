@@ -13,6 +13,8 @@
 
 
 //Auth Route
+use Illuminate\Support\Facades\Route;
+
 Route::get('sv/login', 'SvAuthController@webLoginView')->name('sv.login.view');
 Route::post('sv/login', 'SvAuthController@webLogin')->name('sv.login');
 
@@ -42,6 +44,8 @@ Route::prefix('sv')->middleware('sv')->group(function () {
         Route::get('lap-bien-ban', 'SvHopLop@taoBienBanIndex')->name('sv.hoplop.taobienban');
         Route::post('lap-bien-ban', 'SvHopLop@taoBienBanStore')->name('sv.hoplop.taobienban.store');
         Route::get('sua-bien-ban', 'SvHopLop@suaBienBanIndex')->name('sv.hoplop.suabienban');
+        Route::post('sua-bien-ban', 'SvHopLop@suaBienBanUpdate')->name('sv.hoplop.suabienban.update');
+        Route::get('xem-bien-ban', 'SvHopLop@xemBienBanIndex')->name('sv.hoplop.xembienban');
     });
     Route::prefix('thutucmotcua')->group(function () {
         // Tao don
@@ -72,6 +76,12 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
         Route::post('import_excel', 'AdDanhGiaRenLuyen@getExcel')->name('admin.danhgiarenluyen.importexcel');
         Route::post('commit', 'AdDanhGiaRenLuyen@commitData')->name('admin.danhgiarenluyen.commit');
     });
+    Route::prefix('hoplop')->group(function (){
+        Route::get('danh-sach', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop');
+        Route::get('tong-hop-phan-hoi', 'AdQuanLyHopLop@listPhanHoiIndex')->name('ad.hoplop.tonghopphanhoi');
+        Route::post('phan-hoi', 'AdQuanLyHopLop@phanHoi')->name('ad.hoplop.phanhoi');
+        Route::get('xem-bien-ban', 'AdQuanLyHopLop@xemBienBanIndex')->name('admin.hoplop.xembienban');
+    });
     Route::prefix('donthu')->group(function () {
         Route::prefix('mau')->group(function () {
             // CRUD
@@ -79,10 +89,17 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
             Route::post('taomau', 'AdDonTuController@maudonStore')->name('maudon.Store');
             Route::get('danhsach', 'AdDonTuController@danhSachMauView')->name('danhsachmauView');
             Route::get('suamau/{mau_id}', 'AdDonTuController@chiTietMauView')->name('chitietmauView');
-            Route::post('/admin/maudon/truong/store', 'AdDonTuController@truongStore')->name('truong.Store');
+            Route::post('suamau/{mau_id}', 'AdDonTuController@maudonUpdate')->name('maudon.Update');
+
             // AJAX
             Route::get('ajax/ajaxtruong', 'AdDonTuController@ajaxTruong')->name('ajaxTruong');
             Route::get('ajax_truong', 'AdDonTuController@ajaxSearchTruong')->name('ajax_searchtruong');
+            // Truong don
+            Route::prefix('truong')->group(function (){
+                Route::post('store', 'AdDonTuController@truongStore')->name('truong.Store');
+                Route::post('delete', 'AdDonTuController@truongStore')->name('truong.Store');
+            });
+
 
         });
         Route::prefix('hoso')->group(function(){
