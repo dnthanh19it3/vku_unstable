@@ -4,18 +4,18 @@
 @endsection
 @section('body')
     <div class="row">
-        <div class="col-md-4">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h6 style="float: left">Ảnh đại diện</h6>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
+{{--        <div class="col-md-4">--}}
+{{--            <div class="x_panel">--}}
+{{--                <div class="x_title">--}}
+{{--                    <h6 style="float: left">Ảnh đại diện</h6>--}}
+{{--                    <div class="clearfix"></div>--}}
+{{--                </div>--}}
+{{--                <div class="x_content">--}}
 
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+        <div class="col-md-12">
             <div class="x_panel">
                 <div class="x_title">
                     <h6 style="float: left">Thông tin chi tiết</h6>

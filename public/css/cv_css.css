@@ -1,0 +1,159 @@
+@import url(https://fonts.googleapis.com/css2?family=Quicksand:wght@300;
+
+400;500;600&display=swap);.head_cv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 36px;
+}
+
+.head_cv .photo_block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.head_cv .photo_block .img-cv {
+  border-radius: 999px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 180px;
+  height: 180px;
+  padding: 5px;
+  background-color: #fff;
+  border: 5px solid #a80f00;
+  margin-bottom: 16px;
+  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.head_cv .photo_block .contact_block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 999px;
+  -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.head_cv .photo_block .contact_block .contact_item {
+  margin-right: 16px;
+}
+
+.head_cv .photo_block .contact_block .contact_item i {
+  margin-right: 3px;
+  background-color: #bc2133;
+  color: white;
+  border-radius: 999px;
+  padding: 8px;
+  font-size: 10px;
+}
+
+.head_cv .photo_block .contact_block .contact_item span {
+  color: white;
+  font-size: 12px;
+}
+
+.head_cv .general-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.head_cv .general-info .name {
+  font-size: 48px;
+  text-transform: uppercase;
+  color: #bc2133;
+}
+
+.head_cv .general-info .job_title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #bc2133;
+  margin-bottom: 8px;
+}
+
+.head_cv .general-info .info_block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: rgba(188, 33, 51, 0.15);
+  padding: 10px;
+  border-radius: 999px;
+}
+
+.head_cv .general-info .info_block .contact_item {
+  margin-right: 16px;
+}
+
+.head_cv .general-info .info_block .contact_item i {
+  margin-right: 3px;
+  color: #bc2133;
+  padding: 4px;
+}
+
+.head_cv .general-info .info_block .contact_item span {
+  color: #bc2133;
+  font-size: 12px;
+}
+
+.body_cv .body_left {
+  padding: 3px;
+}
+
+.body_cv .body_left .body_item .title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 400px;
+  background-color: #bc2133;
+  padding: 8px 16px;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-bottom-right-radius: 99px;
+  border-top-right-radius: 99px;
+}
+
+.body_cv .body_left .body_item .body {
+  padding: 8px 16px;
+}
+
+.block_left_red {
+  background-color: #bc2133;
+  color: white;
+  margin-bottom: 3px;
+}
+
