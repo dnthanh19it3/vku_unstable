@@ -11,7 +11,7 @@
  Target Server Version : 100419
  File Encoding         : 65001
 
- Date: 29/08/2021 23:13:36
+ Date: 29/08/2021 23:17:16
 */
 
 SET NAMES utf8mb4;
@@ -2115,39 +2115,6 @@ INSERT INTO `table_don_trangthai` VALUES (1, 'Tiếp nhận');
 INSERT INTO `table_don_trangthai` VALUES (2, 'Duyệt');
 INSERT INTO `table_don_trangthai` VALUES (3, 'Xác nhận');
 INSERT INTO `table_don_trangthai` VALUES (4, 'Hoàn thành');
-
--- ----------------------------
--- Table structure for table_hocky
--- ----------------------------
-DROP TABLE IF EXISTS `table_hocky`;
-CREATE TABLE `table_hocky`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `hocky` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `namhoc` int NULL DEFAULT NULL,
-  `tamtru` tinyint NULL DEFAULT NULL,
-  `trangthai` tinyint NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of table_hocky
--- ----------------------------
-INSERT INTO `table_hocky` VALUES (1, 'Học kì 1 2017-2018', 2017, 0, NULL);
-INSERT INTO `table_hocky` VALUES (2, 'Học kì 2 2017-2028', 2017, 0, NULL);
-INSERT INTO `table_hocky` VALUES (3, 'Học kì 1 2018-2019', 2018, 0, NULL);
-INSERT INTO `table_hocky` VALUES (4, 'Học kì 2 2018-2019', 2018, 0, NULL);
-INSERT INTO `table_hocky` VALUES (5, 'Học kì 1 2019-2020', 2019, 0, NULL);
-INSERT INTO `table_hocky` VALUES (6, 'Học kì 2 2019-2020', 2019, 0, NULL);
-INSERT INTO `table_hocky` VALUES (7, 'Học kì 1 2020-2021', 2020, 0, NULL);
-INSERT INTO `table_hocky` VALUES (8, 'Học kì 2 2020-2021', 2020, 0, NULL);
-INSERT INTO `table_hocky` VALUES (9, 'Học kì 1 2021-2022', 2021, 0, NULL);
-INSERT INTO `table_hocky` VALUES (10, 'Học kì 2 2021-2022', 2021, 1, NULL);
-INSERT INTO `table_hocky` VALUES (11, 'Học kì 1 2022-2023', 2022, 0, NULL);
-INSERT INTO `table_hocky` VALUES (12, 'Học kì 2 2022-2023', 2022, 0, NULL);
-INSERT INTO `table_hocky` VALUES (13, 'Học kì 1 2023-2024', 2023, 0, NULL);
-INSERT INTO `table_hocky` VALUES (14, 'Học kì 2 2023-2024', 2023, 0, NULL);
-INSERT INTO `table_hocky` VALUES (15, 'Học kì 12024-2025', 2024, 0, NULL);
-INSERT INTO `table_hocky` VALUES (16, 'Học kì 2 2022-2025', 2024, 0, NULL);
 
 -- ----------------------------
 -- Table structure for table_lopsh
