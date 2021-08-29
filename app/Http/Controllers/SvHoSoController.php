@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 use mikehaertl\pdftk\Pdf;
 
 class SvHosoController extends Controller
@@ -114,10 +115,12 @@ class SvHosoController extends Controller
                     'hocky' => $hocky_info,
         ]);
     }
-    public function hosoIndex(){
-        $sinhvien = DB::table('table_sinhvien')->where('table_sinhvien.masv', session('masv'))
+    public function hosoIndex(Request $request){
+        $sinhvien = DB::table('table_sinhvien')
             ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
+            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
             ->join('table_nganh', 'table_sinhvien.nganh_id', '=', 'table_nganh.id')
+            ->where('table_sinhvien.masv', '=', session('masv'))
             ->first();
         $sinhhvienTamtru = DB::table('table_sinhvien_tamtru')->where('masv', "=", session('masv'))->get();
         $tamtru =  DB::table('table_sinhvien_tamtru')
@@ -145,7 +148,10 @@ class SvHosoController extends Controller
             $sinhvien->avatar = "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png";
         }
 
-        return view('Sv/HoSo/xemhoso')
+
+
+
+        return view('Sv.HoSo.xemhoso')
             ->with('sinhvien', $sinhvien)
             ->with('sinhvienTamtru', $sinhhvienTamtru)
             ->with('tamtru', $tamtru)

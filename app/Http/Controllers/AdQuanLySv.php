@@ -83,7 +83,12 @@ class AdQuanLySv extends Controller
         ]);
     }
 
-    //Ca nhan post
+
+    /**
+     * Cập nhật thông tin sinh viên
+     * @param  $masv string Mã sinh viên
+     * @return view mã sinh viên
+     * */
     public function caNhanStore(Request $request, $masv)
     {
 
@@ -100,11 +105,30 @@ class AdQuanLySv extends Controller
             "noicap" => $request->noicap,
             "ma_bhyt" => $request->ma_bhyt,
             "doanthe" => $request->doanthe,
+            "ngayketnap" => $request->ngayketnap,
             "tongiao" => $request->tongiao,
+            //Thong tin cha
             "hotencha" => $request->hotencha,
             "namsinhcha" => $request->namsinhcha,
+            "dantoc_cha" => $request->dantoccha,
+            "cmnd_cha" => $request->cmnd_cha,
+            "nghenghiep_cha" => $request->nghenghiep_cha,
+            "sdt_cha" => $request->sdt_cha,
+            "email_cha" => $request->email_cha,
+            "diachi_cha" => $request->diachi_cha,
+
+            //Thong tin me
             "hotenme" => $request->hotenme,
             "namsinhme" => $request->namsinhme,
+            "dantoc_me" => $request->dantocme,
+            "cmnd_me" => $request->cmnd_me,
+            "nghenghiep_me" => $request->nghenghiep_me,
+            "sdt_me" => $request->sdt_me,
+            "email_me" => $request->email_me,
+            "diachi_me" => $request->diachi_me,
+
+            //Thanh phan gia dinh
+            "thanhphangiadinh" => $request->thanhphangiadinh,
             "tinh_thanh" => $request->tinh_thanh,
             "quan_huyen" => $request->quan_huyen,
             "xa_phuong" => $request->xa_phuong,
@@ -114,10 +138,12 @@ class AdQuanLySv extends Controller
             "facebook" => $request->facebook,
             "dienthoai" => $request->dienthoai,
             "dienthoaigiadinh" => $request->dienthoaigiadinh
+
         ];
 
         $update_sinhvien = DB::table('table_sinhvien')->where('masv', $masv)->update($sinhvien);
         $update_sinhvien_chitiet = DB::table('table_sinhvien_chitiet')->where('masv', $masv)->update($sinhvien_chitiet);
+
 
         if ($update_sinhvien || $update_sinhvien_chitiet) {
             pushNotify(1);

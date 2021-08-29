@@ -178,11 +178,13 @@
 <script src="{{asset('vendors/fastclick/lib/fastclick.js')}}"></script>
 <!-- NProgress -->
 <script src="{{asset('vendors/nprogress/nprogress.js')}}"></script>
+<script src="{{asset('vendors/iCheck/icheck.min.js')}}"></script>
+<!-- Table JS -->
+<script src="{{asset('js/table-render.js')}}"></script>
 
 <!-- Custom Theme Scripts -->
 <script src="{{asset('build/js/custom.min.js')}}"></script>
-<!-- Table JS -->
-<script src="{{asset('js/table-render.js')}}"></script>
+
 @yield('custom-script')
 </body>
 </html>

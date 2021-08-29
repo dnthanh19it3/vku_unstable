@@ -11,6 +11,9 @@
     <link href="{{asset('vendors/bootstrap/dist/css/bootstrap.min.css')}}" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="{{asset('vendors/font-awesome-pro/css/all.min.css')}}" rel="stylesheet">
+    <!-- Marterial Icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{{asset('vendors/iCheck/skins/flat/green.css')}}" rel="stylesheet">
     <!-- NProgress -->
     <link href="{{asset('vendors/nprogress/nprogress.css')}}" rel="stylesheet">
     <!-- Custom Theme Style -->

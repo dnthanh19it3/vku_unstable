@@ -38,6 +38,8 @@ Route::prefix('sv')->middleware('sv')->group(function () {
         Route::post('taotamtru', 'SvHoSoController@taoTamTruStore')->name('taotamtru.store');
         Route::get('suatamtru/{tamtru_id}', 'SvHoSoController@suaTamTru')->name('suatamtru');
         Route::post('suatamtru/{tamtru_id}', 'SvHoSoController@suaTamTruStore')->name('suatamtru.store');
+        //Ly Lich
+        Route::get('ly-lich', 'SvLyLichController@getLyLich')->name('sv.getlylich');
     });
     Route::prefix('hoplop')->group(function (){
         Route::get('danh-sach', 'SvHopLop@listHopLopIndex')->name('sv.hoplop.listhoplop');
@@ -147,6 +149,10 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
                 Route::get('xoakyluat/{id}', 'AdQuanLySv@xoaKyLuat')->name('ad.suasinhvien.xoakyluat');
             });
         });
+    });
+    Route::prefix('su-kien')->group(function (){
+        Route::get('danh-sach', 'AdSuKienController@suKienIndex')->name('ad.sukien.danhsach');
+        Route::get('tao', 'AdSuKienController@taoSuKienView')->name('ad.sukien.tao');
     });
 });
 Route::prefix('zalo_api')->group(function (){

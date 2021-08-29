@@ -78,7 +78,9 @@ class ZaloAPI extends Controller
     }
 
 
-
+    function callback_1(Request $request){
+        return "200";
+    }
     function callback(Request $request){
         $store = DB::table('table_zalo_callback')->insert(['body' => $request->getContent()]);
 

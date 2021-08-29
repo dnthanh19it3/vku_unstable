@@ -48,6 +48,18 @@
                         <li><a href="{{route("ad.hoplop.tonghopphanhoi")}}"> Tổng hợp phản hồi </a></li>
                     </ul>
                 </li>
+                <li><a><i class="fa fa-home"></i> Quản lý lớp <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{{route("ad.hoplop.listhoplop")}}">Danh sách biên bản</a></li>
+                        <li><a href="{{route("ad.hoplop.tonghopphanhoi")}}">Tổng hợp phản hồi</a></li>
+                    </ul>
+                </li>
+                <li><a><i class="fa fa-home"></i> Quản sự kiện <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{{route("ad.sukien.danhsach")}}">Danh sách sự kiện</a></li>
+{{--                        <li><a href="{{route("ad.hoplop.tonghopphanhoi")}}">Tổng hợp phản hồi</a></li>--}}
+                    </ul>
+                </li>
             </ul>
         </div>
 

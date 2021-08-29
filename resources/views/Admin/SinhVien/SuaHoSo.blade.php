@@ -1,4 +1,4 @@
-@extends('layout.admin_layout')
+    @extends('layout.admin_layout')
 @section('title', 'Sửa hồ sơ')
 @section('header')
 @endsection

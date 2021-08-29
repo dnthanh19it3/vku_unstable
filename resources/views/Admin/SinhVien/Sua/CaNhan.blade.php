@@ -65,7 +65,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label class=" mb-1" for="inputEmailAddress">Ngày cấp</label>
-                            <input type="text" class="form-control"
+                            <input type="date" class="form-control"
                                    value="{{$sinhvien->ngaycap}}" name="ngaycap">
                         </div>
                         <div class="form-group col-md-4">
@@ -94,6 +94,11 @@
                             </div>
                         </div>
                         <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputEmailAddress">Ngày kết nạp</label>
+                            <input type="date" class="form-control" name="ngayketnap"
+                                   value="{{$sinhvien->ngayketnap}}">
+                        </div>
+                        <div class="form-group col-md-4">
                             <label class=" mb-1" for="inputLocation">Tôn giáo</label>
                             <div class="detail-content">
                                 <input type="text" class="form-control"
@@ -111,11 +116,57 @@
                                        value="{{$sinhvien->hotencha}}" name="hotencha">
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label class=" mb-1" for="inputLocation">Năm sinh bố</label>
+                        <div class="form-group col-md-3">
+                            <label class=" mb-1" for="inputLocation">Năm sinh cha</label>
                             <div class="detail-content">
                                 <input type="text" class="form-control"
                                        value="{{$sinhvien->namsinhcha}}" name="namsinhcha">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class=" mb-1" for="inputLocation">Dân tộc cha</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->dantoc_cha}}" name="dantoc_cha">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputLocation">Số CMND cha</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->cmnd_cha}}" name="cmnd_cha">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputLocation">Nghề nghiệp cha</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->nghenghiep_cha}}" name="nghenghiep_cha">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputLocation">SĐT Cha</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->sdt_cha}}" name="sdt_cha">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputLocation">Email cha (nếu có)</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->email_cha}}" name="email_cha">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label class=" mb-1" for="inputLocation">Nơi ở cha</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->diachi_cha}}" name="diachi_cha">
                             </div>
                         </div>
                     </div>
@@ -127,11 +178,66 @@
                                        value="{{$sinhvien->hotenme}}" name="hotenme">
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-3">
                             <label class=" mb-1" for="inputLocation">Năm sinh mẹ</label>
                             <div class="detail-content">
                                 <input type="text" class="form-control"
                                        value="{{$sinhvien->namsinhme}}" name="namsinhme">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class=" mb-1" for="inputLocation">Dân tộc Mẹ</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->dantoc_me}}" name="dantoc_me">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputLocation">Số CMND Mẹ</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->cmnd_me}}" name="cmnd_me">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputLocation">Nghề nghiệp Mẹ</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->nghenghiep_me}}" name="nghenghiep_me">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputLocation">SĐT Mẹ</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->sdt_me}}" name="sdt_me">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class=" mb-1" for="inputLocation">Email mẹ (nếu có)</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->email_me}}" name="email_me">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label class=" mb-1" for="inputLocation">Nơi ở Mẹ</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->diachi_me}}" name="diachi_me">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class=" mb-1" for="inputLocation">Thành phần gia đình</label>
+                            <div class="detail-content">
+                                <input type="text" class="form-control"
+                                       value="{{$sinhvien->thanhphangiadinh}}" name="thanhphangiadinh">
                             </div>
                         </div>
                     </div>
