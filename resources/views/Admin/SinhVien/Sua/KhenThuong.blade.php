@@ -1,83 +1,92 @@
 @extends('layout.admin_layout')
-@section('title', 'Quản lý khen thưởng')
-@section('header')
-@endsection
 @section('body')
-    <div class="col-md-12">
-        <div class="row bg-white">
-            <div class="col-md-3 profile-leftpanel pr-md-3 border-right">
-                @include('Admin.SinhVien.Sua.Menu', ['index' => 3])
+    <div class="row">
+        <div class="col-md-3">
+            <div class="profile-sidebar">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img id="avatar_round" src="{{asset($sinhvien->avatar)}}" class="img-responsive" alt="">
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        {{$sinhvien->hodem." ".$sinhvien->ten}}
+                    </div>
+                    <div class="profile-usertitle-job">
+                        LỚP {{$sinhvien->tenlop}} MSV {{$sinhvien->masv}}
+                    </div>
+                </div>
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR MENU -->
+
+                <div class="profile-usermenu">
+                    <ul class="nav">
+                        <li >
+                            <a href="{{route('ad.suasinhvien.canhan', ['masv' => $sinhvien->masv])}}">
+                                <i class="glyphicon glyphicon-home"></i>
+                                Thông tin cá nhân </a>
+                        </li>
+                        <li class="active">
+                            <a href="{{route('ad.suasinhvien.khenthuong', ['masv' => $sinhvien->masv])}}">
+                                <i class="glyphicon glyphicon-user"></i>
+                                Khen thưởng </a>
+                        </li>
+                        <li>
+                            <a href="{{route('ad.suasinhvien.kyluat', ['masv' => $sinhvien->masv])}}">
+                                <i class="glyphicon glyphicon-ok"></i>
+                                Kỉ luật </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END MENU -->
             </div>
-            <div class="col-md-9 profile-mainpanel">
-                <h5>Khen thưởng</h5>
-                <div class="mb-3"><a href="javascrip:void(0)" id="btnthem" style="font-size: 18px"><i class="far fa-plus-square"></i> Thêm khen thưởng</a></div>
-                <form id="khenthuong-form" action="{{route('ad.suasinhvien.khenthuong.them', ['masv' => $sinhvien->masv])}}" method="post">
-                    {{ csrf_field() }}
-                    <div class="form-group row">
-                        <label for="capkhenthuong" class="col-3 col-form-label">Cấp khen thưởng</label>
-                        <div class="col-9">
-                            <input id="capkhenthuong" name="capkhenthuong" type="text" class="form-control">
+        </div>
+        <div class="col-md-9">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <h5>Thông tin khen thưởng</h5>
+                        </div>
+                        <div class="col-sm-7">
+                            <a href="{{route('ad.suasinhvien.khenthuong.themview', ['masv' => $sinhvien->masv])}}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Thêm mới</span></a>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="soquyetdinh" class="col-3 col-form-label">Quyết định số</label>
-                        <div class="col-9">
-                            <input id="soquyetdinh" name="soquyetdinh" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="noidung" class="col-3 col-form-label">Nội dung</label>
-                        <div class="col-9">
-                            <input id="noidung" name="noidung" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="thoigian" class="col-3 col-form-label">Thời gian</label>
-                        <div class="col-9">
-                            <div class="input-group">
-                                <input id="thoigian" name="thoigian" type="date" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="offset-3 col-9">
-                            <button name="submit" type="submit" class="btn btn-primary">Lưu</button>
-                        </div>
-                    </div>
-                </form>
-                <table class="table table-striped jambo_table bulk_action">
+                </div>
+                <table class="table table-striped table-hover">
                     <thead>
-                        <tr class="headings">
-                            <th class="column-title">STT</th>
-                            <th class="column-title">Cấp khen thưởng</th>
-                            <th class="column-title">Số quyết định</th>
-                            <th class="column-title">Nội dung</th>
-                            <th class="column-title">Thời gian</th>
-                            <th class="column-title">Hành động</th>
-                        </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Nội dung khen thưởng</th>
+                        <th>Số quyết định</th>
+                        <th>Cấp quyết định</th>
+                        <th>Thời gian</th>
+                        <th>Ngày cập nhật</th>
+                        <th>Action</th>
+                    </tr>
                     </thead>
                     <tbody>
-                    @php
-                        $i = 0;
-                    @endphp
-                    @forelse($khenthuong as $item)
+                    @forelse ($khenthuong as $key => $item)
                         <tr role="row" class="odd">
-                            <td class="sorting_1">{{ $i += 1 }}</td>
-                            <td>{{ $item->capkhenthuong }}</td>
-                            <td>{{ $item->soquyetdinh }}</td>
+                            <td class="sorting_1">{{ $key += 1 }}</td>
                             <td>{{ $item->noidung }}</td>
-                            <td>{{ $item->thoigian }}</td>
+                            <td>{{ $item->soquyetdinh }}</td>
+                            <td>{{ $item->capkhenthuong }}</td>
+                            <td>{{ \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::make($item->created_at)->format('d-m-Y') }}</td>
                             <td>
-                                <a href="{{route('ad.suasinhvien.suakhenthuong', ['masv' => $sinhvien->masv, 'id' => $item->id])}}" class="btn btn-sm btn-primary">Sửa</a>
-                                <a href="{{route('ad.suasinhvien.xoakhenthuong', ['masv' => $sinhvien->masv, 'id' => $item->id])}}" class="btn btn-sm btn-danger">Xoá</a>
+                                <a href="{{route('ad.suasinhvien.suakhenthuong', ['masv' => $sinhvien->masv, 'id' => $item->id])}}" class="settings" title="Sửa" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
+                                <a href="{{route('ad.suasinhvien.xoakhenthuong', ['masv' => $sinhvien->masv, 'id' => $item->id])}}" class="delete" title="Xoá" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
                             </td>
                         </tr>
-                        @empty
+                    @empty
                         <tr>
-                            <td colspan="6">Chưa có thông tin khen thưởng</td>
+                            <td colspan="8">
+                                <center>Sinh viên này không có thông tin khen thưởng!</center>
+                            </td>
                         </tr>
-                        @endforelse
-                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>

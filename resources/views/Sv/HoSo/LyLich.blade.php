@@ -138,7 +138,7 @@
     LÝ LỊCH TRÍCH NGANG SINH VIÊN
 </div>
 <div class="ngaythang" style="display: block; position: relative;">
-    Đà Nẵng, ngày tháng năm 2021
+    Đà Nẵng, ngày {{\Carbon\Carbon::now()->format('d')}} tháng {{\Carbon\Carbon::now()->format('m')}} năm {{\Carbon\Carbon::now()->format('Y')}}
     <div class="anhhoso">
         Ảnh 3x4
         <!-- <img style="width: 100%;" src="D:\Project\myvku-stable\public\AnhHoSo\19IT195_1623580837.png" /> -->
@@ -252,19 +252,19 @@
     </div>
     <div class="line">
         <div class="col f-12" style="width: 98%;"> Địa chỉ liên lạc khi cần: phải ghi cụ thể, chính xác, nếu ở trọ
-            thì ghi địa chỉ nhà trọ, nếu ở nhà thì ghi địa chỉ nhà: {{$tamtru->so_nha . ", " . $tamtru->thon_to .", ".$tamtru->xa_phuong." ".$tamtru->quan_huyen. " " . $tamtru->tinh_thanh}}</div>
+            thì ghi địa chỉ nhà trọ, nếu ở nhà thì ghi địa chỉ nhà: {{$tamtru->sonha . ", " . $tamtru->thonto .", ".$tamtru->xaphuong." ".$tamtru->quanhuyen. " " . $tamtru->tinhthanh}}</div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 55%;">Họ tên người nhận: {{$sv->hodem . ' ' . $sv->ten}}</div>
         <div class="col f-12" style="width:42%">Số điện thoại: {{$sv->dienthoai}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 55%;">Thôn (tổ dân phố, số nhà): {{$tamtru->thon_to}}</div>
-        <div class="col f-12" style="width:42%">Xã (phường, đường): {{$tamtru->xa_phuong}} </div>
+        <div class="col f-12" style="width: 55%;">Thôn (tổ dân phố, số nhà): {{$tamtru->thonto}}</div>
+        <div class="col f-12" style="width:42%">Xã (phường, đường): {{$tamtru->xaphuong}} </div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 53%;">Huyện (quận): {{$tamtru->quan_huyen}}</div>
-        <div class="col f-12" style="width:42%">Tỉnh (thành phố): {{$tamtru->tinh_thanh}} </div>
+        <div class="col f-12" style="width: 53%;">Huyện (quận): {{$tamtru->quanhuyen}}</div>
+        <div class="col f-12" style="width:42%">Tỉnh (thành phố): {{$tamtru->tinhthanh}} </div>
     </div>
     <div class="" style="">
         <div class="col f-12" style="width: 98%;"> Tôi xin cam đoan những thông tin đã kê khai trên là đúng sự thật

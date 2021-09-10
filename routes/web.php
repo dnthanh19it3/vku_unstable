@@ -32,14 +32,17 @@ Route::prefix('sv')->middleware('sv')->group(function () {
         Route::get('xemhoso2', 'SvHoSoController@hosoIndex2')->name('xemhoso2');
         Route::post('suahoso', 'SvHoSoController@suahosoStore')->name('suahosoStore');
         Route::get('xuatpdf', 'SvHoSoController@exportPDF');
-        //Tam tru
-        Route::get('tamtru', 'SvHoSoController@tamTruIndex')->name('sv.tamtru.index');
-        Route::get('taotamtru', 'SvHoSoController@taoTamTru')->name('taotamtru');
-        Route::post('taotamtru', 'SvHoSoController@taoTamTruStore')->name('taotamtru.store');
-        Route::get('suatamtru/{tamtru_id}', 'SvHoSoController@suaTamTru')->name('suatamtru');
-        Route::post('suatamtru/{tamtru_id}', 'SvHoSoController@suaTamTruStore')->name('suatamtru.store');
         //Ly Lich
         Route::get('ly-lich', 'SvLyLichController@getLyLich')->name('sv.getlylich');
+    });
+    Route::prefix('tam-tru')->group(function(){
+        //Tam tru
+        Route::get('/', 'SvTamTruController@tamTruIndex')->name('sv.tamtru.index');
+        Route::get('taotamtru', 'SvTamTruController@taoTamTru')->name('taotamtru');
+        Route::post('taotamtru', 'SvTamTruController@taoTamTruStore')->name('taotamtru.store');
+        //Get dia chi
+        Route::get('get-xa-phuong', 'SvTamTruController@getXaPhuong')->name('sv.tamtru.getxaphuong');
+        Route::get('get-quan-huyen', 'SvTamTruController@getQuanHuyen')->name('sv.tamtru.getquanhuyen');
     });
     Route::prefix('hoplop')->group(function (){
         Route::get('danh-sach', 'SvHopLop@listHopLopIndex')->name('sv.hoplop.listhoplop');
@@ -74,12 +77,13 @@ Route::prefix('sv')->middleware('sv')->group(function () {
 Route::prefix('admin')->middleware('chuyenvien')->group(function(){
     Route::prefix('danhgiarenluyen')->group(function (){
         Route::get('/', 'AdDanhGiaRenLuyen@danhGiaRenLuyenView')->name('admin.danhgiarenluyen.index');
-        Route::get('/xem', 'AdDanhGiaRenLuyen@xemDiemRenluyen')->name('admin.danhgiarenluyen.xem');
+        Route::get('/xem/{lop_id}', 'AdDanhGiaRenLuyen@xemDiemRenluyen')->name('admin.danhgiarenluyen.xem');
         Route::post('import_excel', 'AdDanhGiaRenLuyen@getExcel')->name('admin.danhgiarenluyen.importexcel');
         Route::post('commit', 'AdDanhGiaRenLuyen@commitData')->name('admin.danhgiarenluyen.commit');
     });
     Route::prefix('hoplop')->group(function (){
-        Route::get('danh-sach', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop');
+        Route::get('danh-sach/{namhoc}/{hocky}', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop');
+        Route::get('danh-sach', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop.nullable');
         Route::get('tong-hop-phan-hoi', 'AdQuanLyHopLop@listPhanHoiIndex')->name('ad.hoplop.tonghopphanhoi');
         Route::post('phan-hoi', 'AdQuanLyHopLop@phanHoi')->name('ad.hoplop.phanhoi');
         Route::get('xem-bien-ban', 'AdQuanLyHopLop@xemBienBanIndex')->name('admin.hoplop.xembienban');
@@ -119,12 +123,18 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
         // Dashboard
         Route::get('dashboard', 'AdDonTuController@thuTucDashboard')->name('admin.thutuc.dashboard');
     });
-    Route::prefix('tamtru')->group(function (){
-        Route::get("danhsach", 'AdTamtru@index');
-        Route::get('mo/{hocky}', 'AdTamTru@moKhaiBao')->name("tamtru.mo");
-        Route::get('dong/{hocky}', 'AdTamTru@dongKhaiBao')->name("tamtru.dong");
+    Route::prefix('quan-ly-lop')->group(function(){
+        Route::get('danh-sach', 'AdQuanLyLop@danhSach')->name('admin.quanlylop.danhsach');
+        Route::prefix('chi-tiet-lop/{lop_id}')->group(function (){
+            Route::get('/', 'AdQuanLyLop@chiTiet')->name('admin.quanlylop.chitietlop');
+            Route::get('khen-thuong-ky-luat', 'AdQuanLyLop@khenThuongKyLuat')->name('admin.quanlylop.khenthuongkyluat');
+            Route::get('ban-can-su','AdQuanLyLop@banCanSu')->name('admin.quanlylop.bancansu');
+            Route::get('bo-nhiem-ban-can-su','AdQuanLyLop@boNhiemBanCanSu')->name('admin.quanlylop.bonhiembancansu');
+            Route::post('bo-nhiem-ban-can-su','AdQuanLyLop@boNhiemBanCanSuStore')->name('admin.quanlylop.bonhiembancansu.store');
+            Route::get('diem-ren-luyen','AdQuanLyLop@diemRenLuyen')->name('admin.quanlylop.diemrenluyen');
+        });
     });
-    Route::prefix('sinhvien')->group(function (){
+    Route::prefix('quan-ly-sinh-vien')->group(function (){
         Route::get('danhsach', 'AdQuanLySv@danhSachSvView')->name('ad.danhsachsv');
         Route::prefix('{masv}')->group(function (){
             Route::get('xem', 'AdQuanLySv@chiTietSinhVienView')->name('ad.chitietsv');
@@ -137,12 +147,14 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
                 Route::get('duyetanh', 'AdQuanLySv@duyetAnh')->name('ad.duyetanh');
                 //Khen thuong
                 Route::get('khenthuong', 'AdQuanLySv@khenThuong')->name('ad.suasinhvien.khenthuong');
-                Route::post('themkhenthuong', 'AdQuanLySv@khenThuongStore')->name('ad.suasinhvien.khenthuong.them');
-                Route::get('suakhenthuong/{id}', 'AdQuanLySv@suaKhenThuong')->name('ad.suasinhvien.suakhenthuong');
-                Route::post('suakhenthuong/{id}', 'AdQuanLySv@suaKhenThuongStore')->name('ad.suasinhvien.suakhenthuong.store');
-                Route::get('xoakhenthuong/{id}', 'AdQuanLySv@xoaKhenThuong')->name('ad.suasinhvien.xoakhenthuong');
+                Route::get('themkhenthuong', 'AdQuanLySv@themKhenThuongView')->name('ad.suasinhvien.khenthuong.themview'); //View them khen thuong
+                Route::post('themkhenthuong', 'AdQuanLySv@khenThuongStore')->name('ad.suasinhvien.khenthuong.them'); //Store khenthuong
+                Route::get('suakhenthuong/{id}', 'AdQuanLySv@suaKhenThuong')->name('ad.suasinhvien.suakhenthuong'); //View sua khen thuong
+                Route::post('suakhenthuong/{id}', 'AdQuanLySv@suaKhenThuongStore')->name('ad.suasinhvien.suakhenthuong.store'); // Store sua khen thuong
+                Route::get('xoakhenthuong/{id}', 'AdQuanLySv@xoaKhenThuong')->name('ad.suasinhvien.xoakhenthuong'); // Xoa khen thuong
                 //Ky luat
                 Route::get('kyluat', 'AdQuanLySv@kyLuat')->name('ad.suasinhvien.kyluat');
+                Route::get('themkyluat', 'AdQuanLySv@themKyLuatView')->name('ad.suasinhvien.kyluat.themview');
                 Route::post('themkyluat', 'AdQuanLySv@kyLuatStore')->name('ad.suasinhvien.kyluat.them');
                 Route::get('suakyluat/{id}', 'AdQuanLySv@suaKyLuat')->name('ad.suasinhvien.suakyluat');
                 Route::post('suakyluat/{id}', 'AdQuanLySv@suaKyLuatStore')->name('ad.suasinhvien.suakyluat.store');

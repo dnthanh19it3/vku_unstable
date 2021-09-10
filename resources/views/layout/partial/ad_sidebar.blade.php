@@ -31,26 +31,26 @@
                         <li><a href="{{route("ds_hs")}}">Xử lý đơn</a></li>
                     </ul>
                 </li>
-                <li><a><i class="fa fa-home"></i> Quản lý sinh viên <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-home"></i>Quản lý lớp<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="{{route("ad.danhsachsv")}}"> Cập nhật thông tin </a></li>
+                        <li><a href="{{route("admin.quanlylop.danhsach")}}"> Danh sách lớp </a></li>
                     </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i> Đánh giá rèn luyện <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{route("admin.danhgiarenluyen.index")}}"> Tổng hợp kết quả </a></li>
-                        <li><a href="{{route("admin.danhgiarenluyen.xem")}}"> Xem </a></li>
+{{--                        <li><a href="{{route("admin.danhgiarenluyen.xem")}}"> Xem </a></li>--}}
                     </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i> Quản lý họp lớp <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="{{route("ad.hoplop.listhoplop")}}"> Tổng hợp kết quả </a></li>
+{{--                        <li><a href="{{route("ad.hoplop.listhoplop")}}"> Tổng hợp kết quả </a></li>--}}
                         <li><a href="{{route("ad.hoplop.tonghopphanhoi")}}"> Tổng hợp phản hồi </a></li>
                     </ul>
                 </li>
                 <li><a><i class="fa fa-home"></i> Quản lý lớp <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="{{route("ad.hoplop.listhoplop")}}">Danh sách biên bản</a></li>
+{{--                        <li><a href="{{route("ad.hoplop.listhoplop")}}">Danh sách biên bản</a></li>--}}
                         <li><a href="{{route("ad.hoplop.tonghopphanhoi")}}">Tổng hợp phản hồi</a></li>
                     </ul>
                 </li>

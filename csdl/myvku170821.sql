@@ -2037,24 +2037,24 @@ INSERT INTO `table_nganh` VALUES (2, '7340101', 'Quản trị kinh doanh', '', 0
 INSERT INTO `table_nganh` VALUES (3, '7480108', 'Công nghệ kỹ thuật máy tính', '', 0, NULL, NULL, '2019-10-15 11:08:56');
 
 -- ----------------------------
--- Table structure for table_phongban
+-- Table structure for table_donvi_phongban
 -- ----------------------------
-DROP TABLE IF EXISTS `table_phongban`;
-CREATE TABLE `table_phongban`  (
+DROP TABLE IF EXISTS `table_donvi_phongban`;
+CREATE TABLE `table_donvi_phongban`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tenphongban` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `tenphongkhoa` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of table_phongban
+-- Records of table_donvi_phongban
 -- ----------------------------
-INSERT INTO `table_phongban` VALUES (1, 'Phòng đào tạo');
-INSERT INTO `table_phongban` VALUES (2, 'Phòng công tác sinh viên');
-INSERT INTO `table_phongban` VALUES (3, 'Phòng khảo thí');
-INSERT INTO `table_phongban` VALUES (4, 'Phòng kế hoạch tài chính');
-INSERT INTO `table_phongban` VALUES (5, 'Đoàn thành niên');
-INSERT INTO `table_phongban` VALUES (6, 'Phòng khoa học công nghệ');
+INSERT INTO `table_donvi_phongban` VALUES (1, 'Phòng đào tạo');
+INSERT INTO `table_donvi_phongban` VALUES (2, 'Phòng công tác sinh viên');
+INSERT INTO `table_donvi_phongban` VALUES (3, 'Phòng khảo thí');
+INSERT INTO `table_donvi_phongban` VALUES (4, 'Phòng kế hoạch tài chính');
+INSERT INTO `table_donvi_phongban` VALUES (5, 'Đoàn thành niên');
+INSERT INTO `table_donvi_phongban` VALUES (6, 'Phòng khoa học công nghệ');
 
 -- ----------------------------
 -- Table structure for table_sinhvien

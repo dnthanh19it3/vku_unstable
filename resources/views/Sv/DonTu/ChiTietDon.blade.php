@@ -9,7 +9,7 @@
                         <img class="img-paper" src="{{asset('images/paper.svg')}}"/>
                         <div class="thongtindon">
                             <h4>{{$don->tenmaudon}}</h4>
-                            <h6><i class="fas fa-users-class"></i>&nbsp;Đơn vị xử lý: {{$don->tenphongban}}</h6>
+                            <h6><i class="fas fa-users-class"></i>&nbsp;Đơn vị xử lý: {{$don->tenphongkhoa}}</h6>
                             <h6><i class="fas fa-file-alt"></i>&nbsp;ID: {{$don->id}}</h6>
                         </div>
                     </div>
@@ -24,13 +24,12 @@
             <div class="applicant-content">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="border-bottom pb-2">THÔNG TIN CHUNG</h5>
+                        <h5 class="border-bottom pb-2"><i class="fas fa-info-circle mr-2"></i>THÔNG TIN CHUNG</h5>
                         <div class="row m-3">
                             @foreach ($mangTruong as $item)
                                 @if($item->loai_id != 4)
                                     <div class="col-md-6 p-3 vien-net-dut">
-                                        <div class="col-md-6 control-label" style="font-size: 16px;">
-                                            <h6>{{ $item->tentruong }}</h6></div>
+                                        <div class="col-md-6 control-label" style="font-size: 16px;"><h6>{{ $item->tentruong }}</h6></div>
                                         <div class="col-md-6" style="font-size: 16px">
                                             {{ $item->lienket == null ? $item->noidung : $sinhvien_arr[$item->lienket]}}
                                         </div>
@@ -38,20 +37,32 @@
                                 @endif
                             @endforeach
                         </div>
-                        <h5 class="border-bottom pb-2">TẬP TIN ĐÍNH KÈM</h5>
+                        <h5 class="border-bottom pb-2"><i class="fas fa-paperclip mr-2"></i>TẬP TIN ĐÍNH KÈM</h5>
                         <div class="row m-3">
                             @php
                                 $fileflag = 0
                             @endphp
                             @foreach ($mangTruong as $item)
                                 @if($item->loai_id == 4)
-                                    <div class="col-md-12"><i class="fas fa-paperclip"></i> <h6 style="display: inline">
-                                            &nbsp;{{ $item->tentruong }}&nbsp;</h6> <a href="javascript:void(0)"
-                                                                                       class="ml-1"
-                                                                                       onclick="openPreview('{{ asset('storage/'.$item->noidung)}}')"><i
-                                                    class="fas fa-eye ml-1"></i>Xem trước</a><a
-                                                href="{{ asset('storage/'.$item->noidung)}}" target="_blank"><i
-                                                    class="fas fa-download ml-1"></i>Tải xuống</a></div>
+                                    <div class="col-md-4 file-block">
+                                        <h6 style="display: inline">&nbsp;{{ $item->tentruong }}&nbsp;</h6>
+                                        <div class="description">
+                                            <div class="icon"><i class="fas fa-file-word"></i></div>
+                                            <div class="name">
+                                                {{$item->noidung }}
+                                            </div>
+                                        </div>
+                                        <div class="action">
+                                            <a href="javascript:void(0)" class="ml-1 action-child" onclick="openPreview('{{ asset('storage/'.$item->noidung)}}')">
+                                                <i class="fas fa-eye ml-1"></i>
+                                                <span>Xem trước</span>
+                                            </a>
+                                            <a href="{{ asset('storage/'.$item->noidung)}}"  class="action-child" target="_blank">
+                                                <i class="fas fa-download ml-1"></i>
+                                                <span>Tải xuống</span>
+                                            </a>
+                                        </div>
+                                    </div>
                                     @php $fileflag = 1 @endphp
                                 @endif
                             @endforeach
@@ -103,9 +114,8 @@
 
         </div>
         <!-- Preview Modal -->
-        <div class="modal bd-example-modal-lg fade" id="previewModal" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+        <div class="modal bd-example-modal-lg fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Xem trước tài liệu</h5>
@@ -114,12 +124,10 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <iframe id="iframe_preview" src='' width='100%' height='600px' frameborder='0'></iframe>
-                        {{--                        https://view.officeapps.live.com/op/embed.aspx?src=http://vku.udn.vn/uploads/2021/08/08/1628389623_1628247038_64-K%E1%BA%BF%20ho%E1%BA%A1ch%20Th%E1%BB%B1c%20t%E1%BA%ADp%20Doanh%20nghi%E1%BB%87p%20K19%20(1).doc--}}
+                        <iframe id="iframe_preview" src=''  width='100%' height='600px'></iframe>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">&times; Đóng</button>
                     </div>
                 </div>
             </div>

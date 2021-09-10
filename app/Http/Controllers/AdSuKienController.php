@@ -23,7 +23,7 @@ class AdSuKienController extends Controller
             }
             $item1->lopsh = $lop;
         }
-//        dd($khoa);
+
 
 
         return view('Admin.SuKien.TaoSuKien')->with([

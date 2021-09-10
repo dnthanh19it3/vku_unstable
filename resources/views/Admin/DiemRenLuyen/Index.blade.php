@@ -9,7 +9,7 @@
                         {{ csrf_field() }}
                         <div class="form-group row">
                             <div class="col-md-9">
-                                <input class="form-control-file" type="file" name="excel_file">
+                                <input class="form-control-file" type="file" accept=".doc,.docx,.pdf,.jpg,.jpeg,.png" max="10240" name="excel_file">
                             </div>
                             <div class="col-md-3">
                                 <input class="btn btn-primary" type="submit" value="Tải lên">

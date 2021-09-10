@@ -27,7 +27,12 @@ class AdDonTuController extends Controller
     {
         $filedList = DB::table('table_maudon_chitiet')->get();
         $fileType = DB::table('table_maudon_loai')->get();
-        $phongban = DB::table('table_phongban')->get();
+        $phongban = DB::table('table_donvi_phongban')
+            ->orWhere('id', 2)
+            ->orWhere('id', 7)
+            ->orWhere('id', 8)
+            ->orWhere('id', 9)
+            ->orWhere('id', 10)->get();
 
         if(isset($request->add)){
             session()->push('stack', $request->add);
@@ -60,7 +65,6 @@ class AdDonTuController extends Controller
         $value1 = [
             'tenmaudon' => $request->tenmaudon,
             'truong' => $request->truong,
-            'dieukhoan' => $request->dieukhoan,
             'thoigianxuly' => $request->thoigianxuly,
             'loai_id' => $request->loai_id,
             'mota' => $request->mota,
@@ -75,7 +79,6 @@ class AdDonTuController extends Controller
         $value1 = [
             'tenmaudon' => $request->tenmaudon,
             'truong' => $request->truong,
-            'dieukhoan' => $request->dieukhoan,
             'thoigianxuly' => $request->thoigianxuly,
             'loai_id' => $request->loai_id,
             'mota' => $request->mota,
@@ -124,7 +127,14 @@ class AdDonTuController extends Controller
         $mangTruong = array();
         $filedList = DB::table('table_maudon_chitiet')->get();
         $fileType = DB::table('table_maudon_loai')->get();
-        $phongban = DB::table('table_phongban')->get();
+        $phongban = DB::table('table_donvi_phongban')
+            ->orWhere('id', 2)
+            ->orWhere('id', 7)
+            ->orWhere('id', 8)
+            ->orWhere('id', 9)
+            ->orWhere('id', 10)
+            ->get();
+
 
         foreach ($listtruong as $item) {
             $rs = DB::table('table_maudon_chitiet')->join('table_maudon_loai', 'table_maudon_chitiet.loai_id', '=', 'table_maudon_loai.loai_id')->where('id', $item)->first();
@@ -223,24 +233,29 @@ class AdDonTuController extends Controller
     // View xem hồ sơ
     function xemHoSo(Request $request, $don_id)
     {
-        $phongban = DB::table('table_phongban')->get();
-
+        $phongban = DB::table('table_donvi_phongban')
+            ->orWhere('id', 2)
+            ->orWhere('id', 7)
+            ->orWhere('id', 8)
+            ->orWhere('id', 9)
+            ->orWhere('id', 10)
+            ->get();
         $don = DB::table('table_don')
             ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')
-            ->join('table_phongban', 'table_maudon.donvi_id', '=', 'table_phongban.id')
+            ->join('table_donvi_phongban', 'table_maudon.donvi_id', '=', 'table_donvi_phongban.id')
             ->where('table_don.don_id', $don_id)
             ->first();
         $donvihientai = DB::table('table_don')
-            ->join('table_phongban', 'table_don.phongban_xuly', '=', 'table_phongban.id')
+            ->join('table_donvi_phongban', 'table_don.phongban_xuly', '=', 'table_donvi_phongban.id')
             ->where('table_don.don_id', $don_id)
-            ->first()->tenphongban;
+            ->first()->tenphongkhoa;
         $sinhvien = DB::table('table_sinhvien')
             ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
             ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
             ->where('table_sinhvien.masv', $don->masv)
             ->first();
         $sinhvien->avatar = (isset($sinhvien->avatar) ? asset($sinhvien->avatar) : "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png");
-        $sinhvien->ten = $sinhvien->hodem . $sinhvien->ten;
+        $sinhvien->ten = $sinhvien->hodem . " " .$sinhvien->ten;
         $sinhvien->gioitinh = $sinhvien->gioitinh ? "Nam" : "Nữ";
 
         $timeline = DB::table('table_don_logs')->where('don_id', $don_id)->orderBy('thoigian', 'DESC')->get();
@@ -271,6 +286,8 @@ class AdDonTuController extends Controller
                 ];
             }
         }
+        $hocky_hientai =  DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first();
+        $landcap = DB::table('table_don')->where('maudon_id', $don->maudon_id)->where('namhoc', $hocky_hientai->id)->where('hoanthanh', 1)->count('don_id');
 
 
         return view('Admin/DonTu/ChiTietDon')->with([
@@ -280,7 +297,8 @@ class AdDonTuController extends Controller
             'sinhvien' => $sinhvien,
             'sinhvien_arr' => get_object_vars($sinhvien),
             'timeline' => $timeline,
-            'phongban' => $phongban
+            'phongban' => $phongban,
+            'lancap' => $landcap
             ]);
     }
     // Controller xử lý
@@ -291,7 +309,8 @@ class AdDonTuController extends Controller
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'trangthai' => 1,
-            'noidung' => $loai ." đã được tiếp nhận"
+            'noidung' => $loai ." đã được tiếp nhận",
+            'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         $capnhat = DB::table('table_don')
             ->where('don_id', "=", $don_id)
@@ -309,7 +328,8 @@ class AdDonTuController extends Controller
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'trangthai' => 2,
-            'noidung' => $loai." của bạn đã được chấp nhận và chờ chuyên viên ký xác nhận"
+            'noidung' => $loai." của bạn đã được chấp nhận và chờ chuyên viên ký xác nhận",
+            'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         $capnhat = DB::table('table_don')
             ->where('don_id', "=", $don_id)
@@ -331,8 +351,9 @@ class AdDonTuController extends Controller
         $addLog =  DB::table('table_don_logs')->insert([
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
-            'noidung' => "Đơn đã được chuyển tiếp sang phòng " . DB::table('table_phongban')->where('id', $request->phongban)->first()->tenphongban,
-            'an' => 1
+            'noidung' => "Đơn đã được chuyển tiếp sang phòng " . DB::table('table_donvi_phongban')->where('id', $request->phongban)->first()->tenphongkhoa,
+            'an' => 1,
+            'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         return redirect()->back();
     }
@@ -342,7 +363,8 @@ class AdDonTuController extends Controller
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'trangthai' => 4,
-            'noidung' => "Hiệu trưởng xác nhận " .$loai.". Hẹn nhận tại phòng ABC từ ".$request->thoigianhennhan
+            'noidung' => "Hiệu trưởng xác nhận " .$loai.". Hẹn nhận tại phòng ABC từ ".$request->thoigianhennhan,
+            'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         $capnhat = DB::table('table_don')
             ->where('don_id', "=", $don_id)
@@ -374,7 +396,8 @@ class AdDonTuController extends Controller
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'buoc' => 4,
-            'noidung' => "Đơn bị từ chối!"
+            'noidung' => "Đơn bị từ chối!",
+            'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         $capnhat = DB::table('table_don')
             ->where('don_id', "=", $don_id)
@@ -392,7 +415,8 @@ class AdDonTuController extends Controller
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'buoc' => 4,
-            'noidung' => "Sinh viên đã nhận kết quả"
+            'noidung' => "Sinh viên đã nhận kết quả",
+            'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         $capnhat = DB::table('table_don')
             ->where('don_id', "=", $don_id)
@@ -409,7 +433,12 @@ class AdDonTuController extends Controller
     function thuTucDashboard(Request $request)
     {
 //        $hoanthanh = DB::table('table_don')->where('hoanthanh', 1)->get(); //OK
-        $listphongban = DB::table('table_phongban');
+        $listphongban = DB::table('table_donvi_phongban')
+            ->orWhere('id', 2)
+            ->orWhere('id', 7)
+            ->orWhere('id', 8)
+            ->orWhere('id', 9)
+            ->orWhere('id', 10);
         $chuahoanthanh = DB::table('table_don')
             ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')
             ->join('table_sinhvien', 'table_don.masv', '=', 'table_sinhvien.masv')
@@ -465,13 +494,13 @@ class AdDonTuController extends Controller
             }
         }
         $listphongban_chart = (object) [];
-        $tenphongban = array();
+        $tenphongkhoa = array();
         $soluong = array();
         foreach ($listphongban as $item){
-            array_push($tenphongban, $item->tenphongban);
+            array_push($tenphongkhoa, $item->tenphongkhoa);
             array_push($soluong, $item->soluong);
         }
-        (object) $listphongban_chart->tenphongban = $tenphongban;
+        (object) $listphongban_chart->tenphongkhoa = $tenphongkhoa;
         (object) $listphongban_chart->soluong =  $soluong;
 
 //        Stats

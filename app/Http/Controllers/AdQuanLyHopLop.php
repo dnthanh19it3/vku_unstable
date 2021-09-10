@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class AdQuanLyHopLop extends Controller
 {
-    function listHopLopIndex(Request $request)
+    function listHopLopIndex(Request $request, $namhoc = null, $hocky = null)
     {
+
         $kyhoc_hienhanh = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first();
+        $list_kyhoc = DB::table('table_namhoc_hocky')->get();
+
         $result = CarbonPeriod::create($kyhoc_hienhanh->batdau, '1 month', $kyhoc_hienhanh->ketthuc)->locale('vi');
         $lopsh = DB::table('table_lopsh')->get();
         $arrayMonth = array();
@@ -25,7 +28,12 @@ class AdQuanLyHopLop extends Controller
 
         $arrayBienBan = [];
         foreach ($lopsh as $key => $lop_item) {
-            $data = DB::table('table_lopsh_hoplop')->where('lopsh', $lop_item->id)->where('thang', $thang)->first();
+            $data = DB::table('table_lopsh_hoplop')
+                ->where('lopsh', $lop_item->id)
+                ->where('thang', $thang)
+                ->where('namhoc', $namhoc)
+                ->where('hocky', $hocky)
+                ->first();
             $arrayBienBan[$lop_item->tenlop] = $data;
         }
 
@@ -55,7 +63,10 @@ class AdQuanLyHopLop extends Controller
             'kyhoc_hienhanh' => $kyhoc_hienhanh,
             'thang' => $thang,
             'months' => $months,
-            'thongke' => (object)$thongke
+            'thongke' => (object) $thongke,
+            'namhoc' => $kyhoc_hienhanh->id,
+            'hocky' => $kyhoc_hienhanh->hocky,
+            'list_kyhoc' => $list_kyhoc
         ]);
     }
     function listPhanHoiIndex(Request $request)
@@ -104,7 +115,7 @@ class AdQuanLyHopLop extends Controller
             'kyhoc_hienhanh' => $kyhoc_hienhanh,
             'thang' => $thang,
             'months' => $months,
-            'thongke' => (object)$thongke
+            'thongke' => (object) $thongke
         ]);
     }
 
@@ -112,12 +123,15 @@ class AdQuanLyHopLop extends Controller
     {
         $data = DB::table('table_lopsh_hoplop')
             ->join('table_lopsh', 'table_lopsh_hoplop.lopsh', '=', 'table_lopsh.id')
-            ->where('table_lopsh_hoplop.id', '=', $request->id)
+            ->join("table_namhoc_hocky", function ($join){
+                $join->on("table_lopsh_hoplop.namhoc", "=", "table_namhoc_hocky.id");
+                $join->on("table_lopsh_hoplop.hocky", "=", "table_namhoc_hocky.hocky");
+            })
+            ->where('table_lopsh_hoplop.id','=', $request->id)
             ->first([
                 'table_lopsh_hoplop.id',
-                'table_lopsh_hoplop.thang',
+                'table_lopsh_hoplop.lopsh',
                 'table_lopsh_hoplop.thoigianhop',
-                'table_lopsh_hoplop.diadiem',
                 'table_lopsh_hoplop.chuongtrinh',
                 'table_lopsh_hoplop.noidung',
                 'table_lopsh_hoplop.gopy',
@@ -125,36 +139,30 @@ class AdQuanLyHopLop extends Controller
                 'table_lopsh_hoplop.xacnhan_loptruong',
                 'table_lopsh_hoplop.xacnhan_bithu',
                 'table_lopsh_hoplop.xacnhan_gvcn',
+                'table_lopsh_hoplop.xacnhan_nhatruong',
                 'table_lopsh_hoplop.phanhoi_nhatruong',
+                'table_lopsh_hoplop.thoigianphanhoi',
+                'table_lopsh_hoplop.thoigianduyet',
                 'table_lopsh.tenlop',
-                'table_lopsh.loptruong',
-                'table_lopsh.loppho1',
-                'table_lopsh.loppho2',
-                'table_lopsh.bithu',
-                'table_lopsh.phobithu',
-                'table_lopsh.uyvien'
+                'table_namhoc_hocky.nambatdau',
+                'table_namhoc_hocky.namketthuc',
+                'table_namhoc_hocky.hocky',
+                'table_lopsh_hoplop.thang',
+                'table_lopsh_hoplop.created_at',
             ]);
 
+        $bancansu = $bancansu = DB::table('table_lopsh_bancansu')
+            ->join('table_lopsh_chucvu', 'table_lopsh_bancansu.chucvu_id', '=', 'table_lopsh_chucvu.id')
+            ->join('table_sinhvien', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien.masv')
+            ->join('table_sinhvien_chitiet', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien_chitiet.masv')
+            ->where('table_lopsh_bancansu.lopsh_id', $data->lopsh)
+            ->where('table_lopsh_bancansu.trangthai', 1)
+            ->orderBy('table_lopsh_chucvu.id', 'ASC')
+            ->get();
 
-        $loptruong = DB::table('table_sinhvien')->where('masv', $data->loptruong)->first();
-        $loppho1 = DB::table('table_sinhvien')->where('masv', $data->loppho1)->first();
-        $loppho2 = DB::table('table_sinhvien')->where('masv', $data->loppho2)->first();
-        $bithu = DB::table('table_sinhvien')->where('masv', $data->bithu)->first();
-        $phobithu = DB::table('table_sinhvien')->where('masv', $data->phobithu)->first();
-        $uyvien = DB::table('table_sinhvien')->where('masv', $data->uyvien)->first();
-        $bancansu = (object)[
-            'loptruong' => $loptruong,
-            'loppho1' => $loppho1,
-            'loppho2' => $loppho2,
-            'bithu' => $bithu,
-            'phobithu' => $phobithu,
-            'uyvien' => $uyvien
-        ];
-
-
-        return view('Admin.HopLop.XemBienBan')->with([
+        return view('Sv.LopSH.XemBienBan')->with([
             'data' => $data,
-            'bancansu' => $bancansu,
+            'bancansu' => $bancansu
         ]);
     }
 

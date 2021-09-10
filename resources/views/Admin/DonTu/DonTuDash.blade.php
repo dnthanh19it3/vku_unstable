@@ -53,7 +53,7 @@
                                 <tbody>
                                 @forelse($listphongban as $item)
                                     <tr>
-                                        <td style="font-size: 16px">{{$item->tenphongban}}</td>
+                                        <td style="font-size: 16px">{{$item->tenphongkhoa}}</td>
                                         <td class="fs15 fw700 text-right">{{$item->soluong}}</td>
                                     </tr>
                                 @empty
@@ -78,7 +78,7 @@
             <div class="bg-white p-3">
                 <h6 class="title_danhmuc title_danhmuc-grey">Đang chờ tiếp nhận</h6>
                 @foreach($listphongban as $key1 => $value1)
-                    <h6>{{$value1->tenphongban}}</h6>
+                    <h6>{{$value1->tenphongkhoa}}</h6>
                     @php $count = 0; @endphp
                     @foreach($chotiepnhan as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
@@ -108,7 +108,7 @@
             <div class="bg-white p-3">
                 <h6 class="title_danhmuc title_danhmuc-blue">Đang xử lý</h6>
                 @foreach($listphongban as $key1 => $value1)
-                    <h6>{{$value1->tenphongban}}</h6>
+                    <h6>{{$value1->tenphongkhoa}}</h6>
                     @php $count = 0; @endphp
                     @foreach($dangxuly as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
@@ -136,7 +136,7 @@
             <div class="bg-white p-3">
                 <h6 class="title_danhmuc title_danhmuc-orange">Phải xử lý hôm nay</h6>
                 @foreach($listphongban as $key1 => $value1)
-                    <h6>{{$value1->tenphongban}}</h6>
+                    <h6>{{$value1->tenphongkhoa}}</h6>
                     @php $count = 0; @endphp
                     @foreach($hethanhomnay as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
@@ -164,7 +164,7 @@
             <div class="bg-white p-3">
                 <h6 class="title_danhmuc title_danhmuc-red">Đã hết hạn</h6>
                 @foreach($listphongban as $key1 => $value1)
-                    <h6>{{$value1->tenphongban}}</h6>
+                    <h6>{{$value1->tenphongkhoa}}</h6>
                     @php $count = 0; @endphp
                     @foreach($dahethan as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
@@ -192,7 +192,7 @@
             <div class="bg-white p-3">
                 <h6 class="title_danhmuc title_danhmuc-grey">Hết hạn tuần này</h6>
                 @foreach($listphongban as $key1 => $value1)
-                    <h6>{{$value1->tenphongban}}</h6>
+                    <h6>{{$value1->tenphongkhoa}}</h6>
                     @php $count = 0; @endphp
                     @foreach($hethantuannay as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
@@ -227,7 +227,7 @@
             var config = {
                 type: 'pie',
                 data: {
-                    labels: cData.tenphongban,
+                    labels: cData.tenphongkhoa,
                     datasets: [{
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',

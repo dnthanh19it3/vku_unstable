@@ -6,28 +6,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 
 class SvDonTuController extends Controller
 
 {
-    function endsWith($string, $endString){
-        $len = strlen($endString);
-        if ($len == 0) {
-            return true;
-        }
-        return (substr($string, -$len) === $endString);
-    }
-    function save_file($file, $dir){
-        $path = $file->storeAs($dir, $file->hashName());
-        Storage::move($path, 'public/'.$path);
-        return $path;
+    function save_file($file, $dir, $masv, $maudon_id){
+        $extension = $file->getClientOriginalExtension();
+        $path = $file->storeAs($dir, $masv."-".$maudon_id."-".time().".".$extension);
+        if(Storage::move($path, 'public/'.$path)){
+            return $path;
+        } else {
+            return 0;
+        };
     }
 
-    /*
-        Tạo đơn
-    */
+    /**
+     *   Tạo đơn
+     */
 
     // View tạo đơn
 
@@ -37,59 +34,116 @@ class SvDonTuController extends Controller
         $danhsachdon = DB::table('table_maudon')->get();
         return view('Sv/DonTu/TaoDon')->with(['danhsachdon' => $danhsachdon]);
     }
+
+    // Get file field with format
+    function dinhDangTruong($input){
+        $output = array();
+        foreach ($input as $key => $value){
+            $numkey = ltrim($key, "field");
+            $rs = DB::table('table_maudon_chitiet')
+                ->join('table_maudon_loai', 'table_maudon_chitiet.loai_id', '=', 'table_maudon_loai.loai_id')
+                ->where('id', $numkey)
+                ->first();
+            $output[$key]['truong_id'] = $numkey;
+            $output[$key]['noidung'] = $value;
+            $output[$key]['input_type'] = $rs->input_type;
+            $output[$key]['nullable'] = $rs->nullable;
+        }
+        return $output;
+    }
+    //Validate logic
+    function setValidateLogic($type, $required = null){
+        switch ($type){
+            case "number":
+                return 'required|numeric';
+            case "datetime":
+                return   'required|date';
+            case "text_area":
+            case "text":
+                return ['required', 'regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i'];
+            case "file":
+                return 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:10240';
+        }
+    }
+
+
     // Lưu đơn
-    function nopdonStore(Request $request, $maudon_id){
+    function nopdonStore(Request $request, $maudon_id)
+    {
+        //Flag lỗi
         $flag = 1;
+        //Get hoc ki hien tai
+        $namhoc_hocky = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first();
+        // Prepare mẫu đơn data
         $thongtindon = [
             'masv' => session('masv'),
             'maudon_id' => $maudon_id,
             'thoigiantao' => Carbon::now(),
             'trangthai' => 0,
             'thoigianhethan' => Carbon::now()->addDays(DB::table('table_maudon')->where('maudon_id', $maudon_id)->first()->thoigianxuly),
-            'phongban_xuly' => DB::table('table_maudon')->where('maudon_id', $maudon_id)->first()->donvi_id
+            'phongban_xuly' => DB::table('table_maudon')->where('maudon_id', $maudon_id)->first()->donvi_id,
+            'namhoc' => $namhoc_hocky->id,
+            'hocky' => $namhoc_hocky->hocky,
+            'created_at' => now()
         ];
-
-        $donid = DB::table('table_don')->insertGetId($thongtindon);
-        $addLog =  DB::table('table_don_logs')->insert([
-            'don_id' => $donid,
-            'thoigian' => Carbon::now(),
-            'trangthai' => 0,
-            'noidung' => "Nộp đơn"
-        ]);
-        if(!$donid){
-            $flag = 0;
+        //Lấy format của field để validate
+        $fieldWithFormat = $this->dinhDangTruong($request->except('_token'));
+        //Xây dựng biểu thức logic validate
+        $validate_logic = array();
+        foreach ($request->except('_token') as $key => $item) {
+            $validate_logic[$key] = $this->setValidateLogic($fieldWithFormat[$key]['input_type']);
         }
+        //Validate dữ liệu theo logic
+        $validated_data = $this->validate($request, $validate_logic);
+        DB::beginTransaction();
 
-        $rawRecord = $request->tentruong;
+        while($flag) {
 
-        $fileField = DB::table('table_maudon_chitiet')->join('table_maudon_loai', 'table_maudon_chitiet.loai_id', '=', 'table_maudon_loai.loai_id')->where('table_maudon_loai.input_type', 'file')->get();
-
-        foreach ($rawRecord as $key => $item){
-
-            if($this->endsWith($item, ".tmp")){
-                $record = [
-                    'don_id' => $donid,
-                    'truong_id' => $key,
-                    'noidung' => $this->save_file($item, 'public/HoSo/DinhKem'),
-                ];
-                $result = DB::table('table_don_chitiet')->insert($record);
-                if(!$result){
-                    $flag = 0;
+            //Chèn thông tin cơ bản của đơn
+            $donid = DB::table('table_don')->insertGetId($thongtindon);
+            //Check và insert data
+            if ($donid) { //Thành công thì prepare dữ liệu và add vào array insert data
+                $insert_data = array();
+                foreach ($validated_data as $key => $value) {
+                    if (is_object($value)) {
+                        $file_path = $this->save_file($item, 'public/DonTu/DinhKem', session('masv'), $maudon_id);
+                        if($file_path){
+                            $record = [
+                                'don_id' => $donid,
+                                'truong_id' => ltrim($key, "field"),
+                                'noidung' => $file_path,
+                                'created_at' => now()
+                            ];
+                            array_push($insert_data, $record);
+                        }
+                    } else {
+                        $record = [
+                            'don_id' => $donid,
+                            'truong_id' => ltrim($key, "field"),
+                            'noidung' => $value,
+                            'created_at' => now()
+                        ];
+                        array_push($insert_data, $record);
+                    }
                 }
-            } else {
-                $record = [
-                    'don_id' => $donid,
-                    'truong_id' => $key,
-                    'noidung' => $item,
-                ];
-                $result = DB::table('table_don_chitiet')->insert($record);
-                if(!$result){
+                $insert = DB::table('table_don_chitiet')->insert($insert_data);
+                if (!$insert) { // Thất bại báo vào biến
                     $flag = 0;
+                } else {
+                    $addLog =  DB::table('table_don_logs')->insert([
+                        'don_id' => $donid,
+                        'thoigian' => Carbon::now(),
+                        'trangthai' => 0,
+                        'noidung' => "Nộp đơn"
+                    ]);
                 }
+            } else { // Thất bại báo vào biến
+                $flag = 0;
             }
+            DB::commit();
+            return back();
         }
-        pushNotify($flag);
-        return redirect()->back();
+        DB::rollBack();
     }
 
     // Chi tiet mau
@@ -124,33 +178,6 @@ class SvDonTuController extends Controller
             'sinhvien' => get_object_vars($sinhvien)
         ]);
     }
-    // Ajax trường sang html
-    function ajaxTruongDon(Request $request){
-        $don = DB::table('table_maudon')->where('maudon_id', $request->maudon_id)->first();
-        $listtruong = explode(',', $don->truong);
-
-        $mangTruong = array();
-
-        foreach ($listtruong as $item){
-            $rs = DB::table('table_maudon_chitiet')->join('table_maudon_loai', 'table_maudon_chitiet.loai_id', '=', 'table_maudon_loai.loai_id')->where('id', $item)->first();
-            if($rs != null){
-                array_push($mangTruong, $rs);
-            }
-        }
-        return view('Sv/DonTu/AjaxTruongDon')->with([
-            'truong' => $mangTruong,
-            'maudon_id' => $request->maudon_id,
-            'tendon' => $don->tenmaudon
-        ]);
-    }
-    function ajaxCamKet(Request $request){
-        $don = DB::table('table_maudon')->where('maudon_id', $request->maudon_id)->first();
-        return view('Sv/DonTu/AjaxCamKet')->with(['camket' => $don->dieukhoan]);
-    }
-
-    /*
-        Tạo đơn
-    */
 
     // Danh sách đơn
     function donDaNop(Request $request){
@@ -165,12 +192,12 @@ class SvDonTuController extends Controller
     function donChiTiet(Request $request, $don_id){
         $don = DB::table('table_don')
             ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')
-            ->join('table_phongban', 'table_maudon.donvi_id', '=', 'table_phongban.id')
+            ->join('table_donvi_phongban', 'table_maudon.donvi_id', '=', 'table_donvi_phongban.id')
             ->where('table_don.don_id', $don_id)->first();
         $donvihientai = DB::table('table_don')
-            ->join('table_phongban', 'table_don.phongban_xuly', '=', 'table_phongban.id')
+            ->join('table_donvi_phongban', 'table_don.phongban_xuly', '=', 'table_donvi_phongban.id')
             ->where('table_don.don_id', $don_id)
-            ->first()->tenphongban;
+            ->first()->tenphongkhoa;
         $sinhvien = DB::table('table_sinhvien')
             ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
             ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
@@ -281,34 +308,4 @@ class SvDonTuController extends Controller
         API Controller
     */
 
-    function getAll(Request $request, $masv){
-        $listdon = DB::table('table_don')
-            ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')
-            ->join('table_don_trangthai', 'table_don.trangthai_id', '=', 'table_don_trangthai.trangthai_id')
-            ->where('table_don.masv', '=', $masv)
-            ->get();
-        // dd($listdon);
-        if($listdon){
-            return $listdon;
-        }
-    }
-    function getSingle(Request $request, $masv, $don_id){
-        $don = DB::table('table_don')->join('table_don_trangthai', 'table_don.trangthai_id', '=', 'table_don_trangthai.trangthai_id')->where('don_id', $don_id)->first();
-        $maudon = DB::table('table_maudon')->where('maudon_id', $don->maudon_id)->first();
-        $listtruong = explode(',', $maudon->truong);
-        $mangTruong = array();
-        $response = null;
-        foreach ($listtruong as $item){
-            $rs = DB::table('table_maudon_chitiet')->join('table_maudon_loai', 'table_maudon_chitiet.loai_id', '=', 'table_maudon_loai.loai_id')->join('table_don_chitiet', 'table_maudon_chitiet.id', '=', 'table_don_chitiet.truong_id')->where('table_maudon_chitiet.id', $item)->where('table_don_chitiet.don_id', $don_id)->first();
-            if($rs != null){
-                array_push($mangTruong, $rs);
-            }
-        }
-        $response = [
-            'tendon' => $maudon->tenmaudon,
-            'don' => $don,
-            'truong' => $mangTruong
-        ];
-        return $response;
-    }
 }

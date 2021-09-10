@@ -31,17 +31,17 @@
                             <h6 for="dieukhoan" class="col-4 col-form-label">Loại</h6>
                             <div class="col-12">
                                 <select name="loai_id" class="form-control" value="{{$maudon->loai_id}}">
-                                    <option value="1">Yêu cầu</option>
-                                    <option value="0">Đơn</option>
+                                    <option value="1" {{$maudon->loai_id == 1 ? "selected" : ""}}>Yêu cầu</option>
+                                    <option value="0" {{$maudon->loai_id == 0 ? "selected" : ""}}>Đơn</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <h6 for="dieukhoan" class="col-4 col-form-label">Đơn vị xử lý</h6>
                             <div class="col-12">
-                                <select name="donvi_id" class="form-control" value="{{$maudon->loai_id}}>
+                                <select name="donvi_id" class="form-control">
                                     @foreach($phongban as $item)
-                                        <option value="{{$item->id}}">{{$item->tenphongban}}</option>
+                                        <option value="{{$item->id}}" {{$maudon->donvi_id == $item->id ? "selected" : ""}}>{{$item->tenphongkhoa}}</option>
                                     @endforeach
                                 </select>
                             </div>

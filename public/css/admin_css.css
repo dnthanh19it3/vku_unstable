@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css2?family=Quicksand:wght@300;
 
-400;500;600;700&display=swap);* {
+400;500;600;700&display=swap);@import url(https://fonts.googleapis.com/icon?family=Material+Icons);* {
   font-family: system-ui;
 }
 
@@ -391,6 +391,70 @@ li:hover .profile-leftpanel ul li:visited {
           box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
+.file-block {
+  border: 1px solid #cdcd;
+  border-radius: 15px;
+  width: 100%;
+  height: auto;
+  padding: 1rem;
+}
+
+.file-block .description {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+}
+
+.file-block .description .icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-item-align: center;
+      align-self: center;
+  padding: 1rem;
+}
+
+.file-block .description .icon {
+  font-size: 48px;
+}
+
+.file-block .description .name {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: rtl;
+}
+
+.file-block .action {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.file-block .action .action-child {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  width: 50%;
+  margin-top: 8px;
+}
+
+.file-block .action .action-child {
+  display: block;
+  text-align: center;
+}
+
 .title_danhmuc {
   padding-left: 1rem;
   text-transform: uppercase;
@@ -727,8 +791,128 @@ li:hover .profile-leftpanel ul li:visited {
   font-weight: 500;
 }
 
+/* Profile container */
+
+.profile {
+  margin: 20px 0;
+}
+
+.img-responsive {
+  width: 60%;
+  height: auto;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+/* Profile sidebar */
+
+.profile-sidebar {
+  padding: 20px 0 10px 0;
+  background: #fff;
+}
+
+.profile-userpic {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.profile-userpic img {
+  float: none;
+  margin: 0 auto;
+  width: 50%;
+  height: 50%;
+  border-radius: 50% !important;
+}
+
+.profile-usertitle {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-usertitle-name {
+  color: #5a7391;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.profile-usertitle-job {
+  text-transform: uppercase;
+  color: #5b9bd1;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.profile-userbuttons {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.profile-userbuttons .btn {
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 15px;
+  margin-right: 5px;
+}
+
+.profile-userbuttons .btn:last-child {
+  margin-right: 0px;
+}
+
+.profile-usermenu {
+  margin-top: 30px;
+}
+
+.profile-usermenu ul li {
+  border-bottom: 1px solid #f0f4f7;
+  display: block !important;
+  width: 100%;
+}
+
+.profile-usermenu ul li:last-child {
+  border-bottom: none;
+}
+
+.profile-usermenu ul li a {
+  color: #93a3b5;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.profile-usermenu ul li a i {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.profile-usermenu ul li a:hover {
+  background-color: #fafcfd;
+  color: #5b9bd1;
+}
+
+.profile-usermenu ul li.active {
+  border-bottom: none;
+}
+
+.profile-usermenu ul li.active a {
+  color: #5b9bd1;
+  background-color: #f6f9fb;
+  border-left: 2px solid #5b9bd1;
+  margin-left: -2px;
+}
+
+/* Profile Content */
+
+.profile-content {
+  padding: 20px;
+  background: #fff;
+  min-height: 460px;
+}
+
 .table-responsive {
-  margin: 30px 0;
+  margin: 0 0;
 }
 
 .table-wrapper {
@@ -916,5 +1100,45 @@ table.table .avatar {
   float: left;
   margin-top: 10px;
   font-size: 13px;
+}
+
+div.nav a {
+  color: #93a3b5;
+  font-size: 14px;
+  font-weight: 400;
+  margin-right: 0px;
+}
+
+div.nav a:hover {
+  background-color: #fafcfd;
+  color: #5b9bd1;
+}
+
+div.nav a.active {
+  color: #5b9bd1 !important;
+  background-color: #f6f9fb !important;
+  border-bottom: none;
+  border-top: none;
+  border-left: 2px solid #5b9bd1;
+  margin-left: -2px;
+}
+
+div.nav a.nav-link {
+  background-color: #fff;
+  border-bottom: 1px solid #f0f4f7;
+  border-radius: 0;
+  padding: 12px 8px 12px 16px !important;
+}
+
+div.nav a.nav-link i {
+  min-width: 20px;
+}
+
+div.nav a:last-child {
+  border-bottom: none;
+}
+
+.hoplop-content {
+  padding: 16px;
 }
 

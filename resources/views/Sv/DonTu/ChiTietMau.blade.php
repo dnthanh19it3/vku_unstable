@@ -28,8 +28,8 @@
                                 @elseif ($item->input_type == 'text')
                                     <div class="col-md-4 mb-2">
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
-                                        <input id="tenmaudon" name="tentruong[{{ $item->id }}]" placeholder=""
-                                               type="text" class="form-control" required="required"
+                                        <input id="tenmaudon" name="field{{ $item->id }}" placeholder=""
+                                               type="text" class="form-control rounded" required="required"
                                                 value="{{$item->lienket != null ? $sinhvien[$item->lienket]:""}}" @isset($item->lienket) disabled @endisset>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
@@ -38,8 +38,8 @@
                                 @elseif ($item->input_type == 'datetime')
                                     <div class="col-md-4 mb-2">
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
-                                        <input id="tenmaudon" name="tentruong[{{ $item->id }}]" placeholder=""
-                                               type="date" class="form-control" value="{{$item->lienket != null ? $sinhvien[$item->lienket] : ""}}" @isset($item->lienket) disabled @endisset>
+                                        <input id="tenmaudon" name="field{{ $item->id }}" placeholder=""
+                                               type="date" class="form-control rounded" value="{{$item->lienket != null ? $sinhvien[$item->lienket] : ""}}" @isset($item->lienket) disabled @endisset>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
                                         @endisset
@@ -47,8 +47,8 @@
                                 @elseif ($item->input_type == 'number')
                                     <div class="col-md-4 mb-2">
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
-                                        <input id="tenmaudon" name="tentruong[{{ $item->id }}]" placeholder=""
-                                               type="number" class="form-control" required="required" value="{{$item->lienket != null ? $sinhvien[$item->lienket]:""}}" @isset($item->lienket) disabled @endisset>
+                                        <input id="tenmaudon" name="field{{ $item->id }}" placeholder=""
+                                               type="number" class="form-control rounded" required="required" value="{{$item->lienket != null ? $sinhvien[$item->lienket]:""}}" @isset($item->lienket) disabled @endisset>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
                                         @endisset
@@ -56,8 +56,8 @@
                                 @elseif ($item->input_type == 'textarea')
                                     <div class="col-md-4 mb-2">
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
-                                        <textarea id="tenmaudon" name="tentruong[{{ $item->id }}]" placeholder=""
-                                                  class="form-control" required="required">value="{{$item->lienket != null ? $sinhvien[$item->lienket]:""}}" @isset($item->lienket) disabled @endisset</textarea>
+                                        <textarea id="tenmaudon" name="field{{ $item->id }}" placeholder=""
+                                                  class="form-control rounded" required="required">value="{{$item->lienket != null ? $sinhvien[$item->lienket]:""}}" @isset($item->lienket) disabled @endisset</textarea>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
                                         @endisset
@@ -67,6 +67,15 @@
                         <hr/>
                     </div>
                     <!-- THÔNG TIN ĐÍNH KÈM -->
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     @isset($flag)
                         <div>
                                 <h6>Giấy tờ kèm theo</h6>
@@ -76,12 +85,12 @@
                                 @if ($item->input_type == 'file')
                                     <div class="form-group row">
                                         <div class="col-md-12 mb-2">
-                                            <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
-                                            @isset($item->ghichutruong)
-                                                <div class="mb-1">{{ $item->ghichutruong}}</div>
-                                            @endisset
-                                            <input id="tenmaudon" name="tentruong[{{ $item->id }}]" placeholder=""
-                                                   type="file" class="form-control-file" required="required">
+                                            <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}@isset($item->ghichutruong)
+                                                    ({{ $item->ghichutruong}})
+                                                @endisset</div>
+                                            <input id="field{{ $item->id }}" name="field{{ $item->id }}" placeholder=""
+                                                   type="file" class="filepond" required="required">
+
                                         </div>
                                     </div>
                                 @endif
@@ -104,19 +113,54 @@
         </div>
     </div>
 @endsection
+@section('custom-css')
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet"/>
+@endsection
 @section('custom-script')
-<script>
-    $("#submit").prop('disabled', true);
-    $(document).ready(function (){
-        $("#camket").click(function (){
-            var flag = $("#camket").prop("checked")
-            console.log(flag)
-            if(flag){
-                $("#submit").removeAttr('disabled');
-            } else {
-                $("#submit").prop('disabled', true)
-            }
+{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>--}}
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
+    <script>
+        // Register the plugin
+        $.fn.filepond.registerPlugin(FilePondPluginFileValidateSize);
+        $.fn.filepond.registerPlugin(FilePondPluginFileValidateType);
+        $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
+        // Turn input element into a pond
+        $('.filepond').filepond();
+
+
+        $.fn.filepond.setDefaults({
+            maxFileSize: '10MB',
+            acceptedFileTypes: [
+                'image/png',
+                'image/jpg',
+                'image/jpeg',
+                "application/pdf",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ],
+            storeAsFile: true,
+            allowImagePreview: true
+        });
+
+
+    </script>
+    <script>
+        $("#submit").prop('disabled', true);
+        $(document).ready(function (){
+            $("#camket").click(function (){
+                var flag = $("#camket").prop("checked")
+                console.log(flag)
+                if(flag){
+                    $("#submit").removeAttr('disabled');
+                } else {
+                    $("#submit").prop('disabled', true)
+                }
+            })
         })
-    })
-</script>
+    </script>
 @endsection

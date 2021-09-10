@@ -1,79 +1,65 @@
 @extends('layout.sv_layout')
-@section('title', 'Tạm trú tạm vắng')
 @section('body')
-    <h6>Thông tin tạm trú</h6>
-    <hr/>
-    <div class="alert alert-warning">Thông tin tạm trú được cập nhật cho học kì {{$hocky->hocky}} năm học {{$hocky->nambatdau . "-" . $hocky->namketthuc}}</div>
     <div class="row">
         <div class="col-md-12">
-            @if($tamtrucount < 1)
-                <div class="row">
-                    <div class="col-12">
-                        <div class="alert alert-danger">
-                            Bạn chưa khai báo trong học kì này! Vui lòng bổ sung khai báo tạm trú!
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <a href="{{route('taotamtru')}}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Tạo khai báo mới</a>
-                    </div>
-                </div>
-            @elseif($tamtru != null && $tamtrucount > 0)
-                <div class="row">
-                    <div class="col-12">
-                        <a href="{{route('taotamtru')}}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Tạo khai báo mới</a>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-striped jambo_table bulk_action">
-                <thead>
-                <tr class="headings">
-                    <th>
-                        <div class="icheckbox_flat-green" style="position: relative;"><input
-                                type="checkbox" id="check-all" class="flat"
-                                style="position: absolute; opacity: 0;">
-                            <ins class="iCheck-helper"
-                                 style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                        </div>
-                    </th>
-                    <th class="column-title">Địa chỉ</th>
-                    <th class="column-title">Tên chủ hộ</th>
-                    <th class="column-title">SĐT chủ hộ</th>
-                    <th class="column-title">Thời gian</th>
-                    <th class="column-title">Học kỳ</th>
-                    <th class="column-title">Năm học</th>
-                </tr>
-                </thead>
-                <tbody>
-                @php
-                    $i = 0
-                @endphp
-
-                @forelse($listtamtru as $item)
-                    <tr role="row" class="odd">
-                        <td class="sorting_1">{{ $i += 1 }}</td>
-                        <td>{{ $item->so_nha.", ". $item->thon_to.", ".$item->xa_phuong.", ".$item->quan_huyen.", ".$item->tinh_thanh}}</td>
-                        <td>{{ $item->tenchuho }}</td>
-                        <td>{{ $item->sdtchuho }}</td>
-                        <td>{{ $item->thoigian }}</td>
-                        <td>{{ $item->hocky }}</td>
-                        <td>{{ $item->nambatdau."-".$item->namketthuc }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7">
-                            <div class="alert alert-danger">
-                                Bạn chưa khai báo trong học kì này! Vui lòng bổ sung khai báo tạm trú trong chỉnh sửa hồ sơ!
+            <div class="table-responsive">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <h5>Thông tin tạm trú</h5>
                             </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                    </tr>
-                </tbody>
-            </table>
+                            <div class="col-sm-7">
+                                <a href="{{route('taotamtru')}}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Khai báo</span></a>
+{{--                                <a href="{{route('taotamtru')}}" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Tạo tạm trú</span></a>--}}
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Địa chỉ</th>
+                            <th>Năm học</th>
+                            <th>Học kì</th>
+                            <th>Chủ hộ</th>
+                            <th>Điện thoại chủ hộ</th>
+                            <th>Từ ngày</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày khai báo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @forelse($tamtru as $key => $item)
+                            <tr>
+                                <td>{{$key+=1}}</td>
+                                <td>{{$item->sonha .", ".$item->thonto.", ".$item->xaphuong.", ".$item->quanhuyen.", ".$item->tinhthanh}}</td>
+                                <td>{{$item->nambatdau."-".$item->namketthuc}}</td>
+                                <td>{{$item->hocky}}</td>
+                                <td>{{$item->tenchuho}}</td>
+                                <td>{{$item->sdtchuho}}</td>
+                                <td>{{\Carbon\Carbon::make($item->thoigianbatdau )->format('d-m-Y')}}</td>
+                                <td>@if($item->trangthai)<span class="status text-success">&bull;</span> Hiện tại @else <span class="status text-danger">&bull;</span> Chỗ ở cũ @endif</td>
+                                <td>{{\Carbon\Carbon::make($item->created_at)->format('d-m-Y')}}</td>
+                            </tr>
+                        @empty
+                        @endforelse
+                        </tbody>
+                    </table>
+                    <div class="clearfix">
+                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                        <ul class="pagination">
+                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

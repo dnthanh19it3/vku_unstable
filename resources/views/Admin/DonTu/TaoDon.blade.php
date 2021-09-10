@@ -48,7 +48,7 @@
                             <div class="col-12">
                                 <select name="donvi_id" class="form-control">
                                     @foreach($phongban as $item)
-                                        <option value="{{$item->id}}">{{$item->tenphongban}}</option>
+                                        <option value="{{$item->id}}">{{$item->tenphongkhoa}}</option>
                                     @endforeach
                                 </select>
                             </div>

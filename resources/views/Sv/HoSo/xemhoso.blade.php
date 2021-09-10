@@ -1,48 +1,74 @@
 @extends('layout.sv_layout')
-@section('title', 'Xem hồ sơ')
-@section('header')
-@endsection
 @section('body')
     <div class="row">
         <div class="col-md-3">
-            <div class="profile_avatar_bl p-4 bg-white">
-                <img id="avatar_round" class="avatar_round" src="{{$sinhvien->avatar}}" alt="Avatar" title="Change the avatar"/>
-                <h5 class="mt-3">{{$sinhvien->hodem." ".$sinhvien->ten}}</h5>
-                <div class="">Mã sinh viên: {{$sinhvien->masv}} Lớp: {{$sinhvien->tenlop}} </div>
-                <div class="">Sinh viên ngành {{$sinhvien->tennganh}}</div>
-                <div class="mt-3">
-                    <a class="btn btn-sm btn-primary" style="color: #fff" href="{{route('suahoso')}}"><i
+            <div class="profile-sidebar">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img id="avatar_round" src="{{$sinhvien->avatar}}" class="img-responsive" alt="">
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
+                        {{$sinhvien->hodem." ".$sinhvien->ten}}
+                    </div>
+                    <div class="profile-usertitle-job">
+                        NGÀNH {{$sinhvien->tennganh}}
+                    </div>
+                    <div class="profile-usertitle-job">
+                        LỚP {{$sinhvien->tenlop}} MSV {{$sinhvien->masv}}
+                    </div>
+                </div>
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR BUTTONS -->
+                <div class="profile-userbuttons">
+                    <a href="{{route('suahoso')}}" class="btn btn-success btn-sm"><i
                                 class="fa fa-edit m-right-xs mr-1"></i>Sửa hồ sơ</a>
-                    <a class="btn btn-sm btn-success" style="color: #fff" href="{{route('sv.getlylich')}}"><i
+                    <a href="{{route('sv.getlylich')}}" class="btn btn-danger btn-sm"><i
                                 class="fa fa-file-export m-right-xs mr-1"></i>Xuất lý lịch</a>
                 </div>
-            </div>
-            <div class="profile_avatar_bl p-3 bg-white mt-3 mb-3">
-                <ul class="contact_list">
-                    <li class="contact_item"><div class="label"><i class="fa fa-mailbox"></i>Email</div><div class="value">{{$sinhvien->email}}</div></li>
-                    <li class="contact_item"><div class="label"><i class="fa fa-phone"></i>Số điện thoại</div><div class="value">123{{$sinhvien->dienthoai}}</div></li>
-                    <li class="contact_item"><div class="label"><i class="fab fa-facebook"></i>Facebook</div><div class="value">123{{$sinhvien->facebook}}</div></li>
-                    <li class="contact_item"><div class="label"><i class="fa fa-phone"></i>Facebook</div><div class="value">123{{$sinhvien->dienthoai}}</div></li>
-                </ul>
+                <!-- END SIDEBAR BUTTONS -->
+                <!-- SIDEBAR MENU -->
+
+                <div class="profile-usermenu">
+                    <div class="profile-usermenu">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="canhan-tab" data-toggle="pill" href="#canhan" role="tab" aria-controls="canhan" aria-selected="true">
+                                <i class="fa fa-home text-center mr-1"></i>
+                                Cá nhân
+                            </a>
+                            <a class="nav-link" id="khenthuong-tab" data-toggle="pill" href="#khenthuong" role="tab" aria-controls="khenthuong" aria-selected="false">
+                                <i class="fas fa-star"></i>
+                                Khen thưởng
+                            </a>
+                            <a class="nav-link" id="kyluat-tab" data-toggle="pill" href="#kyluat" role="tab" aria-controls="kyluat" aria-selected="false">
+                                <i class="fas fa-star-half-alt mr-1"></i>
+                                Kỷ luật
+                            </a>
+                            <a class="nav-link" id="renluyen-tab" data-toggle="pill" href="#renluyen" role="tab" aria-controls="renluyen" aria-selected="false">
+                                <i class="fas fa-user-check mr-1"></i>
+                                Rèn luyện
+                            </a>
+                            <a class="nav-link" id="timeline-tab" data-toggle="pill" href="#timeline" role="tab" aria-controls="timeline" aria-selected="false">
+                                <i class="fas fa-stream mr-1    "></i>
+                                Timeline
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- END MENU -->
             </div>
         </div>
+
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-12 ">
-                    <nav>
-                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-canhan-tab" data-toggle="tab" href="#nav-canhan" role="tab" aria-controls="nav-canhan" aria-selected="true">Cá nhân</a>
-                            <a class="nav-item nav-link" id="nav-khenthuong-tab" data-toggle="tab" href="#nav-khenthuong" role="tab" aria-controls="nav-khenthuong" aria-selected="false">Khen thưởng</a>
-                            <a class="nav-item nav-link" id="nav-kyluat-tab" data-toggle="tab" href="#nav-kyluat" role="tab" aria-controls="nav-kyluat" aria-selected="false">Kỷ luật</a>
-                            <a class="nav-item nav-link" id="nav-renluyen-tab" data-toggle="tab" href="#nav-renluyen" role="tab" aria-controls="nav-renluyen" aria-selected="false">Rèn luyện</a>
-                            <a class="nav-item nav-link" id="nav-timeline-tab" data-toggle="tab" href="#nav-timeline" role="tab" aria-controls="nav-about" aria-selected="false">Timeline</a>
-                        </div>
-                    </nav>
-                    <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-canhan" role="tabpanel" aria-labelledby="nav-canhan-tab">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade active show" id="canhan" role="tabpanel" aria-labelledby="canhan-tab">
                             <div>
                                 <div class="profile_main_block p-4 bg-white">
-                                    <h6>Thông tin cá nhân</h6>
+                                    <h6><i class="fas fa-info-circle mr-2"></i>Thông tin cá nhân</h6>
                                     <hr/>
                                     <div class="row">
                                         <div class="col-md-4 info_group">
@@ -93,16 +119,12 @@
                                             <div class="label">Tôn giáo</div>
                                             <div class="value">{{$sinhvien->tongiao}}</div>
                                         </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Diện chính sách</div>
-                                            <div class="value">{{"N/A"}}</div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-md-12">
                                         <div class="profile_main_block p-4 bg-white">
-                                            <h6>Thông tin gia đình</h6>
+                                            <h6><i class="fas fa-users mr-2"></i>Thông tin gia đình</h6>
                                             <hr/>
                                             <div class="row">
                                                 <div class="col-md-6 ">
@@ -189,7 +211,7 @@
                                     </div>
                                 </div>
                                 <div class="profile_main_block p-4 bg-white mt-3">
-                                    <h6>Thường trú và địa chỉ</h6>
+                                    <h6><i class="fas fa-map-marker-alt mr-2"></i>Thường trú và địa chỉ</h6>
                                     <hr/>
                                     <i>Hộ khẩu thường trú</i>
                                     <div class="row">
@@ -220,190 +242,191 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="nav-khenthuong" role="tabpanel" aria-labelledby="nav-khenthuong-tab">
-                            <div>
-                                <div class="table-responsive">
-                                    <div class="table-wrapper">
-                                        <div class="table-title">
-                                            <div class="row">
-                                                <div class="col-sm-5">
-                                                    <h6>Khen thưởng</h6>
-                                                </div>
-                                                <div class="col-sm-7">
-                                                </div>
+                        <div class="tab-pane fade" id="khenthuong" role="tabpanel" aria-labelledby="khenthuong-tab">
+                            <div class="table-responsive">
+                                <div class="table-wrapper">
+                                    <div class="table-title">
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <h6>Kỷ luật</h6>
+                                            </div>
+                                            <div class="col-sm-7">
                                             </div>
                                         </div>
-                                        <table class="table table-striped table-hover">
-                                            <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Nội dung</th>
-                                                <th>Cấp khen thưởng</th>
-                                                <th>Số quyết định</th>
-                                                <th>Thời gian</th>
+                                    </div>
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nội dung</th>
+                                            <th>Cấp khen kỷ luật</th>
+                                            <th>Số quyết định</th>
+                                            <th>Hình thức kỷ luật</th>
+                                            <th>Năm học</th>
+                                            <th>Học kỳ</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @php
+                                            $i = 0;
+                                        @endphp
+                                        @forelse ($kyluat as $item)
+                                            <tr role="row" class="odd">
+                                                <td class="sorting_1">{{ $i += 1 }}</td>
+                                                <td>{{ $item->noidung }}</td>
+                                                <td>{{ $item->capquyetdinh }}</td>
+                                                <td>{{ $item->soquyetdinh }}</td>
+                                                <td>{{ $item->hinhthuckyluat }}</td>
+                                                <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
+                                                <td>{{ $item->hocky }}</td>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            @php
-                                                $i = 0
-                                            @endphp
-
-                                            @forelse ($khenthuong as $item)
-                                                <tr role="row" class="odd">
-                                                    <td>{{ $i += 1 }}</td>
-                                                    <td>{{ $item->noidung }}</td>
-                                                    <td>{{ $item->capkhenthuong }}</td>
-                                                    <td>{{ $item->soquyetdinh }}</td>
-                                                    <td>{{ $item->thoigian }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="6">Chưa có thông tin khen thưởng!</td>
-                                                </tr>
-                                            @endforelse
-                                            </tbody>
-                                        </table>
-                                        <div class="clearfix">
-                                            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                            <ul class="pagination">
-                                                <li class="page-item disabled"><a href="#">Previous</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="nav-kyluat" role="tabpanel" aria-labelledby="nav-kyluat-tab">
-                            <div>
-                                <div class="table-responsive">
-                                    <div class="table-wrapper">
-                                        <div class="table-title">
-                                            <div class="row">
-                                                <div class="col-sm-5">
-                                                    <h6>Kỷ luật</h6>
-                                                </div>
-                                                <div class="col-sm-7">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <table class="table table-striped table-hover">
-                                            <thead>
+                                        @empty
                                             <tr>
-                                                <th>#</th>
-                                                <th>Nội dung</th>
-                                                <th>Cấp khen kỷ luật</th>
-                                                <th>Số quyết định</th>
-                                                <th>Hình thức kỷ luật</th>
-                                                <th>Thời gian</th>
+                                                <td colspan="7">
+                                                    Sinh viên này không có thông tin kỷ luật!
+                                                </td>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            @php
-                                                $i = 0;
-                                            @endphp
-                                            @forelse ($kyluat as $item)
-                                                <tr role="row" class="odd">
-                                                    <td class="sorting_1">{{ $i += 1 }}</td>
-                                                    <td>{{ $item->noidung }}</td>
-                                                    <td>{{ $item->capquyetdinh }}</td>
-                                                    <td>{{ $item->soquyetdinh }}</td>
-                                                    <td>{{ $item->hinhthuckyluat }}</td>
-                                                    <td>{{ $item->thoigian }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="7">
-                                                        Sinh viên này không có thông tin kỷ luật!
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                            </tbody>
-                                        </table>
-                                        <div class="clearfix">
-                                            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                            <ul class="pagination">
-                                                <li class="page-item disabled"><a href="#">Previous</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                            </ul>
-                                        </div>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                    <div class="clearfix">
+                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                                        <ul class="pagination">
+                                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="nav-renluyen" role="tabpanel" aria-labelledby="nav-renluyen-tab">
+                        <div class="tab-pane fade" id="kyluat" role="tabpanel" aria-labelledby="kyluat-tab">
                             <div>
-                                <div class="table-responsive">
-                                    <div class="table-wrapper">
-                                        <div class="table-title">
-                                            <div class="row">
-                                                <div class="col-sm-5">
-                                                    <h6>Kết quả rèn luyện</h6>
-                                                </div>
-                                                <div class="col-sm-7">
-                                                </div>
+                                <div class="table-wrapper">
+                                    <div class="table-title">
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <h6>Kỷ luật</h6>
+                                            </div>
+                                            <div class="col-sm-7">
                                             </div>
                                         </div>
-                                        <table class="table table-striped table-hover">
-                                            <thead>
-                                                <th class="column-title">#</th>
-                                                <th class="column-title">Năm học</th>
-                                                <th class="column-title">Học kì</th>
-                                                <th class="column-title">Điểm</th>
-                                                <th class="column-title">Xếp loại</th>
-                                            </thead>
-                                            <tbody>
-                                            @php
-                                                $i = 0
-                                            @endphp
-
-                                            @forelse($renluyen as $item)
-                                                <tr role="row" class="odd">
-                                                    <td class="sorting_1">{{ $i += 1 }}</td>
-                                                    <td>{{ $item->namhoc}}</td>
-                                                    <td>{{ $item->hocky }}</td>
-                                                    <td>{{ $item->diem }}</td>
-                                                    <td>{{ $item->xeploai }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="7">
-                                                        <div class="alert alert-danger">
-                                                            Chưa có đánh giá rèn luyện
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                            </tbody>
-                                        </table>
-                                        <div class="clearfix">
-                                            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                            <ul class="pagination">
-                                                <li class="page-item disabled"><a href="#">Previous</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                                <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                            </ul>
-                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nội dung</th>
+                                            <th>Cấp khen kỷ luật</th>
+                                            <th>Số quyết định</th>
+                                            <th>Hình thức kỷ luật</th>
+                                            <th>Năm học</th>
+                                            <th>Học kỳ</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @php
+                                            $i = 0;
+                                        @endphp
+                                        @forelse ($kyluat as $item)
+                                            <tr role="row" class="odd">
+                                                <td class="sorting_1">{{ $i += 1 }}</td>
+                                                <td>{{ $item->noidung }}</td>
+                                                <td>{{ $item->capquyetdinh }}</td>
+                                                <td>{{ $item->soquyetdinh }}</td>
+                                                <td>{{ $item->hinhthuckyluat }}</td>
+                                                <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
+                                                <td>{{ $item->hocky }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="8">
+                                                    Sinh viên này không có thông tin kỷ luật!
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                    <div class="clearfix">
+                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                                        <ul class="pagination">
+                                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="nav-timeline" role="tabpanel" aria-labelledby="nav-timeline-tab">
-                            <div class="bg-white p-5">
+                        <div class="tab-pane fade" id="renluyen" role="tabpanel" aria-labelledby="renluyen-tab">
+                            <div>
+                                <div class="table-wrapper">
+                                    <div class="table-title">
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <h6>Kết quả rèn luyện</h6>
+                                            </div>
+                                            <div class="col-sm-7">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                        <th class="column-title">#</th>
+                                        <th class="column-title">Năm học</th>
+                                        <th class="column-title">Học kì</th>
+                                        <th class="column-title">Điểm</th>
+                                        <th class="column-title">Xếp loại</th>
+                                        </thead>
+                                        <tbody>
+                                        @php
+                                            $i = 0
+                                        @endphp
+
+                                        @forelse($renluyen as $item)
+                                            <tr role="row" class="odd">
+                                                <td class="sorting_1">{{ $i += 1 }}</td>
+                                                <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
+                                                <td>{{ $item->hocky }}</td>
+                                                <td>{{ $item->diem }}</td>
+                                                <td>{{ $item->xeploai }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="7">
+                                                    <div class="alert alert-danger">
+                                                        Chưa có đánh giá rèn luyện
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                    <div class="clearfix">
+                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                                        <ul class="pagination">
+                                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
+                            <div class="bg-white p-3">
                                 <h6>Nhật kí hoạt động</h6>
                                 <ul class="list-unstyled timeline">
                                     @forelse($timeline as $item)
@@ -425,9 +448,9 @@
                                                 </div>
                                             </div>
                                         </li>
-                                @empty
-                                    <li>Chưa có hoạt động được ghi nhận!</li>
-                                @endforelse
+                                    @empty
+                                        <li>Chưa có hoạt động được ghi nhận!</li>
+                                    @endforelse
                                 </ul>
                             </div>
                         </div>
@@ -451,51 +474,6 @@
 @endsection
 @section('custom-css')
 <style>
-    nav > .nav.nav-tabs{
 
-        border: none;
-        color:#fff;
-        background:#272e38;
-        border-radius:0;
-
-    }
-    nav > div a.nav-item.nav-link,
-    nav > div a.nav-item.nav-link.active
-    {
-        border: none;
-        padding: 18px 25px;
-        color:#000;
-        font-weight: 500;
-        background: #fff;
-        border-radius:0;
-    }
-
-    nav > div a.nav-item.nav-link.active:after
-    {
-        content: "";
-        position: relative;
-        bottom: -60px;
-        left: -10%;
-        border: 15px solid transparent;
-        border-top-color: #26B99A;
-    }
-    .tab-content{
-        /*background: #fdfdfd;*/
-        line-height: 25px;
-        /*border: 1px solid #ddd;*/
-        border-top:5px solid #26b99a;
-        border-bottom:5px solid #26b99a;
-        padding:30px 25px;
-    }
-
-    nav > div a.nav-item.nav-link:hover,
-    nav > div a.nav-item.nav-link:focus
-    {
-        border: none;
-        background: #26b99a;
-        color:#fff;
-        border-radius:0;
-        transition:background 0.20s linear;
-    }
 </style>
 @endsection

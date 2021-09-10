@@ -13,7 +13,7 @@
                             <h6><i class="fas fa-users-class"></i>&nbsp;Đơn vị xử lý: {{$donvihientai}}</h6>
                             <h6><i class="fas fa-file-alt"></i>&nbsp;ID: 1234</h6>
                             @if($don->chuyentiep)
-                                <span><i class="fa fa-share"></i>&nbsp;Đơn được chuyển tiếp từ {{$don->tenphongban}}</span>
+                                <span><i class="fa fa-share"></i>&nbsp;Đơn được chuyển tiếp từ {{$don->tenphongkhoa}}</span>
                                 <span><i class="fa fa-share"></i>&nbsp;Lý do chuyển {{$don->lydo}}</span>
                             @endif
                         </div>
@@ -22,6 +22,9 @@
                         <div class="thongtindon-phai">
                             <span>Thời gian nộp: {{$don->thoigiantao}}</span>
                             <span>Thời gian hết hạn: {{$don->thoigianhethan}}</span>
+                            @if($lancap > 0)
+                                <p>Lần cấp trong năm : <span>{{$lancap}}</span></p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -29,7 +32,7 @@
             <div class="applicant-content">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="border-bottom pb-2">THÔNG TIN CHUNG</h5>
+                        <h5 class="border-bottom pb-2"><i class="fas fa-info-circle mr-2"></i>THÔNG TIN CHUNG</h5>
                         <div class="row m-3">
                             @foreach ($mangTruong as $item)
                                     @if($item->loai_id != 4)
@@ -42,14 +45,32 @@
                                     @endif
                             @endforeach
                         </div>
-                        <h5 class="border-bottom pb-2">TẬP TIN ĐÍNH KÈM</h5>
+                        <h5 class="border-bottom pb-2"><i class="fas fa-paperclip mr-2"></i>TẬP TIN ĐÍNH KÈM</h5>
                         <div class="row m-3">
                             @php
                                 $fileflag = 0
                             @endphp
                             @foreach ($mangTruong as $item)
                                 @if($item->loai_id == 4)
-                                    <div class="col-md-12"><i class="fas fa-paperclip"></i> <h6 style="display: inline">&nbsp;{{ $item->tentruong }}&nbsp;</h6> <a href="javascript:void(0)" class="ml-1" onclick="openPreview('{{ asset('storage/'.$item->noidung)}}')"  ><i class="fas fa-eye ml-1"></i>Xem trước</a><a href="{{ asset('storage/'.$item->noidung)}}" target="_blank"><i class="fas fa-download ml-1"></i>Tải xuống</a></div>
+                                    <div class="col-md-4 file-block">
+                                        <h6 style="display: inline">&nbsp;{{ $item->tentruong }}&nbsp;</h6>
+                                        <div class="description">
+                                            <div class="icon"><i class="fas fa-file-word"></i></div>
+                                            <div class="name">
+                                                {{$item->noidung }}
+                                            </div>
+                                        </div>
+                                        <div class="action">
+                                            <a href="javascript:void(0)" class="ml-1 action-child" onclick="openPreview('{{ asset('storage/'.$item->noidung)}}')">
+                                                <i class="fas fa-eye ml-1"></i>
+                                                <span>Xem trước</span>
+                                            </a>
+                                            <a href="{{ asset('storage/'.$item->noidung)}}"  class="action-child" target="_blank">
+                                                <i class="fas fa-download ml-1"></i>
+                                                <span>Tải xuống</span>
+                                            </a>
+                                        </div>
+                                    </div>
                                     @php $fileflag = 1 @endphp
                                 @endif
                             @endforeach
@@ -112,9 +133,9 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
+    <!-- Modal Preview -->
         <div class="modal bd-example-modal-lg fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Xem trước tài liệu</h5>
@@ -126,8 +147,7 @@
                         <iframe id="iframe_preview" src=''  width='100%' height='600px'></iframe>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">&times; Đóng</button>
                     </div>
                 </div>
             </div>
@@ -189,9 +209,9 @@
             </div>
         </div>
         {{-- CHUYỂN TIẾP --}}
-        <div class="modal fade" id="modalChuyen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        <div class="modal fade bd-example-modal-lg" id="modalChuyen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
              aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <form method="post" action="{{route('admin.thutuc.chuyentiep', ['don_id' => $don->don_id])}}">
                         {{ csrf_field() }}
@@ -212,7 +232,7 @@
                                 <div class="col-8">
                                     <select id="phongban" name="phongban" required="required" class="custom-select">
                                         @foreach($phongban as $key => $value)
-                                            <option value="{{$value->id}}">{{$value->tenphongban}}</option>
+                                            <option value="{{$value->id}}">{{$value->tenphongkhoa}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -227,10 +247,15 @@
             </div>
         </div>
 @endsection
+@section('custom-css')
+    <style>
+
+    </style>
+@endsection
 @section('custom-script')
             <script>
                 function openPreview(url) {
-                    if(url.endsWith("docx") || url.endsWith("doc") || url.endsWith("xlss") || url.endsWith("xls") || url.endsWith("pdf")){
+                    if(url.endsWith("docx") || url.endsWith("doc") || url.endsWith("xlsx") || url.endsWith("xls") || url.endsWith("pdf")){
                         $('#iframe_preview').attr('src', "https://view.officeapps.live.com/op/embed.aspx?src=" + url);
                         console.log("https://view.officeapps.live.com/op/embed.aspx?src=" + url);
                     } else {

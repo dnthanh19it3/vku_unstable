@@ -8,8 +8,8 @@
                     <div class="row">
                         <div class="col-12 ml-3">
                             <p>Tên đơn: <span>{{$don->tenmaudon}}</span></p>
-                    <p>Thời gian xử lý: <span>{{$don->thoigianxuly}}</span></p>
-                    <p>Điều khoản: <span>{{$don->dieukhoan}}</span></p>
+                            <p>Thời gian xử lý: <span>{{$don->thoigianxuly}}</span></p>
+                            <p>Điều khoản: <span>{{$don->dieukhoan}}</span></p>
                         </div>
                     </div>
                 </div>
