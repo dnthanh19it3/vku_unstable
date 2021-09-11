@@ -53,9 +53,14 @@ Route::prefix('sv')->middleware('sv')->group(function () {
         Route::get('danh-sach', 'SvHopLop@listHopLopIndex')->name('sv.hoplop.listhoplop');
         Route::get('lap-bien-ban', 'SvHopLop@taoBienBanIndex')->name('sv.hoplop.taobienban');
         Route::post('lap-bien-ban', 'SvHopLop@taoBienBanStore')->name('sv.hoplop.taobienban.store');
-        Route::get('sua-bien-ban', 'SvHopLop@suaBienBanIndex')->name('sv.hoplop.suabienban');
-        Route::post('sua-bien-ban', 'SvHopLop@suaBienBanUpdate')->name('sv.hoplop.suabienban.update');
-        Route::get('xem-bien-ban', 'SvHopLop@xemBienBanIndex')->name('sv.hoplop.xembienban');
+
+        Route::prefix('{id}')->group(function (){
+            Route::get('sua-bien-ban', 'SvHopLop@suaBienBanIndex')->name('sv.hoplop.suabienban');
+            Route::post('sua-bien-ban', 'SvHopLop@suaBienBanUpdate')->name('sv.hoplop.suabienban.update');
+            Route::get('xem-bien-ban', 'SvHopLop@xemBienBanIndex')->name('sv.hoplop.xembienban');
+            Route::get('duyet-bien-ban/{role}', 'SvHopLop@xacNhan')->name('sv.hoplop.xacnhan');
+        });
+
     });
     Route::prefix('thutucmotcua')->group(function () {
         // Tao don
@@ -87,11 +92,22 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
         Route::post('commit', 'AdDanhGiaRenLuyen@commitData')->name('admin.danhgiarenluyen.commit');
     });
     Route::prefix('hoplop')->group(function (){
+        //Duyệt
         Route::get('danh-sach/{namhoc}/{hocky}', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop');
         Route::get('danh-sach', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop.nullable');
+        //Tổng hợp phản hồi
         Route::get('tong-hop-phan-hoi', 'AdQuanLyHopLop@listPhanHoiIndex')->name('ad.hoplop.tonghopphanhoi');
-        Route::post('phan-hoi', 'AdQuanLyHopLop@phanHoi')->name('ad.hoplop.phanhoi');
-        Route::get('xem-bien-ban', 'AdQuanLyHopLop@xemBienBanIndex')->name('admin.hoplop.xembienban');
+        //Xử lý biên bản
+        Route::prefix('bienban/{id}')->group(function (){
+            Route::get('xem-bien-ban', 'AdQuanLyHopLop@xemBienBanIndex')->name('admin.hoplop.xembienban');
+            Route::post('phan-hoi', 'AdQuanLyHopLop@phanHoi')->name('ad.hoplop.phanhoi');
+            Route::prefix('duyet')->group(function (){
+                Route::get('gvcn', 'AdQuanLyHopLop@duyetGvcn')->name('admin.hoplop.duyet.gvcn');
+                Route::get('khoa', 'AdQuanLyHopLop@duyetKhoa')->name('admin.hoplop.duyet.khoa');
+                Route::get('ctsv', 'AdQuanLyHopLop@duyetCtsv')->name('admin.hoplop.duyet.ctsv');
+                Route::get('bgh', 'AdQuanLyHopLop@duyetBgh')->name('admin.hoplop.duyet.bgh');
+            });
+        });
     });
     Route::prefix('donthu')->group(function () {
         Route::prefix('mau')->group(function () {

@@ -1,7 +1,4 @@
 @extends('layout.sv_layout')
-@section('title', 'Xem hồ sơ')
-@section('header')
-@endsection
 @section('body')
     <form method="post" action="{{route('sv.hoplop.suabienban.update', ['id' => $data->id])}}" class="row mb-3">
         {{ csrf_field() }}

@@ -41,7 +41,7 @@
                                                 <div class="ma-phan-hoi">
                                                     {{$lop}}
                                                 </div>
-                                                @if($noidungbienban->phanhoi_nhatruong != null)
+                                                @if($noidungbienban->phanhoi != null)
                                                 <div class="trang-thai-badge trang-thai-badge-open">
                                                     Đã phản hồi
                                                 </div>
@@ -58,12 +58,12 @@
                                                 <div class="gopy-lop">
                                                     {!! $noidungbienban->gopy !!}
                                                     <div class="phan-hoi-nha-truong">
-                                                        @if($noidungbienban->phanhoi_nhatruong != null)
+                                                        @if($noidungbienban->phanhoi != null)
                                                             <div class="title">
                                                                 <i class="fas fa-share mr-2"></i>Phản hồi từ {{"phòng abc"}}
                                                             </div>
                                                             <div class="content">
-                                                                {!! $noidungbienban->phanhoi_nhatruong !!}
+                                                                {!! $noidungbienban->phanhoi !!}
                                                             </div>
                                                         @else
                                                             <div class="title">

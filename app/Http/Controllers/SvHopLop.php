@@ -39,9 +39,11 @@ class SvHopLop extends Controller
                         'table_lopsh_hoplop.gvcn_nhanxet',
                         'table_lopsh_hoplop.xacnhan_loptruong',
                         'table_lopsh_hoplop.xacnhan_bithu',
-                        'table_lopsh_hoplop.xacnhan_gvcn',
-                        'table_lopsh_hoplop.xacnhan_nhatruong',
-                        'table_lopsh_hoplop.phanhoi_nhatruong',
+                        'table_lopsh_hoplop.xacnhan_bgh',
+                        'table_lopsh_hoplop.xacnhan_khoa',
+                        'table_lopsh_hoplop.xacnhan_bgh',
+                        'table_lopsh_hoplop.xacnhan_ctsv',
+                        'table_lopsh_hoplop.phanhoi',
                         'table_lopsh_hoplop.thoigianphanhoi',
                         'table_lopsh_hoplop.thoigianduyet',
                         'table_lopsh.tenlop',
@@ -117,14 +119,14 @@ class SvHopLop extends Controller
         return redirect(route('sv.hoplop.listhoplop'));
     }
 
-    function xemBienBanIndex(Request $request){
+    function xemBienBanIndex(Request $request, $id){
         $data = DB::table('table_lopsh_hoplop')
             ->join('table_lopsh', 'table_lopsh_hoplop.lopsh', '=', 'table_lopsh.id')
             ->join("table_namhoc_hocky", function ($join){
                 $join->on("table_lopsh_hoplop.namhoc", "=", "table_namhoc_hocky.id");
                 $join->on("table_lopsh_hoplop.hocky", "=", "table_namhoc_hocky.hocky");
             })
-            ->where('table_lopsh_hoplop.id','=', $request->id)
+            ->where('table_lopsh_hoplop.id','=', $id)
             ->first([
                 'table_lopsh_hoplop.id',
                 'table_lopsh_hoplop.lopsh',
@@ -136,8 +138,10 @@ class SvHopLop extends Controller
                 'table_lopsh_hoplop.xacnhan_loptruong',
                 'table_lopsh_hoplop.xacnhan_bithu',
                 'table_lopsh_hoplop.xacnhan_gvcn',
-                'table_lopsh_hoplop.xacnhan_nhatruong',
-                'table_lopsh_hoplop.phanhoi_nhatruong',
+                'table_lopsh_hoplop.xacnhan_khoa',
+                'table_lopsh_hoplop.xacnhan_bgh',
+                'table_lopsh_hoplop.xacnhan_ctsv',
+                'table_lopsh_hoplop.phanhoi',
                 'table_lopsh_hoplop.thoigianphanhoi',
                 'table_lopsh_hoplop.thoigianduyet',
                 'table_lopsh.tenlop',
@@ -156,20 +160,19 @@ class SvHopLop extends Controller
             ->where('table_lopsh_bancansu.trangthai', 1)
             ->orderBy('table_lopsh_chucvu.id', 'ASC')
             ->get();
-
         return view('Sv.LopSH.XemBienBan')->with([
             'data' => $data,
             'bancansu' => $bancansu
         ]);
     }
-    function suaBienBanIndex(Request $request){
+    function suaBienBanIndex(Request $request, $id){
         $data = DB::table('table_lopsh_hoplop')
             ->join('table_lopsh', 'table_lopsh_hoplop.lopsh', '=', 'table_lopsh.id')
             ->join("table_namhoc_hocky", function ($join){
                 $join->on("table_lopsh_hoplop.namhoc", "=", "table_namhoc_hocky.id");
                 $join->on("table_lopsh_hoplop.hocky", "=", "table_namhoc_hocky.hocky");
             })
-            ->where('table_lopsh_hoplop.id','=', $request->id)
+            ->where('table_lopsh_hoplop.id','=', $id)
             ->first([
                 'table_lopsh_hoplop.id',
                 'table_lopsh_hoplop.lopsh',
@@ -181,8 +184,10 @@ class SvHopLop extends Controller
                 'table_lopsh_hoplop.xacnhan_loptruong',
                 'table_lopsh_hoplop.xacnhan_bithu',
                 'table_lopsh_hoplop.xacnhan_gvcn',
-                'table_lopsh_hoplop.xacnhan_nhatruong',
-                'table_lopsh_hoplop.phanhoi_nhatruong',
+                'table_lopsh_hoplop.xacnhan_khoa',
+                'table_lopsh_hoplop.xacnhan_bgh',
+                'table_lopsh_hoplop.xacnhan_ctsv',
+                'table_lopsh_hoplop.phanhoi',
                 'table_lopsh_hoplop.thoigianphanhoi',
                 'table_lopsh_hoplop.thoigianduyet',
                 'table_lopsh.tenlop',
@@ -208,7 +213,8 @@ class SvHopLop extends Controller
         ]);
     }
 
-    function suaBienBanUpdate(Request $request){
+    function suaBienBanUpdate(Request $request, $id){
+        $flag = 1;
         $data = $request->validate([
             'chuongtrinh' => 'required',
             'noidung' => 'required',
@@ -217,8 +223,25 @@ class SvHopLop extends Controller
 
         // Add thong tin
         $data['updated_at'] = now();
-
-        $update = DB::table('table_lopsh_hoplop')->where('id', '=', $request->id)->update($data);
+        $update = DB::table('table_lopsh_hoplop')->where('id', '=', $id)->update($data);
+        if(!$update){
+            $flag = 0;
+        }
         return redirect(route('sv.hoplop.listhoplop'));
+    }
+    function xacNhan(Request $request, $id, $role){
+        $record = (array) DB::table('table_lopsh_hoplop')->where('id', $id)->first();
+        $update = null;
+
+        if($record['xacnhan_'.$role]){
+            $update = (array) DB::table('table_lopsh_hoplop')->where('id', $id)->update(['xacnhan_'."$role" => 0]);
+        } else {
+            $update = (array) DB::table('table_lopsh_hoplop')->where('id', $id)->update(['xacnhan_'."$role" => 1]);
+        }
+        if(!$update){
+            $flag = 0;
+        }
+
+        return back();
     }
 }

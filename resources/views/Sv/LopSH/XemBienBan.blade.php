@@ -49,11 +49,27 @@
                 </div>
                 <div class="row ml-3">
                     <div class="col-md-6"><h6>Bí thư</h6></div>
-                    <div class="col-md-6">@if($data->xacnhan_bithu) <i class="fas fa-check-circle"></i> @else <i class="fas fa-times-circle"></i> @endif</div>
-                </div
-                ><div class="row ml-3">
+                    <div class="col-md-6">@if($data->xacnhan_bithu) <i class="fas fa-check-circle"></i> @else <i class="fas fa-times-circle"></i>@endif</div>
+                </div>
+                <div class="row ml-3">
                     <div class="col-md-6"><h6>GVCN</h6></div>
                     <div class="col-md-6">@if($data->xacnhan_gvcn) <i class="fas fa-check-circle"></i> @else <i class="fas fa-times-circle"></i> @endif</div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        @if($data->xacnhan_khoa != 1)
+                            @foreach($bancansu as $key => $item)
+                                @if($item->masv == session('masv'))
+                                    @php $array_data = (array) $data @endphp
+                                    @if(!$array_data['xacnhan_'.$item->chucvu_slug])
+                                        <a href="{{route('sv.hoplop.xacnhan', ['id' => $data->id, 'role' => $item->chucvu_slug])}}" class="btn btn-sm btn-primary w-100"><i class="fas fa-check-circle mr-2"></i>{{$item->chucvu}} xác nhận</a>
+                                    @else
+                                        <a href="{{route('sv.hoplop.xacnhan', ['id' => $data->id, 'role' => $item->chucvu_slug])}}" class="btn btn-sm btn-danger w-100"><i class="fas fa-times-circle mr-2"></i>{{$item->chucvu}} huỷ xác nhận</a>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
+                    </div>
                 </div>
             </div>
             <div class="bg-white p-3 mb-3">
@@ -87,7 +103,7 @@
                 <h6><i class="fas fa-comment-dots mr-2"></i>Phản hồi từ nhà trường</h6>
                 <hr/>
                 <div class="phan-hoi-info pl-3">
-                    @if($data->phanhoi_nhatruong != null)
+                    @if($data->phanhoi != null)
                         <div class="trang-thai-badge trang-thai-badge-open">
                             Đã phản hồi
                         </div>
@@ -102,7 +118,7 @@
                 </div>
                 <div class="row hoplop-content">
                     <div class="col-md-12"><h6>Nội dung phản hồi</h6></div>
-                    <div class="col-md-12 mb-2 ml-3">{!! $data->phanhoi_nhatruong ? $data->phanhoi_nhatruong : "Không có phản hồi!" !!}</div>
+                    <div class="col-md-12 mb-2 ml-3">{!! $data->phanhoi ? $data->phanhoi : "Không có phản hồi!" !!}</div>
                 </div>
             </div>
         </div>

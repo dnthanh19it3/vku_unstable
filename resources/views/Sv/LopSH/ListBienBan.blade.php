@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
           <div class="bg-white p-3">
-              <h5>Danh sách biên bản</h5>
+              <h5>Danh sách biên bản họp lớp</h5>
               <hr/>
 
               <div class="table-responsive">
@@ -38,13 +38,15 @@
                                       <td>Họp lớp tháng {{$value->thang_text}}</td>
                                       <td><span class="status text-success">•</span>Đã nộp</td>
                                       <td>
-                                          @if($value->bienban->xacnhan_nhatruong) <span class="status text-success">•</span> Đã duyệt @else <span class="status text-warning">•</span> Chờ duyệt @endif
+                                          @if($value->bienban->xacnhan_khoa) <span class="status text-success">•</span> Đã duyệt @else <span class="status text-warning">•</span> Chờ duyệt @endif
                                       </td>
                                       <td>{{$value->bienban->hodem . " " . $value->bienban->ten}}</td>
                                       <td>{{\Carbon\Carbon::make($value->bienban->thoigianhop)->format('d/m/Y')}}</td>
                                       <td>
-                                          <a href="{{route('sv.hoplop.xembienban', ['id' => $value->bienban->id])}}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xe8f4;</i></a>
-                                          <a href="{{route('sv.hoplop.suabienban', ['id' => $value->bienban->id])}}" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xf097;</i></a>
+                                          <a href="{{route('sv.hoplop.xembienban', ['id' => $value->bienban->id])}}" class="settings" title="Xem biên bản" data-toggle="tooltip"><i class="material-icons">&#xe8f4;</i></a>
+                                          @if(!$value->bienban->xacnhan_khoa)
+                                              <a href="{{route('sv.hoplop.suabienban', ['id' => $value->bienban->id])}}" class="delete" title="Sửa biên bản" data-toggle="tooltip"><i class="material-icons">&#xf097;</i></a>
+                                          @endif
                                       </td>
                                   </tr>
                               @else
@@ -60,18 +62,6 @@
                           @endforeach
                           </tbody>
                       </table>
-                      <div class="clearfix">
-                          <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                          <ul class="pagination">
-                              <li class="page-item disabled"><a href="#">Previous</a></li>
-                              <li class="page-item"><a href="#" class="page-link">1</a></li>
-                              <li class="page-item"><a href="#" class="page-link">2</a></li>
-                              <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                              <li class="page-item"><a href="#" class="page-link">4</a></li>
-                              <li class="page-item"><a href="#" class="page-link">5</a></li>
-                              <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                          </ul>
-                      </div>
                   </div>
               </div>
           </div>

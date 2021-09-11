@@ -12,6 +12,8 @@ class ToolController extends Controller
         return substr($headers[0], 9, 3);
     }
     function  crawlAvatar(){
+
+        dd("HIHI");
         $s = 0;
         $e = 0;
         $listStudent = DB::table('table_sinhvien')->get();
