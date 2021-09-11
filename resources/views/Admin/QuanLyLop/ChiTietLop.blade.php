@@ -63,7 +63,7 @@
                             <tbody>
                             @foreach($listsinhvien as $key => $item)
                                 <tr>
-                                    <td>{{$key+=1}}</td>
+                                    <td><img src="{{asset($item->avatar)}}" class="avatar"/> </td>
                                     <td>{{$item->hodem}}</td>
                                     <td>{{$item->ten}}</td>
                                     <td>{{$item->gioitinh ? "Nữ" : "Nam"}}</td>

@@ -15,6 +15,11 @@
 //Auth Route
 use Illuminate\Support\Facades\Route;
 
+
+Route::prefix('tools')->group(function (){
+    Route::get('crawl_student_image', 'ToolController@crawlAvatar');
+});
+
 Route::get('sv/login', 'SvAuthController@webLoginView')->name('sv.login.view');
 Route::post('sv/login', 'SvAuthController@webLogin')->name('sv.login');
 

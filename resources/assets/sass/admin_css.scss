@@ -831,6 +831,7 @@ table.table td i {
 }
 table.table .avatar {
   border-radius: 50%;
+  object-fit: cover;
   vertical-align: middle;
   margin-right: 10px;
 }
