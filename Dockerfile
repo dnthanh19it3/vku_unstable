@@ -1,12 +1,11 @@
+# Set master image
+FROM php:7.2-fpm-alpine
 
-FROM php:7.4-fpm-alpine
+# Set working directory
+WORKDIR /var/www/html
 
-RUN docker-php-ext-install pdo pdo_mysql sockets
-RUN curl -sS https://getcomposer.org/installer | php -- \
-     --install-dir=/usr/local/bin --filename=composer
+# Install PHP Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-WORKDIR /app
+# Copy existing application directory
 COPY . .
-RUN composer update

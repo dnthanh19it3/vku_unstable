@@ -68,6 +68,7 @@ class SvHosoController extends Controller
             ->join('table_nganh', 'table_sinhvien.nganh_id', '=', 'table_nganh.id')
             ->where('table_sinhvien.masv', '=', session('masv'))
             ->first();
+        $sinhvien->thanhphangiadinh = $sinhvien->thanhphangiadinh ? explode('|', $sinhvien->thanhphangiadinh) : null;
         $sinhhvienTamtru = DB::table('table_sinhvien_tamtru')->where('masv', "=", session('masv'))->get();
         if(isset($sinhvien->avatar)){
             $sinhvien->avatar = asset($sinhvien->avatar);

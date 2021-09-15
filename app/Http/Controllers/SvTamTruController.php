@@ -17,6 +17,7 @@ class SvTamTruController extends Controller
             ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
             ->first();
         $hocky_info = DB::table('table_namhoc_hocky')->where('hienhanh', '=', 1)->first();
+        $khaibaohientai = DB::table('table_sinhvien_tamtru')->where(['masv' => session('masv'), 'namhoc' => $hocky_info->id, 'hocky' => $hocky_info->hocky])->first();
         $tamtru = DB::table('table_sinhvien_tamtru')
             ->join("table_namhoc_hocky", function ($join){
                 $join->on("table_sinhvien_tamtru.namhoc", "=", "table_namhoc_hocky.id");
@@ -48,7 +49,8 @@ class SvTamTruController extends Controller
 
         return view('Sv.HoSo.TamTruIndex')->with([
             'tamtru' => $tamtru,
-            'hocky' => $hocky_info
+            'hocky' => $hocky_info,
+            'khaibaohientai' => $khaibaohientai
         ]);
 
     }

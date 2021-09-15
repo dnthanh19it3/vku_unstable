@@ -121,6 +121,41 @@
                     <div class="col-md-12 mb-2 ml-3">{!! $data->phanhoi ? $data->phanhoi : "Không có phản hồi!" !!}</div>
                 </div>
             </div>
+            <!-- Xác nhận -->
+            <div class="bg-white p-3">
+                <h6><i class="fas fa-signature mr-2"></i>Xác nhận</h6>
+                <hr/>
+                <div class="row">
+                    <div class="col-md-4">
+                        @if($data->xacnhan_khoa)
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
+                            <div class="text-center">Khoa: Đã duyệt</div>
+                        @else
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-times-circle"></i></div>
+                            <div class="text-center">Khoa: Chưa duyệt</div>
+                        @endif
+                    </div>
+                    <div class="col-md-4">
+                        @if($data->xacnhan_ctsv)
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
+                            <div class="text-center">CTSV: Đã duyệt</div>
+                        @else
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-times-circle"></i></div>
+                            <div class="text-center">CTSV: Chưa duyệt</div>
+                        @endif
+                    </div>
+                    <div class="col-md-4">
+                        @if($data->xacnhan_bgh)
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
+                            <div class="text-center">BGH: Đã duyệt</div>
+                        @else
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-times-circle"></i></div>
+                            <div class="text-center">BGH: Chưa duyệt</div>
+                        @endif
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 @endsection

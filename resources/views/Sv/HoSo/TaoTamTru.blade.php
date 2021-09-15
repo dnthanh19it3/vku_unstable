@@ -12,28 +12,28 @@
                 <div class="form-group col-md-3">
                     <label class=" mb-1" for="inputLocation">Tên chủ hộ</label>
                     <div class="detail-content">
-                        <input type="text" class="form-control"   name="tenchuho"
+                        <input type="text" class="form-control rounded"   name="tenchuho"
                                value="{{isset($tamtru) ? $tamtru->tenchuho : ""}}">
                     </div>
                 </div>
                 <div class="form-group col-md-3">
                     <label class=" mb-1" for="inputLocation">SĐT Chủ hộ</label>
                     <div class="detail-content">
-                        <input type="text" class="form-control"   name="sdtchuho"
+                        <input type="text" class="form-control rounded"   name="sdtchuho"
                                value="{{isset($tamtru) ? $tamtru->sdtchuho : ""}}">
                     </div>
                 </div>
                 <div class="form-group col-md-3">
                     <label class=" mb-1" for="inputLocation">Thời gian tạm trú</label>
                     <div class="detail-content">
-                        <input type="date" class="form-control" name="thoigianbatdau"
+                        <input type="date" class="form-control rounded" name="thoigianbatdau"
                                value="{{isset($tamtru) ? $tamtru->thoigianbatdau : ""}}">
                     </div>
                 </div>
                 <div class="form-group col-md-3">
                     <label class=" mb-1" for="inputLocation">Số nhà</label>
                     <div class="detail-content">
-                        <input type="text" class="form-control"   name="sonha"
+                        <input type="text" class="form-control rounded"   name="sonha"
                                value="{{isset($tamtru) ? $tamtru->sonha : ""}}">
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                         <select type="text" class="form-control rounded" name="tinhthanh" id="tinhthanh">
                             <option value="">Mời bạn chọn tỉnh thành</option>
                             @foreach($tinhthanh as $key => $value)
-                                <option value="{{$value->id}}" @isset($tamtru) {{($tamtru->tinhthanh_id == $value->id) ? "selected" : ""}} @endisset>{{$value->name}}</option>
+                                <option value="{{$value->id}}" @if($tamtru != null) {{($tamtru->tinhthanh_id == $value->id) ? "selected" : ""}} @else {{($value->id == 32) ? "selected" : ""}} @endif>{{$value->name}}</option>
                             @endforeach
                         </select>
                     </div>

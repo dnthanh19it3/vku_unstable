@@ -21,7 +21,7 @@ class SvHopLop extends Controller
         foreach ($result as $dt) {
             array_push($arrayMonth, (object) [
                 'thang' => $dt->format("m"),
-                'thang_text' => $dt->format("M"),
+                'thang_text' => $dt->format("m/Y"),
                 'bienban' => DB::table('table_lopsh_hoplop')
                     ->leftJoin('table_sinhvien', 'table_lopsh_hoplop.nguoilapbienban', '=', 'table_sinhvien.masv')
                     ->join('table_lopsh', 'table_lopsh_hoplop.lopsh', '=', 'table_lopsh.id')
@@ -79,12 +79,16 @@ class SvHopLop extends Controller
             ->where('table_lopsh_bancansu.trangthai', 1)
             ->orderBy('table_lopsh_chucvu.id', 'ASC')
             ->get();
+        $dexuat = DB::table('table_gvcn_noidungdukien')->where(
+            ['namhoc' => $kyhoc_hienhanh->id, 'hocky' => $kyhoc_hienhanh->hocky, 'thang' => $request->thang])
+            ->first();
 
         return view('Sv.LopSH.TaoBienBanV2')->with([
             'lopsh' => $lopsh,
             'thang' => $request->thang,
             'kyhoc_hienhanh' => $kyhoc_hienhanh,
-            'bancansu' => $bancansu
+            'bancansu' => $bancansu,
+            'dexuat' => $dexuat
         ]);
     }
     function taoBienBanStore(Request $request){

@@ -118,7 +118,7 @@
                                     <div class="row">
                                         <div class="col-md-4 form-group">
                                             <div class="label">Đoàn thể</div>
-                                            <input type="text" class="form-control rounded" value="{{$sinhvien->doanthe}}" disabled/>
+                                            <input type="text" class="form-control rounded" value="{{getTruongTinh('doanthe', $sinhvien)}}" disabled/>
                                         </div>
                                         <div class="col-md-4 form-group">
                                             <div class="label">Ngày kết nạp</div>
@@ -288,7 +288,6 @@
                                             <div class="label">Email khác</div>
                                             <input type="text" class="form-control rounded" name="facebook" value="{{$sinhvien->facebook}}"/>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

@@ -91,12 +91,26 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
         Route::post('import_excel', 'AdDanhGiaRenLuyen@getExcel')->name('admin.danhgiarenluyen.importexcel');
         Route::post('commit', 'AdDanhGiaRenLuyen@commitData')->name('admin.danhgiarenluyen.commit');
     });
-    Route::prefix('hoplop')->group(function (){
-        //Duyệt
-        Route::get('danh-sach/{namhoc}/{hocky}', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop');
+    Route::prefix('hop-lop')->group(function (){
+        //Add-on route
+        Route::get('get-link-bien-ban', 'AdQuanLyHopLop@getLinkBienBan')->name('ad.hoplop.linklistbienban');
+        Route::get('get-link-phan-hoi', 'AdQuanLyHopLop@getLinkPhanHoi')->name('ad.hoplop.linklistphanhoi');
+        Route::get('get-link-du-kien', 'AdQuanLyHopLop@getLinkDuKien')->name('ad.hoplop.linklistdukien');
+        Route::post('cap-nhat-noi-dung-du-kien/{id}', 'AdQuanLyHopLop@duKienUpdate')->name('ad.hoplop.noidungdukien.capnhat');
+        // Duyệt có sẵn tham số
+        Route::prefix('{namhoc}/{hocky}')->group(function (){
+            Route::get('danh-sach', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop');
+            Route::get('tong-hop-phan-hoi', 'AdQuanLyHopLop@listPhanHoiIndex')->name('ad.hoplop.tonghopphanhoi');
+            Route::get('noi-dung-du-kien', 'AdQuanLyHopLop@noiDungDeXuatIndex')->name('ad.hoplop.noidungdukien');
+            Route::post('tao-noi-dung-du-kien', 'AdQuanLyHopLop@duKienStore')->name('ad.hoplop.noidungdukien.tao');
+
+        });
+        // Duyệt chưa có tham số
         Route::get('danh-sach', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop.nullable');
-        //Tổng hợp phản hồi
-        Route::get('tong-hop-phan-hoi', 'AdQuanLyHopLop@listPhanHoiIndex')->name('ad.hoplop.tonghopphanhoi');
+        Route::get('tong-hop-phan-hoi', 'AdQuanLyHopLop@listPhanHoiIndex')->name('ad.hoplop.tonghopphanhoi.nullable');
+        Route::get('noi-dung-du-kien', 'AdQuanLyHopLop@noiDungDeXuatIndex')->name('ad.hoplop.noidungdukien.nullable');
+
+
         //Xử lý biên bản
         Route::prefix('bienban/{id}')->group(function (){
             Route::get('xem-bien-ban', 'AdQuanLyHopLop@xemBienBanIndex')->name('admin.hoplop.xembienban');
@@ -117,6 +131,7 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
             Route::get('danhsach', 'AdDonTuController@danhSachMauView')->name('danhsachmauView');
             Route::get('suamau/{mau_id}', 'AdDonTuController@chiTietMauView')->name('chitietmauView');
             Route::post('suamau/{mau_id}', 'AdDonTuController@maudonUpdate')->name('maudon.Update');
+            Route::get('xoamau/{mau_id}', 'AdDonTuController@xoaMau')->name('maudon.Delete');
 
             // AJAX
             Route::get('ajax/ajaxtruong', 'AdDonTuController@ajaxTruong')->name('ajaxTruong');
@@ -192,3 +207,6 @@ Route::prefix('zalo_api')->group(function (){
     Route::get('get_follower', 'ZaloAPI@getDanhSachTheoDoi');
     Route::get('send_msg_text', 'ZaloAPI@guiTinNhanText');
 });
+
+
+Route::get('test-field', 'AdDonTuController@getStaticFieldData');

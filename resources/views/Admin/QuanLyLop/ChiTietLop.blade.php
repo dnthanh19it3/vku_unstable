@@ -51,8 +51,7 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Họ đệm</th>
-                                <th>Tên</th>
+                                <th>Họ và tên</th>
                                 <th>Giới tính</th>
                                 <th>Ngày sinh</th>
                                 <th>Mã sinh viên</th>
@@ -63,9 +62,8 @@
                             <tbody>
                             @foreach($listsinhvien as $key => $item)
                                 <tr>
-                                    <td><img src="{{asset($item->avatar)}}" class="avatar"/> </td>
-                                    <td>{{$item->hodem}}</td>
-                                    <td>{{$item->ten}}</td>
+                                    <td>{{$key+=1}}</td>
+                                    <td><img src="{{asset($item->avatar)}}" class="avatar"/>{{$item->hodem}} {{$item->ten}}</td>
                                     <td>{{$item->gioitinh ? "Nữ" : "Nam"}}</td>
                                     <td>{{\Carbon\Carbon::make($item->ngaysinh)->format("d-m-Y")}}</td>
                                     <td>{{$item->masv}}</td>
@@ -78,18 +76,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                        <div class="clearfix">
-                            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                            <ul class="pagination">
-                                <li class="page-item disabled"><a href="#">Previous</a></li>
-                                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                            </ul>
-                        </div>
+
                     </div>
                 </div>
             </div>

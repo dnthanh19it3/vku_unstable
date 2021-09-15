@@ -34,12 +34,6 @@ class AdDonTuController extends Controller
             ->orWhere('id', 9)
             ->orWhere('id', 10)->get();
 
-        if(isset($request->add)){
-            session()->push('stack', $request->add);
-        }
-        if(isset($request->reset)){
-            session()->forget('stack');
-        }
         return view('Admin/DonTu/TaoDon')->with([
             'listTruong' => $filedList,
             'fileType' => $fileType,
@@ -152,9 +146,56 @@ class AdDonTuController extends Controller
     }
     function xoaMau(Request $request, $mau_id)
     {
-        $stmt = DB::table('table_maudon')->where('maudon_id', $mau_id)->delete();
-        pushNotify($stmt);
+        $flag = 1;
+        $flag_delete_field = 0;
+        DB::beginTransaction();
+        while ($flag){
+            // Get form DB
+            $maudon = DB::table('table_maudon')->where('maudon_id', $mau_id)->first();
+            $listmauddon = DB::table('table_maudon')->where('maudon_id', '<>', $mau_id)->get();
+            // Convert to array
+            $maudon->truong = explode(',', $maudon->truong);
+            foreach ($listmauddon as $key => $item){
+                $item->truong = explode(',', $item->truong);
+            }
+            //Loop for compare
+            foreach ($maudon->truong as $key_truongxoa => $value_truongxoa){
+                foreach ($listmauddon as $key_maudon => $value_maudon){
+                    $check = array_search($value_truongxoa, $value_maudon->truong);
+                    dump($value_maudon, $value_truongxoa, $check);
+                    if(is_numeric($check)){
+                        echo "Tìm $value_truongxoa | Tìm thấy | $check | Bỏ qua<hr/>";
+                        unset($maudon->truong[$key_truongxoa]);
+                        break;
+                    } else {
+                        echo "Tìm $value_truongxoa |Không tìm thấy, tìm tiếp<hr/>";
+                    }
+
+                }
+            }
+            // Tìm trường không phải trường tĩnh (Họ tên, ngày sinh, giới tính, blah blah
+            $dynamic_field = array();
+            foreach ($maudon->truong as $key => $item){
+                $item = DB::table('table_maudon_chitiet')->where('id', $item)->where('lienket', null)->first();
+                array_push($dynamic_field, $item);
+            }
+
+            foreach ($dynamic_field as $key => $item){
+                $delete = DB::table('table_maudon_chitiet')->delete($item->id);
+                if(!$delete){
+                    $flag = 0;
+                }
+            }
+            $delete = DB::table('table_maudon')->where('maudon_id', $mau_id)->delete();
+            if(!$delete){
+                $flag = 0;
+            }
+            DB::commit();
+            return redirect()->back();
+        }
+        DB::rollBack();
         return redirect()->back();
+
     }
 
 
@@ -249,14 +290,8 @@ class AdDonTuController extends Controller
             ->join('table_donvi_phongban', 'table_don.phongban_xuly', '=', 'table_donvi_phongban.id')
             ->where('table_don.don_id', $don_id)
             ->first()->tenphongkhoa;
-        $sinhvien = DB::table('table_sinhvien')
-            ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
-            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
-            ->where('table_sinhvien.masv', $don->masv)
-            ->first();
-        $sinhvien->avatar = (isset($sinhvien->avatar) ? asset($sinhvien->avatar) : "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png");
-        $sinhvien->ten = $sinhvien->hodem . " " .$sinhvien->ten;
-        $sinhvien->gioitinh = $sinhvien->gioitinh ? "Nam" : "Nữ";
+        $sinhvien = getSinhVienData($don->masv);
+
 
         $timeline = DB::table('table_don_logs')->where('don_id', $don_id)->orderBy('thoigian', 'DESC')->get();
         $filedList = explode(',', $don->truong);
@@ -295,7 +330,7 @@ class AdDonTuController extends Controller
             'don' => $don,
             'donvihientai' => $donvihientai,
             'sinhvien' => $sinhvien,
-            'sinhvien_arr' => get_object_vars($sinhvien),
+            'sinhvien' => get_object_vars($sinhvien),
             'timeline' => $timeline,
             'phongban' => $phongban,
             'lancap' => $landcap
@@ -528,11 +563,6 @@ class AdDonTuController extends Controller
 
 
 
-
-
-
-
-
         return view('Admin/DonTu/DonTuDash')->with([
             'listphongban_chart' => $listphongban_chart,
             'listphongban' => $listphongban,
@@ -544,6 +574,7 @@ class AdDonTuController extends Controller
             'stats' => (object) $stats
         ]);
     }
+
 }
 /*
  *

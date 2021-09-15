@@ -27,9 +27,32 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="noidung" class="col-3 col-form-label">Nội dung</label>
+                        <label for="hinhthuckyluat" class="col-3 col-form-label">Hình thức kỷ luật</label>
                         <div class="col-9">
                             <input class="form-control rounded" id="hinhthuckyluat" name="hinhthuckyluat" type="text" class="form-control" value="{{$kyluat->hinhthuckyluat}}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="thoigian" class="col-3 col-form-label">Năm học</label>
+                        <div class="col-9">
+                            <div class="input-group\">
+                                <select name="namhoc" class="form-control  rounded">
+                                    @foreach($namhoc_hocky as $key => $value)
+                                        <option value="{{$value->id}}" {{$value->id == $kyluat->namhoc ? "selected" : ""}}>{{$value->nambatdau."-".$value->namketthuc}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="thoigian" class="col-3 col-form-label">Học kỳ</label>
+                        <div class="col-9">
+                            <div class="input-group">
+                                <select name="hocky" class="form-control rounded">
+                                    <option value="1" {{1 == $kyluat->hocky ? "selected" : ""}}>Học kỳ 1</option>
+                                    <option value="2" {{2 == $kyluat->hocky ? "selected" : ""}}>Học kỳ 2</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row">

@@ -1,5 +1,5 @@
 @extends('layout.admin_layout')
-@section('title', 'Xem hồ sơ')
+@section('title', 'Xem biên bản')
 @section('header')
 @endsection
 @section('body')
@@ -11,9 +11,39 @@
                        <h5 class="pb-0"><i class="fas fa-file mr-2"></i>BIÊN BẢN HỌP LỚP {{$data->tenlop}} THÁNG {{$data->thang}} NĂM HỌC {{$data->nambatdau."-".$data->namketthuc}}</h5>
                    </div>
                     <div class="col-md-5  d-flex justify-content-end">
-                       <a href="{{route('admin.hoplop.duyet.khoa', ['id' => $data->id])}}" class="btn btn-primary"><i class="fas fa-check-circle mr-2"></i>Duyệt biên bản (Khoa)</a>
-                       <a href="{{route('admin.hoplop.duyet.ctsv', ['id' => $data->id])}}" class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Duyệt biên bản (CTSV)</a>
-                       <a href="{{route('admin.hoplop.duyet.bgh', ['id' => $data->id])}}" class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Duyệt biên bản (BGH)</a>
+                        <!--Nút duyệt GVCN-->
+                        @if(!$data->xacnhan_khoa)
+                            @if($data->xacnhan_gvcn)
+                                <a href="{{route('admin.hoplop.duyet.gvcn', ['id' => $data->id])}}" class="btn btn-danger"><i class="fas fa-check-circle mr-2"></i>Bỏ duyệt biên bản (GVCN)</a>
+                            @else
+                                <a href="{{route('admin.hoplop.duyet.gvcn', ['id' => $data->id])}}" class="btn btn-primary"><i class="fas fa-check-circle mr-2"></i>Duyệt biên bản (GVCN)</a>
+                            @endif
+                        @endif
+                        <!--Nút duyệt Khoa-->
+                        @if(!$data->xacnhan_ctsv && $data->xacnhan_bithu && $data->xacnhan_loptruong && $data->xacnhan_gvcn)
+                            @if($data->xacnhan_khoa)
+                                <a href="{{route('admin.hoplop.duyet.khoa', ['id' => $data->id])}}" class="btn btn-danger"><i class="fas fa-check-circle mr-2"></i>Bỏ duyệt biên bản (Khoa)</a>
+                            @else
+                                <a href="{{route('admin.hoplop.duyet.khoa', ['id' => $data->id])}}" class="btn btn-primary"><i class="fas fa-check-circle mr-2"></i>Duyệt biên bản (Khoa)</a>
+                            @endif
+                        @endif
+                        <!--Nút duyệt CTSV-->
+                        @if($data->xacnhan_khoa)
+                            @if($data->xacnhan_ctsv)
+                                <a href="{{route('admin.hoplop.duyet.ctsv', ['id' => $data->id])}}" class="btn btn-danger"><i class="fas fa-check-circle mr-2"></i>Bỏ duyệt biên bản (CTSV)</a>
+                            @else
+                                <a href="{{route('admin.hoplop.duyet.ctsv', ['id' => $data->id])}}" class="btn btn-primary"><i class="fas fa-check-circle mr-2"></i>Duyệt biên bản (CTSV)</a>
+                            @endif
+                        @endif
+                        <!--Nút duyệt CTSV-->
+                        @if($data->xacnhan_khoa)
+                            @if($data->xacnhan_bgh)
+                                <a href="{{route('admin.hoplop.duyet.bgh', ['id' => $data->id])}}" class="btn btn-danger"><i class="fas fa-check-circle mr-2"></i>Bỏ duyệt biên bản (BGH)</a>
+                            @else
+                                <a href="{{route('admin.hoplop.duyet.bgh', ['id' => $data->id])}}" class="btn btn-primary"><i class="fas fa-check-circle mr-2"></i>Duyệt biên bản (BGH)</a>
+                            @endif
+                        @endif
+
                    </div>
                 </div>
             </div>
@@ -152,17 +182,33 @@
                 <hr/>
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
-                        <div class="text-center">Khoa: đã duyệt</div>
+                        @if($data->xacnhan_khoa)
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
+                            <div class="text-center">Khoa: Đã duyệt</div>
+                        @else
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-times-circle"></i></div>
+                            <div class="text-center">Khoa: Chưa duyệt</div>
+                        @endif
                     </div>
                     <div class="col-md-4">
-                        <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
-                        <div class="text-center">Công tác sinh viên: đã duyệt</div>
+                        @if($data->xacnhan_ctsv)
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
+                            <div class="text-center">CTSV: Đã duyệt</div>
+                        @else
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-times-circle"></i></div>
+                            <div class="text-center">CTSV: Chưa duyệt</div>
+                        @endif
                     </div>
                     <div class="col-md-4">
-                        <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
-                        <div class="text-center">Ban giám hiệu: đã duyệt</div>
+                        @if($data->xacnhan_bgh)
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-check-circle"></i></div>
+                            <div class="text-center">BGH: Đã duyệt</div>
+                        @else
+                            <div class="text-center" style="font-size: 32px"><i class="far fa-times-circle"></i></div>
+                            <div class="text-center">BGH: Chưa duyệt</div>
+                        @endif
                     </div>
+
                 </div>
             </div>
         </div>

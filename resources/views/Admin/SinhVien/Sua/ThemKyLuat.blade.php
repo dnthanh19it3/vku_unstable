@@ -43,6 +43,29 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="thoigian" class="col-3 col-form-label">Năm học</label>
+                <div class="col-9">
+                    <div class="input-group\">
+                        <select name="namhoc" class="form-control  rounded">
+                            @foreach($namhoc_hocky as $key => $value)
+                                <option value="{{$value->id}}">{{$value->nambatdau." ".$value->namketthuc}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="thoigian" class="col-3 col-form-label">Học kỳ</label>
+                <div class="col-9">
+                    <div class="input-group">
+                        <select name="hocky" class="form-control rounded">
+                            <option value="1">Học kỳ 1</option>
+                            <option value="2">Học kỳ 2</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
                 <div class="offset-3 col-9">
                     <button name="submit" type="submit" class="btn btn-primary">Lưu</button>
                 </div>

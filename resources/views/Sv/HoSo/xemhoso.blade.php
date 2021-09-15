@@ -14,10 +14,10 @@
                         {{$sinhvien->hodem." ".$sinhvien->ten}}
                     </div>
                     <div class="profile-usertitle-job">
-                        NGÀNH {{$sinhvien->tennganh}}
+                         <i class="fas fa-id-card-alt mr-2"></i> MSV {{$sinhvien->masv}} LỚP {{$sinhvien->tenlop}}
                     </div>
                     <div class="profile-usertitle-job">
-                        LỚP {{$sinhvien->tenlop}} MSV {{$sinhvien->masv}}
+                        <i class="fas fa-briefcase mr-2"></i>NGÀNH {{$sinhvien->tennganh}}
                     </div>
                 </div>
                 <!-- END SIDEBAR USER TITLE -->
@@ -39,19 +39,15 @@
                                 Cá nhân
                             </a>
                             <a class="nav-link" id="khenthuong-tab" data-toggle="pill" href="#khenthuong" role="tab" aria-controls="khenthuong" aria-selected="false">
-                                <i class="fas fa-star"></i>
-                                Khen thưởng
-                            </a>
-                            <a class="nav-link" id="kyluat-tab" data-toggle="pill" href="#kyluat" role="tab" aria-controls="kyluat" aria-selected="false">
-                                <i class="fas fa-star-half-alt mr-1"></i>
-                                Kỷ luật
+                                <i class="fas fa-star-half-alt"></i>
+                                Khen thưởng kỷ luât
                             </a>
                             <a class="nav-link" id="renluyen-tab" data-toggle="pill" href="#renluyen" role="tab" aria-controls="renluyen" aria-selected="false">
                                 <i class="fas fa-user-check mr-1"></i>
                                 Rèn luyện
                             </a>
                             <a class="nav-link" id="timeline-tab" data-toggle="pill" href="#timeline" role="tab" aria-controls="timeline" aria-selected="false">
-                                <i class="fas fa-stream mr-1    "></i>
+                                <i class="fas fa-stream mr-1"></i>
                                 Timeline
                             </a>
                         </div>
@@ -109,7 +105,7 @@
                                     <div class="row">
                                         <div class="col-md-4 info_group">
                                             <div class="label">Đoàn thể</div>
-                                            <div class="value">{{$sinhvien->doanthe}}</div>
+                                            <div class="value">{{getTruongTinh('doanthe', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Ngày kết nạp</div>
@@ -201,10 +197,13 @@
                                             <div class="row">
                                                 <div class="col-md-12 mt-3">
                                                     <h6 style="border-left: 3px solid #00a180; padding-left: 3px">Anh chị ruột</h6>
-                                                    <div class="info_group">
-                                                        <div class="label">Anh chị em</div>
-                                                        <div class="value">{{$sinhvien->thanhphangiadinh}}</div>
-                                                    </div>
+                                                    @if($sinhvien->thanhphangiadinh != null)
+                                                        @foreach($sinhvien->thanhphangiadinh as $value)
+                                                            <div class="info_group">
+                                                                {{$value}}
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -240,10 +239,40 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div>
+                                    <div class="profile_main_block p-4 bg-white mt-3">
+                                        <h6><i class="fas fa-address-card mr-2"></i>Thông tin liên hệ</h6>
+                                        <hr/>
+                                        <div class="row">
+                                            <div class="col-md-4 info_group">
+                                                <div class="label">Email khác</div>
+                                                <div class="value">{{$sinhvien->email_khac}}</div>
+                                            </div>
+                                            <div class="col-md-4 info_group">
+                                                <div class="label">Điện thoại</div>
+                                                <div class="value">{{$sinhvien->dienthoai}}</div>
+                                            </div>
+                                            <div class="col-md-4 info_group">
+                                                <div class="label">Zalo</div>
+                                                <div class="value">{{$sinhvien->zalo}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 info_group">
+                                                <div class="label">Điện thoại gia đình</div>
+                                                <div class="value">{{$sinhvien->dienthoaigiadinh}}</div>
+                                            </div>
+                                            <div class="col-md-4 info_group">
+                                                <div class="label">Email khác</div>
+                                                <div class="value">{{$sinhvien->facebook}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="khenthuong" role="tabpanel" aria-labelledby="khenthuong-tab">
-                            <div class="table-responsive">
+                            <div class="table-responsive mb-3">
                                 <div class="table-wrapper">
                                     <div class="table-title">
                                         <div class="row">
@@ -289,23 +318,9 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    <div class="clearfix">
-                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                        <ul class="pagination">
-                                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="kyluat" role="tabpanel" aria-labelledby="kyluat-tab">
-                            <div>
+                            <div class="table-responsive mb-3">
                                 <div class="table-wrapper">
                                     <div class="table-title">
                                         <div class="row">
@@ -351,19 +366,13 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    <div class="clearfix">
-                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                        <ul class="pagination">
-                                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
+
                                 </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="kyluat" role="tabpanel" aria-labelledby="kyluat-tab">
+                            <div>
+
                             </div>
                         </div>
                         <div class="tab-pane fade" id="renluyen" role="tabpanel" aria-labelledby="renluyen-tab">
@@ -410,18 +419,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    <div class="clearfix">
-                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                        <ul class="pagination">
-                                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -471,9 +469,4 @@
                 $('#avatar_round').css({'height': + cw +'px'});
             }
     </script>
-@endsection
-@section('custom-css')
-<style>
-
-</style>
 @endsection

@@ -252,19 +252,19 @@
     </div>
     <div class="line">
         <div class="col f-12" style="width: 98%;"> Địa chỉ liên lạc khi cần: phải ghi cụ thể, chính xác, nếu ở trọ
-            thì ghi địa chỉ nhà trọ, nếu ở nhà thì ghi địa chỉ nhà: {{$tamtru->sonha . ", " . $tamtru->thonto .", ".$tamtru->xaphuong." ".$tamtru->quanhuyen. " " . $tamtru->tinhthanh}}</div>
+            thì ghi địa chỉ nhà trọ, nếu ở nhà thì ghi địa chỉ nhà: @if($tamtru != null) {{$tamtru->sonha . ", " . $tamtru->thonto .", ".$tamtru->xaphuong." ".$tamtru->quanhuyen. " " . $tamtru->tinhthanh}} @endif</div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 55%;">Họ tên người nhận: {{$sv->hodem . ' ' . $sv->ten}}</div>
-        <div class="col f-12" style="width:42%">Số điện thoại: {{$sv->dienthoai}}</div>
+        <div class="col f-12" style="width:42%">Số điện thoại:@if($tamtru != null) {{$sv->dienthoai}} @endif </div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 55%;">Thôn (tổ dân phố, số nhà): {{$tamtru->thonto}}</div>
-        <div class="col f-12" style="width:42%">Xã (phường, đường): {{$tamtru->xaphuong}} </div>
+        <div class="col f-12" style="width: 55%;">Thôn (tổ dân phố, số nhà): @if($tamtru != null){{$tamtru->thonto}}  @endif </div>
+        <div class="col f-12" style="width:42%">Xã (phường, đường): @if($tamtru != null) {{$tamtru->xaphuong}} @endif  </div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 53%;">Huyện (quận): {{$tamtru->quanhuyen}}</div>
-        <div class="col f-12" style="width:42%">Tỉnh (thành phố): {{$tamtru->tinhthanh}} </div>
+        <div class="col f-12" style="width: 53%;">Huyện (quận): @if($tamtru != null) {{$tamtru->quanhuyen}} @endif </div>
+        <div class="col f-12" style="width:42%">Tỉnh (thành phố): @if($tamtru != null) {{$tamtru->tinhthanh}} @endif </div>
     </div>
     <div class="" style="">
         <div class="col f-12" style="width: 98%;"> Tôi xin cam đoan những thông tin đã kê khai trên là đúng sự thật

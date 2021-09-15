@@ -23,6 +23,11 @@
                                 <i class="glyphicon glyphicon-user"></i>
                                 Kết quả rèn luyện</a>
                         </li>
+                        <li>
+                            <a href="{{route('admin.quanlylop.bancansu', ['lop_id' => $lop_id])}}">
+                                <i class="glyphicon glyphicon-user"></i>
+                                Ban cán sự</a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -15,6 +15,7 @@
         "laravel/framework": "^5.8.0",
         "laravel/tinker": "~1.0",
         "maatwebsite/excel": "^3.1",
+        "nao-pon/flysystem-google-drive": "^1.1",
         "zaloplatform/zalo-php-sdk": "^2.0"
     },
     "require-dev": {
@@ -25,7 +26,8 @@
     "autoload": {
         "files": [
             "App/Helper/CustomNotification.php",
-            "App/Helper/RenLuyenHelper.php"
+            "App/Helper/RenLuyenHelper.php",
+            "App/Helper/DonTuHelper.php"
         ],
         "classmap": [
             "database"

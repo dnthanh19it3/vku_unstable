@@ -31,7 +31,17 @@ class AdQuanLyLop extends Controller
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
             ->where("table_lopsh.id", $lop_id)
-            ->get();
+            ->get([
+                'table_sinhvien.id',
+                'table_sinhvien.masv',
+                'table_sinhvien.hodem',
+                'table_sinhvien.ten',
+                'table_sinhvien.masv',
+                'table_sinhvien.ngaysinh',
+                'table_sinhvien.gioitinh',
+                'table_sinhvien.email',
+                'table_sinhvien_chitiet.avatar',
+            ]);
         return view("Admin.QuanLyLop.ChiTietLop")->with([
             "listsinhvien" => $listsinhvien,
             "lop_id" => $request->lop_id

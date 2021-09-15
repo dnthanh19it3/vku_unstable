@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -56,6 +57,8 @@ class AdQuanLySv extends Controller
             ->join('table_nganh', 'table_sinhvien.nganh_id', '=', 'table_nganh.id')
             ->where('table_sinhvien.masv', '=', $masv)
             ->first();
+        //Thanh phan gia dinh
+        $sinhvien->thanhphangiadinh = $sinhvien->thanhphangiadinh ? explode('|', $sinhvien->thanhphangiadinh) : null;
         //Thong tin tam tru
         $tamtru = DB::table('table_sinhvien_tamtru')
             ->join("table_namhoc_hocky", function ($join){
@@ -137,6 +140,7 @@ class AdQuanLySv extends Controller
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
             ->join("table_nganh", "table_sinhvien.nganh_id", "=", "table_nganh.id")
             ->first();
+        $sinhvien->thanhphangiadinh = $sinhvien->thanhphangiadinh ? explode('|', $sinhvien->thanhphangiadinh) : null;
         if(isset($sinhvien->avatar)){
             $sinhvien->avatar = asset($sinhvien->avatar);
         } else {
@@ -155,13 +159,13 @@ class AdQuanLySv extends Controller
      * */
     public function caNhanStore(Request $request, $masv)
     {
-
-        $sinhvien = $request->validate([
-            "hodem" => ["required", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
-            "ten" => ["required", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
-            "ngaysinh" => "required|date",
-            "gioitinh" => ["required", "regex:/[01]/"],
-        ]);
+//        dd($request->all());
+//        $sinhvien = $request->validate([
+//            "hodem" => ["required", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
+//            "ten" => ["required", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
+//            "ngaysinh" => "required|date",
+//            "gioitinh" => ["required", "regex:/[01]/"],
+//        ]);
 
         $sinhvien_chitiet = $request->validate([
             "cmnd" => ["required", "regex:/[0-9]{9,12}/"],
@@ -177,18 +181,18 @@ class AdQuanLySv extends Controller
             "dantoc_cha" => "nullable",
             "cmnd_cha" => ["nullable", "regex:/[0-9]{9,12}/"],
             "nghenghiep_cha" => "nullable",
-            "sdt_cha" => ["required", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})/"],
+            "sdt_cha" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})/"],
             "email_cha" => "nullable|email",
-            "diachi_cha" => ["required", "regex:/^([a-zA-Z0-9,.-ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
+            "diachi_cha" => ["nullable", "regex:/^([a-zA-Z0-9,.-ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
             //Thong tin me
             "hotenme" => ["nullable", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
             "namsinhme" => "nullable",
             "dantoc_me" => "nullable",
             "cmnd_me" => ["nullable", "regex:/[0-9]{9,12}/"],
             "nghenghiep_me" => "nullable",
-            "sdt_me" => ["required", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})/"],
+            "sdt_me" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})/"],
             "email_me" => "nullable|email",
-            "diachi_me" => ["required", "regex:/^([a-zA-Z0-9,.-ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
+            "diachi_me" => ["nullable", "regex:/^([a-zA-Z0-9,.-ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
             // Thanh phan gia
             "thanhphangiadinh" => "nullable",
             "tinh_thanh" => "required",
@@ -203,12 +207,21 @@ class AdQuanLySv extends Controller
             "dienthoaigiadinh" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
             "zalo" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"]
         ]);
+        // Xử lý thành phần gia đình
+        $str_thanhphangiadinh = "";
+        if(isset($sinhvien_chitiet['thanhphangiadinh'])){
+            foreach ($sinhvien_chitiet['thanhphangiadinh'] as $value){
+                $str_thanhphangiadinh = $str_thanhphangiadinh . $value . "|";
+            }
+        }
+        $str_thanhphangiadinh = rtrim($str_thanhphangiadinh, "|");
+        $sinhvien_chitiet['thanhphangiadinh'] = $str_thanhphangiadinh;
 
-        $update_sinhvien = DB::table("table_sinhvien")->where("masv", $masv)->update($sinhvien);
+//        $update_sinhvien = DB::table("table_sinhvien")->where("masv", $masv)->update($sinhvien);
         $update_sinhvien_chitiet = DB::table("table_sinhvien_chitiet")->where("masv", $masv)->update($sinhvien_chitiet);
 
 
-        if ($update_sinhvien || $update_sinhvien_chitiet) {
+        if ($update_sinhvien_chitiet) {
             pushNotify(1);
             return back();
         } else {
@@ -268,9 +281,42 @@ class AdQuanLySv extends Controller
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
             ->first();
-        $khenthuong = DB::table("table_sinhvien_khenthuong")->where("masv", $masv)->get();
+        $khenthuong = DB::table("table_sinhvien_khenthuong")->join("table_namhoc_hocky", function ($join){
+            $join->on("table_sinhvien_khenthuong.namhoc", "=", "table_namhoc_hocky.id");
+            $join->on("table_sinhvien_khenthuong.hocky", "=", "table_namhoc_hocky.hocky");
+        })->where("masv", $masv)->get([
+            'table_sinhvien_khenthuong.id',
+            'table_sinhvien_khenthuong.masv',
+            'table_sinhvien_khenthuong.noidung',
+            'table_sinhvien_khenthuong.capkhenthuong',
+            'table_sinhvien_khenthuong.soquyetdinh',
+            'table_sinhvien_khenthuong.thoigian',
+            'table_sinhvien_khenthuong.created_at',
+            'table_sinhvien_khenthuong.updated_at',
+            'table_sinhvien_khenthuong.namhoc',
+            'table_sinhvien_khenthuong.hocky',
+            'table_namhoc_hocky.nambatdau',
+            'table_namhoc_hocky.namketthuc',
+        ]);
+        $kyluat = DB::table("table_sinhvien_kyluat")->join("table_namhoc_hocky", function ($join){
+            $join->on("table_sinhvien_kyluat.namhoc", "=", "table_namhoc_hocky.id");
+            $join->on("table_sinhvien_kyluat.hocky", "=", "table_namhoc_hocky.hocky");
+        })->where("masv", $masv)->get(['table_sinhvien_kyluat.id',
+            'table_sinhvien_kyluat.masv',
+            'table_sinhvien_kyluat.noidung',
+            'table_sinhvien_kyluat.capquyetdinh',
+            'table_sinhvien_kyluat.hinhthuckyluat',
+            'table_sinhvien_kyluat.soquyetdinh',
+            'table_sinhvien_kyluat.thoigian',
+            'table_sinhvien_kyluat.created_at',
+            'table_sinhvien_kyluat.updated_at',
+            'table_sinhvien_kyluat.namhoc',
+            'table_sinhvien_kyluat.hocky',
+            'table_namhoc_hocky.nambatdau',
+            'table_namhoc_hocky.namketthuc',]);
         return view("Admin.SinhVien.Sua.KhenThuong")->with([
             "khenthuong" => $khenthuong,
+            "kyluat" => $kyluat,
             "sinhvien" => $sinhvien
         ]);
     }
@@ -279,8 +325,10 @@ class AdQuanLySv extends Controller
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
             ->first();
+        $namhoc_hocky = DB::table('table_namhoc_hocky')->addSelect(['id', 'nambatdau', 'namketthuc'])->distinct()->get('id');
         return view('Admin.SinhVien.Sua.ThemKhenThuong')->with([
-            'sinhvien' => $sinhvien
+            'sinhvien' => $sinhvien,
+            'namhoc_hocky' => $namhoc_hocky
         ]);
     }
     function khenThuongStore(Request $request, $masv)
@@ -290,6 +338,8 @@ class AdQuanLySv extends Controller
             "noidung" => $request->noidung,
             "capkhenthuong" => $request->capkhenthuong,
             "soquyetdinh" => $request->soquyetdinh,
+            "namhoc" => $request->namhoc,
+            "hocky" => $request->hocky,
             "thoigian" => $request->thoigian,
             "created_at" => Carbon::now()
         ];
@@ -302,52 +352,45 @@ class AdQuanLySv extends Controller
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->first();
         $khenthuong = DB::table("table_sinhvien_khenthuong")->where("masv", $masv)->where("id", $id)->first();
+        $namhoc_hocky = DB::table('table_namhoc_hocky')->addSelect(['id', 'nambatdau', 'namketthuc'])->distinct()->get('id');
         return view("Admin.SinhVien.Sua.SuaKhenThuong")->with([
             "khenthuong" => $khenthuong,
-            "sinhvien" => $sinhvien
+            "sinhvien" => $sinhvien,
+            'namhoc_hocky' => $namhoc_hocky
         ]);
     }
     function suaKhenThuongStore(Request $request, $masv, $id)
     {
         $data = [
-            "masv" => $masv,
             "noidung" => $request->noidung,
             "capkhenthuong" => $request->capkhenthuong,
             "soquyetdinh" => $request->soquyetdinh,
+            "namhoc" => $request->namhoc,
+            "hocky" => $request->hocky,
             "thoigian" => $request->thoigian,
             "updated_at" => Carbon::now()
         ];
-
         $response = DB::table("table_sinhvien_khenthuong")->where("id", $id)->update($data);
+
 
         pushNotify($response);
         return redirect()->back();
     }
-    function xoaKhenThuong(Request $request, $masv, $id){
+    function xoaKhenThuong(Request $request, $id){
         $xoa = DB::table("table_sinhvien_khenthuong")->where("id", $id)->delete();
         pushNotify($xoa);
         return redirect()->back();
     }
 
-    //Kyluat
-    function kyLuat(Request $request, $masv){
-        $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
-            ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
-            ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
-            ->first();
-        $kyluat = DB::table("table_sinhvien_kyluat")->where("masv", $masv)->get();
-        return view("Admin.SinhVien.Sua.KyLuat")->with([
-            "kyluat" => $kyluat,
-            "sinhvien" => $sinhvien
-        ]);
-    }
     function themKyLuatView(Request $request, $masv){
         $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
             ->first();
+        $namhoc_hocky = DB::table('table_namhoc_hocky')->addSelect(['id', 'nambatdau', 'namketthuc'])->distinct()->get('id');
         return view('Admin.SinhVien.Sua.ThemKyLuat')->with([
-            'sinhvien' => $sinhvien
+            'sinhvien' => $sinhvien,
+            "namhoc_hocky" => $namhoc_hocky
         ]);
     }
     function kyLuatStore(Request $request, $masv)
@@ -358,6 +401,8 @@ class AdQuanLySv extends Controller
             "hinhthuckyluat" => $request->hinhthuckyluat,
             "capquyetdinh" => $request->capquyetdinh,
             "soquyetdinh" => $request->soquyetdinh,
+            "namhoc" => $request->namhoc,
+            "hocky" => $request->hocky,
             "thoigian" => $request->thoigian,
             "created_at" => Carbon::now()
         ];
@@ -370,9 +415,11 @@ class AdQuanLySv extends Controller
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->first();
         $kyluat = DB::table("table_sinhvien_kyLuat")->where("masv", $masv)->where("id", $id)->first();
+        $namhoc_hocky = DB::table('table_namhoc_hocky')->addSelect(['id', 'nambatdau', 'namketthuc'])->distinct()->get('id');
         return view("Admin.SinhVien.Sua.SuaKyLuat")->with([
             "kyluat" => $kyluat,
-            "sinhvien" => $sinhvien
+            "sinhvien" => $sinhvien,
+            'namhoc_hocky' => $namhoc_hocky
         ]);
     }
     function suaKyLuatStore(Request $request, $masv, $id)
@@ -382,6 +429,8 @@ class AdQuanLySv extends Controller
             "hinhthuckyluat" => $request->hinhthuckyluat,
             "capquyetdinh" => $request->capquyetdinh,
             "soquyetdinh" => $request->soquyetdinh,
+            "namhoc" => $request->namhoc,
+            "hocky" => $request->hocky,
             "thoigian" => $request->thoigian,
             "updated_at" => Carbon::now()
         ];
@@ -389,7 +438,7 @@ class AdQuanLySv extends Controller
         pushNotify($response);
         return redirect()->back();
     }
-    function xoaKyLuat(Request $request, $masv, $id){
+    function xoaKyLuat(Request $request, $id){
         $xoa = DB::table("table_sinhvien_kyluat")->where("id", $id)->delete();
         pushNotify($xoa);
         return redirect()->back();

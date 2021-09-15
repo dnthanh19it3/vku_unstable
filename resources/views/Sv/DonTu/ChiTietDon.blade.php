@@ -31,7 +31,7 @@
                                     <div class="col-md-6 p-3 vien-net-dut">
                                         <div class="col-md-6 control-label" style="font-size: 16px;"><h6>{{ $item->tentruong }}</h6></div>
                                         <div class="col-md-6" style="font-size: 16px">
-                                            {{ $item->lienket == null ? $item->noidung : $sinhvien_arr[$item->lienket]}}
+                                            {{$item->lienket != null ? getTruongTinh($item->lienket, $sinhvien):""}}
                                         </div>
                                     </div>
                                 @endif
@@ -53,11 +53,11 @@
                                             </div>
                                         </div>
                                         <div class="action">
-                                            <a href="javascript:void(0)" class="ml-1 action-child" onclick="openPreview('{{ asset('storage/'.$item->noidung)}}')">
+                                            <a href="javascript:void(0)" class="ml-1 action-child" onclick="openPreview('{{ $item->noidung}}')">
                                                 <i class="fas fa-eye ml-1"></i>
                                                 <span>Xem trước</span>
                                             </a>
-                                            <a href="{{ asset('storage/'.$item->noidung)}}"  class="action-child" target="_blank">
+                                            <a href="{{ $item->noidung }}"  class="action-child" target="_blank">
                                                 <i class="fas fa-download ml-1"></i>
                                                 <span>Tải xuống</span>
                                             </a>

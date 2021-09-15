@@ -30,7 +30,7 @@
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
                                         <input id="tenmaudon" name="field{{ $item->id }}" placeholder=""
                                                type="text" class="form-control rounded" required="required"
-                                                value="{{$item->lienket != null ? $sinhvien[$item->lienket]:""}}" @isset($item->lienket) disabled @endisset>
+                                                value="{{$item->lienket != null ? getTruongTinh($item->lienket, $sinhvien):""}}" @isset($item->lienket) disabled @endisset>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
                                         @endisset
@@ -39,7 +39,7 @@
                                     <div class="col-md-4 mb-2">
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
                                         <input id="tenmaudon" name="field{{ $item->id }}" placeholder=""
-                                               type="date" class="form-control rounded" value="{{$item->lienket != null ? $sinhvien[$item->lienket] : ""}}" @isset($item->lienket) disabled @endisset>
+                                               type="date" class="form-control rounded" value="{{$item->lienket != null ? getTruongTinh($item->lienket, $sinhvien) : ""}}" @isset($item->lienket) disabled @endisset>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
                                         @endisset
@@ -48,7 +48,7 @@
                                     <div class="col-md-4 mb-2">
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
                                         <input id="tenmaudon" name="field{{ $item->id }}" placeholder=""
-                                               type="number" class="form-control rounded" required="required" value="{{$item->lienket != null ? $sinhvien[$item->lienket]:""}}" @isset($item->lienket) disabled @endisset>
+                                               type="number" class="form-control rounded" required="required" value="{{$item->lienket != null ? getTruongTinh($item->lienket, $sinhvien):""}}" @isset($item->lienket) disabled @endisset>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
                                         @endisset
@@ -57,7 +57,7 @@
                                     <div class="col-md-4 mb-2">
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
                                         <textarea id="tenmaudon" name="field{{ $item->id }}" placeholder=""
-                                                  class="form-control rounded" required="required">value="{{$item->lienket != null ? $sinhvien[$item->lienket]:""}}" @isset($item->lienket) disabled @endisset</textarea>
+                                                  class="form-control rounded" required="required">value="{{$item->lienket != null ? getTruongTinh($item->lienket, $sinhvien):""}}" @isset($item->lienket) disabled @endisset</textarea>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
                                         @endisset

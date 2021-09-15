@@ -68,7 +68,11 @@
                 <div class="row hoplop-content">
                     <div class="col-md-12"><h6>Nội dung triển khai</h6></div>
                     <div class="col-md-12 mb-2 ml-3">
-                        <textarea id="noidung" name="noidung" cols="40" rows="5" class="form-control"></textarea>
+                        <textarea id="noidung" name="noidung" cols="40" rows="5" class="form-control">
+                            @isset($dexuat)
+                                {!! $dexuat->noidung !!}
+                            @endisset
+                        </textarea>
                     </div>
                 </div>
                 <div class="row hoplop-content">

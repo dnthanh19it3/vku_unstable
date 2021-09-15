@@ -80,9 +80,24 @@ class AdQuanLyHopLop extends Controller
             'selected' => $selected
         ]);
     }
-    function listPhanHoiIndex(Request $request)
+    function listPhanHoiIndex(Request $request, $namhoc = null, $hocky = null)
     {
         $kyhoc_hienhanh = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first();
+        $list_kyhoc = DB::table('table_namhoc_hocky')->addSelect(['id', 'nambatdau', 'namketthuc'])->distinct()->get('id');
+
+        //kỳ học truy vấn mặc định
+
+        $selected = [
+            'namhoc' => ($namhoc) ? $namhoc : $kyhoc_hienhanh->id,
+            'hocky' => ($hocky) ? $hocky : $kyhoc_hienhanh->hocky,
+            'thang' => ($request->thang) ? $request->thang : (int) now()->format('m')
+        ];
+
+        $kyhoc_query = $kyhoc_hienhanh = DB::table('table_namhoc_hocky')
+            ->where('id', $selected['namhoc'])
+            ->where('hocky', $selected['hocky'])
+            ->first();
+
         $result = CarbonPeriod::create($kyhoc_hienhanh->batdau, '1 month', $kyhoc_hienhanh->ketthuc)->locale('vi');
         $lopsh = DB::table('table_lopsh')->get();
         $arrayMonth = array();
@@ -96,8 +111,17 @@ class AdQuanLyHopLop extends Controller
 
         $arrayBienBan = [];
         foreach ($lopsh as $key => $lop_item) {
-            $data = DB::table('table_lopsh_hoplop')->where('lopsh', $lop_item->id)->where('thang', $thang)->first();
-            $arrayBienBan[$lop_item->tenlop] = $data;
+            $data = DB::table('table_lopsh_hoplop')
+                ->where('lopsh', $lop_item->id)
+                ->where('thang', $selected['thang'])
+                ->where('namhoc', $selected['namhoc'])
+                ->where('hocky', $selected['hocky'])
+                ->first();
+            if($data){
+                if($data->gopy){
+                    $arrayBienBan[$lop_item->tenlop] = $data;
+                }
+            }
         }
 
 
@@ -120,14 +144,13 @@ class AdQuanLyHopLop extends Controller
             'thang_text' => Carbon::create()->month($thang)->format('M'),
             'bienban' => $arrayBienBan,
         ]);
-
-
         return view('Admin.HopLop.ListPhanHoi')->with([
             'arrayMonth' => $arrayMonth,
             'kyhoc_hienhanh' => $kyhoc_hienhanh,
-            'thang' => $thang,
             'months' => $months,
             'thongke' => (object) $thongke,
+            'list_kyhoc' => $list_kyhoc,
+            'selected' => $selected
         ]);
     }
 
@@ -179,7 +202,15 @@ class AdQuanLyHopLop extends Controller
             'bancansu' => $bancansu
         ]);
     }
-
+    function getLinkBienBan (Request $request){
+        return redirect(route('ad.hoplop.listhoplop', ['namhoc' => $request->namhoc, 'hocky' => $request->hocky]));
+    }
+    function getLinkPhanHoi (Request $request){
+        return redirect(route('ad.hoplop.tonghopphanhoi', ['namhoc' => $request->namhoc, 'hocky' => $request->hocky]));
+    }
+    function getLinkDuKien (Request $request){
+        return redirect(route('ad.hoplop.noidungdukien', ['namhoc' => $request->namhoc, 'hocky' => $request->hocky]));
+    }
 
     /**
      *
@@ -202,7 +233,17 @@ class AdQuanLyHopLop extends Controller
      *
      */
     function duyetGvcn(Request $request, $id){
-        DB::table('table_lopsh_hoplop')->where('id', $id)->update(['xacnhan_gvcn' => 1, 'updated_at' => now()]);
+        $flag = 1;
+        $update_content = null;
+        $check = DB::table('table_lopsh_hoplop')->where('id', $id)->first()->xacnhan_gvcn;
+        if($check){
+            $update_content = ['xacnhan_gvcn' => 0, 'updated_at' => now()];
+        } else {
+            $update_content = ['xacnhan_gvcn' => 1, 'updated_at' => now()];
+        }
+        $update = DB::table('table_lopsh_hoplop')->where('id', $id)->update($update_content);
+        $flag = $update ? 1 : 0;
+        return back();
     }
     /**
      *
@@ -212,7 +253,16 @@ class AdQuanLyHopLop extends Controller
      *
      */
     function duyetKhoa(Request $request, $id){
-        $flag = DB::table('table_lopsh_hoplop')->where('id', $id)->update(['xacnhan_khoa' => 1, 'updated_at' => now()]);
+        $flag = 1;
+        $update_content = null;
+        $check = DB::table('table_lopsh_hoplop')->where('id', $id)->first()->xacnhan_khoa;
+        if($check){
+            $update_content = ['xacnhan_khoa' => 0, 'updated_at' => now()];
+        } else {
+            $update_content = ['xacnhan_khoa' => 1, 'updated_at' => now()];
+        }
+        $update = DB::table('table_lopsh_hoplop')->where('id', $id)->update($update_content);
+        $flag = $update ? 1 : 0;
         return back();
     }
     /**
@@ -223,7 +273,16 @@ class AdQuanLyHopLop extends Controller
      *
      */
     function duyetCTSV(Request $request, $id){
-        $flag = DB::table('table_lopsh_hoplop')->where('id', $id)->update(['xacnhan_ctsv' => 1, 'updated_at' => now()]);
+        $flag = 1;
+        $update_content = null;
+        $check = DB::table('table_lopsh_hoplop')->where('id', $id)->first()->xacnhan_gvcn;
+        if($check){
+            $update_content = ['xacnhan_ctsv' => 0, 'updated_at' => now()];
+        } else {
+            $update_content = ['xacnhan_ctsv' => 1, 'updated_at' => now()];
+        }
+        $update = DB::table('table_lopsh_hoplop')->where('id', $id)->update($update_content);
+        $flag = $update ? 1 : 0;
         return back();
     }
     /**
@@ -234,8 +293,96 @@ class AdQuanLyHopLop extends Controller
      *
      */
     function duyetBgh(Request $request, $id){
-       $flag = DB::table('table_lopsh_hoplop')->where('id', $id)->update(['xacnhan_bgh' => 1, 'updated_at' => now()]);
-       dump($flag);
+        $flag = 1;
+        $update_content = null;
+        $check = DB::table('table_lopsh_hoplop')->where('id', $id)->first()->xacnhan_gvcn;
+        if($check){
+            $update_content = ['xacnhan_bgh' => 0, 'updated_at' => now()];
+        } else {
+            $update_content = ['xacnhan_bgh' => 1, 'updated_at' => now()];
+        }
+        $update = DB::table('table_lopsh_hoplop')->where('id', $id)->update($update_content);
+        $flag = $update ? 1 : 0;
+        return back();
+    }
+    function noiDungDeXuatIndex(Request $request, $namhoc = null, $hocky = null){
+        $kyhoc_hienhanh = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first();
+        $list_kyhoc = DB::table('table_namhoc_hocky')->addSelect(['id', 'nambatdau', 'namketthuc'])->distinct()->get('id');
+
+        //kỳ học truy vấn mặc định
+
+        $selected = [
+            'namhoc' => ($namhoc) ? $namhoc : $kyhoc_hienhanh->id,
+            'hocky' => ($hocky) ? $hocky : $kyhoc_hienhanh->hocky,
+            'thang' => ($request->thang) ? $request->thang : (int) now()->format('m')
+        ];
+
+        $kyhoc_query = $kyhoc_hienhanh = DB::table('table_namhoc_hocky')
+            ->where('id', $selected['namhoc'])
+            ->where('hocky', $selected['hocky'])
+            ->first();
+
+        $result = CarbonPeriod::create($kyhoc_hienhanh->batdau, '1 month', $kyhoc_hienhanh->ketthuc)->locale('vi');
+        $lopsh = DB::table('table_lopsh')->get();
+        $arrayMonth = array();
+        $thang = ($request->thang != null) ? $request->thang : date('m');
+        $months = [];
+        $thongke = [];
+
+        foreach ($result as $dt) {
+            array_push($months, $dt->format('m'));
+        }
+
+        $noidung = DB::table('table_gvcn_noidungdukien')
+            ->where('thang', $selected['thang'])
+            ->where('namhoc', $selected['namhoc'])
+            ->where('hocky', $selected['hocky'])
+            ->first();
+
+        array_push($arrayMonth, (object)[
+            'thang' => $thang,
+            'thang_text' => Carbon::create()->month($thang)->format('M'),
+            'bienban' => $noidung,
+        ]);
+
+        return view('Admin.HopLop.ListDeXuat')->with([
+            'kyhoc_hienhanh' => $kyhoc_hienhanh,
+            'noidung' => $noidung,
+            'months' => $months,
+            'list_kyhoc' => $list_kyhoc,
+            'selected' => $selected
+        ]);
+    }
+    function duKienStore(Request $request){
+        $flag = 1;
+        $data = [
+            'namhoc' => $request->namhoc,
+            'hocky' => $request->hocky,
+            'thang' => $request->thang,
+            'noidung' => $request->noidung,
+            'created_at' => now()
+        ];
+
+        $insert = DB::table('table_gvcn_noidungdukien')->insert($data);
+        if(!$insert){
+            $flag = 0;
+        }
+        dump($data, $insert);
+        return back();
+    }
+    function duKienUpdate(Request $request){
+        $flag = 1;
+        $data = [
+            'noidung' => $request->noidung,
+            'updated_at' => now()
+        ];
+
+        $update = DB::table('table_gvcn_noidungdukien')->where('id', $request->id)->update($data);
+
+        if(!$update){
+            $flag = 0;
+        }
+
         return back();
     }
 }

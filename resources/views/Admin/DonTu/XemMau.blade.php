@@ -39,13 +39,13 @@
                                 $i = 0;
                             @endphp
                             @foreach ($danhsachmau as $item)
-                                <tr role="row" class="odd" role="button" onclick="window.open('{{route('chitietmauView', ['mau_id' => $item->maudon_id])}}')">
+                                <tr role="row" class="odd" role="button"">
                                     <td class="sorting_1">{{ $i += 1 }}</td>
                                     <td>{{ $item->tenmaudon }}</td>
                                     <td>{{ $item->thoigianxuly }}</td>
                                     <td>
-                                        <a class="btn btn-outline-blue btn-sm btn-primary text-white" thref="#" onclick="">Sửa</a>
-                                        <a class="btn btn-outline-blue btn-sm btn-danger text-white" thref="#" onclick="">Xoá</a>
+                                        <a class="btn btn-outline-blue btn-sm btn-primary text-white" href="{{route('chitietmauView', ['mau_id' => $item->maudon_id])}}">Sửa</a>
+                                        <a class="btn btn-outline-blue btn-sm btn-danger text-white" href="{{route('maudon.Delete', ['mau_id' => $item->maudon_id])}}">Xoá</a>
                                     </td>
                                 </tr>
                             @endforeach

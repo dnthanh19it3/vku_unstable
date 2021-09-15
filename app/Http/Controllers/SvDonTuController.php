@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -12,14 +13,24 @@ use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 class SvDonTuController extends Controller
 
 {
-    function save_file($file, $dir, $masv, $maudon_id){
-        $extension = $file->getClientOriginalExtension();
-        $path = $file->storeAs($dir, $masv."-".$maudon_id."-".time().".".$extension);
-        if(Storage::move($path, 'public/'.$path)){
-            return $path;
-        } else {
-            return 0;
-        };
+    /**
+     *Lấy file từ GoogleDrive
+     * @param file $originalfile File cần lưu
+     * @param string $dir thư mục lưu file
+     * @return string đường dẫn GoogleDrive
+     */
+    function uploadGoogleDrive($originalfile, $dir = "/"){
+        $fileName = Storage::disk('google')->put('/', $originalfile);
+        $recursive = false; // Get subdirectories also?
+        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+        $file = $contents
+            ->where('type', '=', 'file')
+            ->where('filename', '=', pathinfo($fileName, PATHINFO_FILENAME))
+            ->where('extension', '=', pathinfo($fileName, PATHINFO_EXTENSION))
+            ->first(); // there can be duplicate file names!
+
+        return Storage::disk('google')->url($file['path']);
     }
 
     /**
@@ -106,7 +117,7 @@ class SvDonTuController extends Controller
                 $insert_data = array();
                 foreach ($validated_data as $key => $value) {
                     if (is_object($value)) {
-                        $file_path = $this->save_file($item, 'public/DonTu/DinhKem', session('masv'), $maudon_id);
+                        $file_path = $this->uploadGoogleDrive($item);
                         if($file_path){
                             $record = [
                                 'don_id' => $donid,
@@ -149,17 +160,7 @@ class SvDonTuController extends Controller
     // Chi tiet mau
     function chiTietThuTuc(Request $request, $maudon_id){
         $don = DB::table('table_maudon')->where('maudon_id', $maudon_id)->first();
-        $sinhvien = DB::table('table_sinhvien')
-            ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
-            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
-            ->where('table_sinhvien.masv', '=', session('masv'))
-            ->first();
-        if($sinhvien->gioitinh){
-            $sinhvien->gioitinh = "Nam";
-        } else {
-            $sinhvien->gioitinh = "Nữ";
-        }
-        $sinhvien->ten = $sinhvien->hodem . " " .$sinhvien->ten;
+        $sinhvien = getSinhVienData(session('masv'));
 
         $listtruong = explode(',', $don->truong);
         $mangTruong = array();
@@ -188,7 +189,7 @@ class SvDonTuController extends Controller
             ->get();
         return view('Sv/DonTu/DonDaNop')->with(['dondanop' => $dondanop]);
     }
-    // Xem và sửa lại
+    // Xem đơn
     function donChiTiet(Request $request, $don_id){
         $don = DB::table('table_don')
             ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')
@@ -198,19 +199,7 @@ class SvDonTuController extends Controller
             ->join('table_donvi_phongban', 'table_don.phongban_xuly', '=', 'table_donvi_phongban.id')
             ->where('table_don.don_id', $don_id)
             ->first()->tenphongkhoa;
-        $sinhvien = DB::table('table_sinhvien')
-            ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
-            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
-            ->where('table_sinhvien.masv', session('masv'))
-            ->first();
-        // Sua format
-        $sinhvien->ten = $sinhvien->hodem . $sinhvien->ten;
-        $sinhvien->ngaysinh = Carbon::make($sinhvien->ngaysinh)->format('d-m-Y');
-        if(isset($sinhvien->avatar)){
-            $sinhvien->avatar = asset($sinhvien->avatar);
-        } else {
-            $sinhvien->avatar = "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png";
-        }
+        $sinhvien = getSinhVienData($don->masv);
         $timeline = DB::table('table_don_logs')->where('don_id', $don_id)->where('an', '<>', '1')->orderBy('thoigian', 'DESC')->get();
         $filedList = explode(',', $don->truong);
         foreach ($filedList as $key => $item) {
@@ -245,7 +234,7 @@ class SvDonTuController extends Controller
             'mangTruong' => $mangTruong,
             'don' => $don,
             'sinhvien' => $sinhvien,
-            'sinhvien_arr' => get_object_vars($sinhvien),
+            'sinhvien' => $sinhvien,
             'timeline' => $timeline
         ]);
     }

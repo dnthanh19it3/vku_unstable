@@ -11,19 +11,19 @@
                 <!-- SIDEBAR USER TITLE -->
                 <div class="profile-usertitle">
                     <div class="profile-usertitle-name">
-                        {{$sinhvien->hodem." ".$sinhvien->ten}}
+                        {{getTruongTinh('hodem." ".$sinhvien->ten', $sinhvien)}}
                     </div>
                     <div class="profile-usertitle-job">
-                        NGÀNH {{$sinhvien->tennganh}}
+                        NGÀNH {{getTruongTinh('tennganh', $sinhvien)}}
                     </div>
                     <div class="profile-usertitle-job">
-                        LỚP {{$sinhvien->tenlop}} MSV {{$sinhvien->masv}}
+                        LỚP {{getTruongTinh('tenlop', $sinhvien)}} MSV {{getTruongTinh('masv', $sinhvien)}}
                     </div>
                 </div>
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR BUTTONS -->
                 <div class="profile-userbuttons">
-                    <a href="{{route('suahoso')}}" class="btn btn-success btn-sm"><i
+                    <a href="{{route('ad.suasinhvien.canhan', ['masv' => $sinhvien->masv])}}" class="btn btn-success btn-sm"><i
                                 class="fa fa-edit m-right-xs mr-1"></i>Sửa hồ sơ</a>
                     <a href="{{route('sv.getlylich')}}" class="btn btn-danger btn-sm"><i
                                 class="fa fa-file-export m-right-xs mr-1"></i>Xuất lý lịch</a>
@@ -77,7 +77,7 @@
                                     <div class="row">
                                         <div class="col-md-4 info_group">
                                             <div class="label">Họ và tên</div>
-                                            <div class="value">{{$sinhvien->hodem." ".$sinhvien->ten}}</div>
+                                            <div class="value">{{getTruongTinh('hoten', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Giới tính</div>
@@ -85,43 +85,43 @@
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Ngày sinh</div>
-                                            <div class="value">{{\Carbon\Carbon::parse($sinhvien->ngaysinh)->format("d-m-Y")}}</div>
+                                            <div class="value">{{getTruongTinh('ngaysinh', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Nơi sinh</div>
-                                            <div class="value">{{$sinhvien->noisinh}}</div>
+                                            <div class="value">{{getTruongTinh('noisinh', $sinhvien)}}</div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4 info_group">
                                             <div class="label">Dân tộc</div>
-                                            <div class="value">{{$sinhvien->dantoc}}</div>
+                                            <div class="value">{{getTruongTinh('dantoc', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">CMND/CCCD</div>
-                                            <div class="value">{{$sinhvien->cmnd}}</div>
+                                            <div class="value">{{getTruongTinh('cmnd', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Ngày cấp</div>
-                                            <div class="value">{{$sinhvien->ngaycap}}</div>
+                                            <div class="value">{{getTruongTinh('ngaycap', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Nơi cấp</div>
-                                            <div class="value">{{$sinhvien->noicap}}</div>
+                                            <div class="value">{{getTruongTinh('noicap', $sinhvien)}}</div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4 info_group">
                                             <div class="label">Đoàn thể</div>
-                                            <div class="value">{{$sinhvien->doanthe}}</div>
+                                            <div class="value">{{getTruongTinh('doanthe',$sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Ngày kết nạp</div>
-                                            <div class="value">{{$sinhvien->ngayketnap}}</div>
+                                            <div class="value">{{getTruongTinh('ngayketnap', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Tôn giáo</div>
-                                            <div class="value">{{$sinhvien->tongiao}}</div>
+                                            <div class="value">{{getTruongTinh('tongiao', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Diện chính sách</div>
@@ -139,80 +139,83 @@
                                                     <h6 style="border-left: 3px solid #0b7ec4; padding-left: 3px">Cha</h6>
                                                     <div class="info_group">
                                                         <div class="label">Họ tên</div>
-                                                        <div class="value">{{$sinhvien->hotencha}}</div>
+                                                        <div class="value">{{getTruongTinh('hotencha', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Ngày sinh</div>
-                                                        <div class="value">{{$sinhvien->namsinhcha}}</div>
+                                                        <div class="value">{{getTruongTinh('namsinhcha', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Dân tộc</div>
-                                                        <div class="value">{{$sinhvien->dantoc_cha}}</div>
+                                                        <div class="value">{{getTruongTinh('dantoc_cha', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">CMND/CCCD</div>
-                                                        <div class="value">{{$sinhvien->cmnd_cha}}</div>
+                                                        <div class="value">{{getTruongTinh('cmnd_cha', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Nghề nghiệp</div>
-                                                        <div class="value">{{$sinhvien->nghenghiep_cha}}</div>
+                                                        <div class="value">{{getTruongTinh('nghenghiep_cha', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Nơi ở</div>
-                                                        <div class="value">{{$sinhvien->diachi_cha}}</div>
+                                                        <div class="value">{{getTruongTinh('diachi_cha', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Email</div>
-                                                        <div class="value">{{$sinhvien->email_cha}}</div>
+                                                        <div class="value">{{getTruongTinh('email_cha', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">SĐT</div>
-                                                        <div class="value">{{$sinhvien->sdt_cha}}</div>
+                                                        <div class="value">{{getTruongTinh('sdt_cha', $sinhvien)}}</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 ">
                                                     <h6 style="border-left: 3px solid #00a180; padding-left: 3px">Mẹ</h6>
                                                     <div class="info_group">
                                                         <div class="label">Họ tên</div>
-                                                        <div class="value">{{$sinhvien->hotenme}}</div>
+                                                        <div class="value">{{getTruongTinh('hotenme', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Ngày sinh</div>
-                                                        <div class="value">{{$sinhvien->namsinhme}}</div>
+                                                        <div class="value">{{getTruongTinh('namsinhme', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Dân tộc</div>
-                                                        <div class="value">{{$sinhvien->dantoc_me}}</div>
+                                                        <div class="value">{{getTruongTinh('dantoc_me', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">CMND/CCCD</div>
-                                                        <div class="value">{{$sinhvien->cmnd_me}}</div>
+                                                        <div class="value">{{getTruongTinh('cmnd_me', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Nghề nghiệp</div>
-                                                        <div class="value">{{$sinhvien->nghenghiep_me}}</div>
+                                                        <div class="value">{{getTruongTinh('nghenghiep_me', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Nơi ở</div>
-                                                        <div class="value">{{$sinhvien->diachi_me}}</div>
+                                                        <div class="value">{{getTruongTinh('diachi_me', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">Email</div>
-                                                        <div class="value">{{$sinhvien->email_me}}</div>
+                                                        <div class="value">{{getTruongTinh('email_me', $sinhvien)}}</div>
                                                     </div>
                                                     <div class="info_group">
                                                         <div class="label">SĐT</div>
-                                                        <div class="value">{{$sinhvien->sdt_me}}</div>
+                                                        <div class="value">{{getTruongTinh('sdt_me', $sinhvien)}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 mt-3">
                                                     <h6 style="border-left: 3px solid #00a180; padding-left: 3px">Anh chị ruột</h6>
-                                                    <div class="info_group">
-                                                        <div class="label">Anh chị em</div>
-                                                        <div class="value">{{$sinhvien->thanhphangiadinh}}</div>
-                                                    </div>
+                                                    @if($sinhvien->thanhphangiadinh != null)
+                                                        @foreach($sinhvien->thanhphangiadinh as $value)
+                                                            <div class="info_group">
+                                                                {{$value}}
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -225,26 +228,26 @@
                                     <div class="row">
                                         <div class="col-md-4 info_group">
                                             <div class="label">Thôn tổ</div>
-                                            <div class="value">{{$sinhvien->thon_to}}</div>
+                                            <div class="value">{{getTruongTinh('thon_to', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Xã phường</div>
-                                            <div class="value">{{$sinhvien->xa_phuong}}</div>
+                                            <div class="value">{{getTruongTinh('xa_phuong', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Quận huyện</div>
-                                            <div class="value">{{$sinhvien->quan_huyen}}</div>
+                                            <div class="value">{{getTruongTinh('quan_huyen', $sinhvien)}}</div>
                                         </div>
                                         <div class="col-md-4 info_group">
                                             <div class="label">Tỉnh/ Thành phố</div>
-                                            <div class="value">{{$sinhvien->tinh_thanh}}</div>
+                                            <div class="value">{{getTruongTinh('tinh_thanh', $sinhvien)}}</div>
                                         </div>
                                     </div>
                                     <i>Địa chỉ liên lạc</i>
                                     <div class="row">
                                         <div class="col-md-12 info_group">
                                             <div class="label">Địa chỉ</div>
-                                            <div class="value">{{$sinhvien->dia_chi_lien_lac}}</div>
+                                            <div class="value">{{getTruongTinh('dia_chi_lien_lac', $sinhvien)}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -294,18 +297,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    <div class="clearfix">
-                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                        <ul class="pagination">
-                                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -355,18 +347,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    <div class="clearfix">
-                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                        <ul class="pagination">
-                                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -414,18 +395,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    <div class="clearfix">
-                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                        <ul class="pagination">
-                                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -472,18 +442,7 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-                                    <div class="clearfix">
-                                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                                        <ul class="pagination">
-                                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                                        </ul>
-                                    </div>
+
                                 </div>
 
                         </div>
@@ -545,28 +504,28 @@
 {{--                    <div class="col-md-3 col-sm-3  profile_left">--}}
 {{--                        <div class="profile_img">--}}
 {{--                            <div id="crop-avatar d-flex">--}}
-{{--                                <img class="img-account-profile rounded-circle mb-2 " src="{{$sinhvien->avatar}}" alt="Avatar" title="Change the avatar">--}}
+{{--                                <img class="img-account-profile rounded-circle mb-2 " src="{{getTruongTinh('avatar}}" alt="Avatar" title="Change the avatar">--', $sinhvien)}}
 {{--                            </div>--}}
 {{--                        </div>--}}
 {{--                        <!-- Thông tin cá nhân -->--}}
-{{--                        <h3>{{$sinhvien->hodem." ".$sinhvien->ten}}</h3>--}}
+{{--                        <h3>{{getTruongTinh('hodem." ".$sinhvien->ten}}</h3>--', $sinhvien)}}
 {{--                        <ul class="list-unstyled user_data">--}}
 {{--                            <li>--}}
-{{--                                <i class="fa fa-map-marker user-profile-icon"></i> {{$sinhvien->thon_to .", ". $sinhvien->xa_phuong.", ". $sinhvien->quan_huyen.", ".$sinhvien->tinh_thanh}}--}}
+{{--                                <i class="fa fa-map-marker user-profile-icon"></i> {{getTruongTinh('thon_to .", ". $sinhvien->xa_phuong.", ". $sinhvien->quan_huyen.", ".$sinhvien->tinh_thanh}}--', $sinhvien)}}
 {{--                            </li>--}}
 {{--                            <li>--}}
-{{--                                <i class="fa fa-indent user-profile-icon"></i> Mã sinh viên: {{$sinhvien->masv}}--}}
+{{--                                <i class="fa fa-indent user-profile-icon"></i> Mã sinh viên: {{getTruongTinh('masv}}--', $sinhvien)}}
 {{--                            </li>--}}
 {{--                            <li>--}}
-{{--                                <i class="fa fa-mail-reply-all user-profile-icon"></i> {{$sinhvien->email}}--}}
+{{--                                <i class="fa fa-mail-reply-all user-profile-icon"></i> {{getTruongTinh('email}}--', $sinhvien)}}
 {{--                            </li>--}}
 {{--                            <li>--}}
-{{--                                <i class="fa fa-briefcase user-profile-icon"></i> {{$sinhvien->tennganh}}--}}
+{{--                                <i class="fa fa-briefcase user-profile-icon"></i> {{getTruongTinh('tennganh}}--', $sinhvien)}}
 {{--                            </li>--}}
 
 {{--                            <li class="m-top-xs">--}}
 {{--                                <i class="fa fa-external-link user-profile-icon"></i>--}}
-{{--                                <a href="{{"https://".$sinhvien->facebook}}" target="_blank">{{$sinhvien->facebook}}</a>--}}
+{{--                                <a href="{{"https://".$sinhvien->facebook}}" target="_blank">{{getTruongTinh('facebook}}</a>--', $sinhvien)}}
 {{--                            </li>--}}
 {{--                        </ul>--}}
 
@@ -606,7 +565,7 @@
 {{--                                        <div class="row pl-3 pr-3 pb-2">--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Họ và tên</div>--}}
-{{--                                                <div class="content">{{$sinhvien->hodem." ".$sinhvien->ten}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('hodem." ".$sinhvien->ten}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Ngày sinh</div>--}}
@@ -621,34 +580,34 @@
 {{--                                        <div class="row pl-3 pr-3 pb-2">--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">CMND</div>--}}
-{{--                                                <div class="content">{{$sinhvien->cmnd}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('cmnd}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Ngày cấp</div>--}}
-{{--                                                <div class="content">{{$sinhvien->ngaycap}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('ngaycap}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Nơi cấp</div>--}}
-{{--                                                <div class="content">{{$sinhvien->noicap}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('noicap}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
 {{--                                        <!-- Line2 -->--}}
 {{--                                        <div class="row pl-3 pr-3 pb-2">--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Dân tộc</div>--}}
-{{--                                                <div class="content">{{$sinhvien->dantoc}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('dantoc}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Tôn giáo</div>--}}
-{{--                                                <div class="content">{{$sinhvien->tongiao}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('tongiao}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Đoàn thể</div>--}}
-{{--                                                <div class="content">{{$sinhvien->doanthe}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('doanthe}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Mã số thẻ BHYT</div>--}}
-{{--                                                <div class="content">{{$sinhvien->ma_bhyt}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('ma_bhyt}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
 {{--                                        <!-- End Thông tin cá nhân -->--}}
@@ -661,47 +620,47 @@
 {{--                                        <div class="row pl-3 pr-3 pb-2">--}}
 {{--                                            <div class="col-md-6 hoso_block">--}}
 {{--                                                <div class="title">Họ và tên cha</div>--}}
-{{--                                                <div class="content">{{$sinhvien->hotencha}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('hotencha}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-6 hoso_block">--}}
 {{--                                                <div class="title">Năm sinh cha</div>--}}
-{{--                                                <div class="content">{{$sinhvien->namsinhcha}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('namsinhcha}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
 {{--                                        <div class="row pl-3 pr-3 pb-2">--}}
 {{--                                            <div class="col-md-6 hoso_block">--}}
 {{--                                                <div class="title">Họ và tên mẹ</div>--}}
-{{--                                                <div class="content">{{$sinhvien->hotenme}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('hotenme}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-6 hoso_block">--}}
 {{--                                                <div class="title">Năm sinh mẹ</div>--}}
-{{--                                                <div class="content">{{$sinhvien->namsinhme}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('namsinhme}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
 {{--                                        <!-- Line2 -->--}}
 {{--                                        <div class="row pl-3 pr-3 pb-2">--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Hộ khẩu (Thôn xã)</div>--}}
-{{--                                                <div class="content">{{$sinhvien->thon_to}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('thon_to}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Hộ khẩu (Xã phường)</div>--}}
-{{--                                                <div class="content">{{$sinhvien->xa_phuong}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('xa_phuong}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Hộ khẩu (Quận huyện)</div>--}}
-{{--                                                <div class="content">{{$sinhvien->quan_huyen}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('quan_huyen}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
 {{--                                        <!-- Line2 -->--}}
 {{--                                        <div class="row pl-3 pr-3 pb-2">--}}
 {{--                                            <div class="col-md-4 hoso_block">--}}
 {{--                                                <div class="title">Hộ khẩu (Tính/ TP)</div>--}}
-{{--                                                <div class="content">{{$sinhvien->tinh_thanh}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('tinh_thanh}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                            <div class="col-md-8 hoso_block">--}}
 {{--                                                <div class="title">Địa chỉ liên lạc</div>--}}
-{{--                                                <div class="content">{{$sinhvien->dia_chi_lien_lac}}</div>--}}
+{{--                                                <div class="content">{{getTruongTinh('dia_chi_lien_lac}}</div>--', $sinhvien)}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
 {{--                                    </div>--}}
@@ -710,7 +669,7 @@
 {{--                                            <hr/>--}}
 {{--                                            <div class="row">--}}
 {{--                                                <div class="col-md-3">--}}
-{{--                                                    <img class="img-fluid" src="{{$sinhvien->avatar}}"/>--}}
+{{--                                                    <img class="img-fluid" src="{{getTruongTinh('avatar}}"/>--', $sinhvien)}}
 {{--                                                </div>--}}
 {{--                                            </div>--}}
 {{--                                            <h6 class="mt-3">Ảnh đang chờ duyệt</h6>--}}

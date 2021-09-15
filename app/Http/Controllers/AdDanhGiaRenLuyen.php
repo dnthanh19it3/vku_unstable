@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Imports\RenLuyenImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+//use Google\Service\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\SvDonTuController;
+
 
 class AdDanhGiaRenLuyen extends Controller
 {
@@ -14,6 +18,21 @@ class AdDanhGiaRenLuyen extends Controller
     {
         return view('Admin.DiemRenLuyen.Index');
     }
+    function getGoogleFile($filename, $dir = "/"){
+        $recursive = false; // Get subdirectories also?
+        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+        $file = $contents
+            ->where('type', '=', 'file')
+            ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
+            ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+            ->first(); // there can be duplicate file names!
+
+        $url = Storage::disk('google')->url($file['path']);
+
+        return $url;
+    }
+
     public function getExcel(Request $request)
     {
         $array = Excel::toArray(new RenLuyenImport, $request->file('excel_file'));
