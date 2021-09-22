@@ -57,7 +57,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-12 mx-auto">
-                                <button type="submit" class="btn btn-block btn-primary">Tạo đơn mới</button>
+                                <button type="submit" class="btn btn-block btn-primary">Lưu</button>
                             </div>
                         </div>
                     </form>

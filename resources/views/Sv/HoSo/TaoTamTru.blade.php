@@ -13,28 +13,28 @@
                     <label class=" mb-1" for="inputLocation">Tên chủ hộ</label>
                     <div class="detail-content">
                         <input type="text" class="form-control rounded"   name="tenchuho"
-                               value="{{isset($tamtru) ? $tamtru->tenchuho : ""}}">
+                               value="{{isset($tamtru) ? $tamtru->tenchuho : ""}}" required>
                     </div>
                 </div>
                 <div class="form-group col-md-3">
                     <label class=" mb-1" for="inputLocation">SĐT Chủ hộ</label>
                     <div class="detail-content">
                         <input type="text" class="form-control rounded"   name="sdtchuho"
-                               value="{{isset($tamtru) ? $tamtru->sdtchuho : ""}}">
+                               value="{{isset($tamtru) ? $tamtru->sdtchuho : ""}}" required>
                     </div>
                 </div>
                 <div class="form-group col-md-3">
                     <label class=" mb-1" for="inputLocation">Thời gian tạm trú</label>
                     <div class="detail-content">
                         <input type="date" class="form-control rounded" name="thoigianbatdau"
-                               value="{{isset($tamtru) ? $tamtru->thoigianbatdau : ""}}">
+                               value="{{isset($tamtru) ? $tamtru->thoigianbatdau : ""}}" required>
                     </div>
                 </div>
                 <div class="form-group col-md-3">
                     <label class=" mb-1" for="inputLocation">Số nhà</label>
                     <div class="detail-content">
                         <input type="text" class="form-control rounded"   name="sonha"
-                               value="{{isset($tamtru) ? $tamtru->sonha : ""}}">
+                               value="{{isset($tamtru) ? $tamtru->sonha : ""}}" required>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     <label class=" mb-1" for="inputLocation">Tỉnh thành</label>
                     <div class="detail-content">
                         <input type="hidden" name="tinhthanh_id" id="tinhthanh_id" value="{{isset($tamtru) ? $tamtru->tinhthanh_id : ""}}"/>
-                        <select type="text" class="form-control rounded" name="tinhthanh" id="tinhthanh">
+                        <select type="text" class="form-control rounded" name="tinhthanh" id="tinhthanh" required>
                             <option value="">Mời bạn chọn tỉnh thành</option>
                             @foreach($tinhthanh as $key => $value)
                                 <option value="{{$value->id}}" @if($tamtru != null) {{($tamtru->tinhthanh_id == $value->id) ? "selected" : ""}} @else {{($value->id == 32) ? "selected" : ""}} @endif>{{$value->name}}</option>
@@ -55,7 +55,7 @@
                     <label class=" mb-1" for="inputLocation">Quận huyện</label>
                     <div class="detail-content">
                         <input type="hidden" name="quanhuyen_id" id="quanhuyen_id" value="{{$tamtru != null ? $tamtru->quanhuyen_id : ""}}">
-                        <select type="text" class="form-control rounded" name="quanhuyen" id="quanhuyen">
+                        <select type="text" class="form-control rounded" name="quanhuyen" id="quanhuyen" required>
                             <option value="">Quận huyện</option>
                         </select>
                     </div>
@@ -73,7 +73,7 @@
                     <label class=" mb-1" for="inputLocation">Thôn tổ</label>
                     <div class="detail-content">
                         <input type="text" class="form-control rounded" name="thonto"
-                               value="{{isset($tamtru) ? $tamtru->thonto : ""}}">
+                               value="{{isset($tamtru) ? $tamtru->thonto : ""}}" required>
                     </div>
                 </div>
             </div>
@@ -112,6 +112,8 @@
         $(document).ready(() => {
             getQuanHuyen({{$tamtru != null ? $tamtru->quanhuyen_id : ""}});
             getXaPhuong({{$tamtru != null ? $tamtru->xaphuong_id : ""}});
+
+            $('#tinhthanh_id').val($('#tinhthanh').val());
             $('#tinhthanh').change(() => {
                 $('#tinhthanh_id').val($('#tinhthanh').val());
                 getQuanHuyen();

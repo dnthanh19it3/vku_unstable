@@ -14,18 +14,23 @@
                         {{getTruongTinh('hodem." ".$sinhvien->ten', $sinhvien)}}
                     </div>
                     <div class="profile-usertitle-job">
-                        NGÀNH {{getTruongTinh('tennganh', $sinhvien)}}
+                        <i class="fas fa-id-card-alt mr-2"></i> MSV {{getTruongTinh('masv', $sinhvien)}} LỚP {{getTruongTinh('tenlop', $sinhvien)}}
                     </div>
                     <div class="profile-usertitle-job">
-                        LỚP {{getTruongTinh('tenlop', $sinhvien)}} MSV {{getTruongTinh('masv', $sinhvien)}}
+                        <i class="fas fa-briefcase mr-2"></i>NGÀNH {{getTruongTinh('tennganh', $sinhvien)}}
                     </div>
+                    @if(getTruongTinh('tenchuyennganh', $sinhvien))
+                        <div class="profile-usertitle-job">
+                            <i class="fas fa-briefcase mr-2"></i>{{getTruongTinh('tenchuyennganh', $sinhvien)}}
+                        </div>
+                    @endif
                 </div>
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR BUTTONS -->
                 <div class="profile-userbuttons">
                     <a href="{{route('ad.suasinhvien.canhan', ['masv' => $sinhvien->masv])}}" class="btn btn-success btn-sm"><i
                                 class="fa fa-edit m-right-xs mr-1"></i>Sửa hồ sơ</a>
-                    <a href="{{route('sv.getlylich')}}" class="btn btn-danger btn-sm"><i
+                    <a href="{{route('sv.getlylich', ['masv' => $sinhvien->masv])}}" class="btn btn-danger btn-sm"><i
                                 class="fa fa-file-export m-right-xs mr-1"></i>Xuất lý lịch</a>
                 </div>
                 <!-- END SIDEBAR BUTTONS -->
@@ -39,24 +44,20 @@
                                 Cá nhân
                             </a>
                             <a class="nav-link" id="khenthuong-tab" data-toggle="pill" href="#khenthuong" role="tab" aria-controls="khenthuong" aria-selected="false">
-                                <i class="fa fa-key text-center mr-1"></i>
-                                Khen thưởng
-                            </a>
-                            <a class="nav-link" id="kyluat-tab" data-toggle="pill" href="#kyluat" role="tab" aria-controls="kyluat" aria-selected="false">
-                                <i class="fa fa-user text-center mr-1"></i>
-                                Kỷ luật
+                                <i class="fas fa-star-half-alt"></i>
+                                Khen thưởng kỷ luât
                             </a>
                             <a class="nav-link" id="renluyen-tab" data-toggle="pill" href="#renluyen" role="tab" aria-controls="renluyen" aria-selected="false">
-                                <i class="fa fa-tv text-center mr-1"></i>
+                                <i class="fas fa-user-check mr-1"></i>
                                 Rèn luyện
                             </a>
                             <a class="nav-link" id="tamtru-tab" data-toggle="pill" href="#tamtru" role="tab" aria-controls="tamtru" aria-selected="false">
-                                <i class="fa fa-bell text-center mr-1"></i>
+                                <i class="fa fa-marker text-center mr-1"></i>
                                 Tạm trú
                             </a>
                             <a class="nav-link" id="timeline-tab" data-toggle="pill" href="#timeline" role="tab" aria-controls="timeline" aria-selected="false">
-                                <i class="fa fa-bell text-center mr-1"></i>
-                                Timeline
+                                <i class="fas fa-stream mr-1"></i>
+                                Nhật ký hoạt động
                             </a>
                         </div>
                     </div>
@@ -72,7 +73,7 @@
                         <div class="tab-pane fade active show" id="canhan" role="tabpanel" aria-labelledby="canhan-tab">
                             <div>
                                 <div class="profile_main_block p-4 bg-white">
-                                    <h6>Thông tin cá nhân</h6>
+                                    <h6><i class="fas fa-info-circle mr-2"></i>Thông tin cá nhân</h6>
                                     <hr/>
                                     <div class="row">
                                         <div class="col-md-4 info_group">
@@ -132,7 +133,7 @@
                                 <div class="row mt-3">
                                     <div class="col-md-12">
                                         <div class="profile_main_block p-4 bg-white">
-                                            <h6>Thông tin gia đình</h6>
+                                            <h6><i class="fas fa-users mr-2"></i>Thông tin gia đình</h6>
                                             <hr/>
                                             <div class="row">
                                                 <div class="col-md-6 ">
@@ -222,7 +223,7 @@
                                     </div>
                                 </div>
                                 <div class="profile_main_block p-4 bg-white mt-3">
-                                    <h6>Thường trú và địa chỉ</h6>
+                                    <h6><i class="fas fa-map-marker-alt mr-1"></i>Thường trú và địa chỉ</h6>
                                     <hr/>
                                     <i>Hộ khẩu thường trú</i>
                                     <div class="row">
@@ -252,10 +253,40 @@
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                <div class="profile_main_block p-4 bg-white mt-3">
+                                    <h6><i class="fas fa-address-card mr-2"></i>Thông tin liên hệ</h6>
+                                    <hr/>
+                                    <div class="row">
+                                        <div class="col-md-4 info_group">
+                                            <div class="label">Email khác</div>
+                                            <div class="value">{{getTruongTinh('email_khac', $sinhvien)}}</div>
+                                        </div>
+                                        <div class="col-md-4 info_group">
+                                            <div class="label">Điện thoại</div>
+                                            <div class="value">{{getTruongTinh('dienthoai', $sinhvien)}}</div>
+                                        </div>
+                                        <div class="col-md-4 info_group">
+                                            <div class="label">Zalo</div>
+                                            <div class="value">{{getTruongTinh('zalo', $sinhvien)}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 info_group">
+                                            <div class="label">Điện thoại gia đình</div>
+                                            <div class="value">{{getTruongTinh('dienthoaigiadinh', $sinhvien)}}</div>
+                                        </div>
+                                        <div class="col-md-4 info_group">
+                                            <div class="label">Facebook</div>
+                                            <div class="value">{{getTruongTinh('facebook', $sinhvien)}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="khenthuong" role="tabpanel" aria-labelledby="khenthuong-tab">
                             <div>
-                                <div class="table-wrapper">
+                                <div class="table-wrapper mb-3">
                                     <div class="table-title">
                                         <div class="row">
                                             <div class="col-sm-5">
@@ -297,59 +328,60 @@
                                         @endforelse
                                         </tbody>
                                     </table>
+                                </div>
+                                <div class="table-responsive">
+                                    <div class="table-wrapper">
+                                        <div class="table-title">
+                                            <div class="row">
+                                                <div class="col-sm-5">
+                                                    <h6>Kỷ luật</h6>
+                                                </div>
+                                                <div class="col-sm-7">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Nội dung</th>
+                                                <th>Cấp khen kỷ luật</th>
+                                                <th>Số quyết định</th>
+                                                <th>Hình thức kỷ luật</th>
+                                                <th>Năm học</th>
+                                                <th>Học kỳ</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @php
+                                                $i = 0;
+                                            @endphp
+                                            @forelse ($kyluat as $item)
+                                                <tr role="row" class="odd">
+                                                    <td class="sorting_1">{{ $i += 1 }}</td>
+                                                    <td>{{ $item->noidung }}</td>
+                                                    <td>{{ $item->capquyetdinh }}</td>
+                                                    <td>{{ $item->soquyetdinh }}</td>
+                                                    <td>{{ $item->hinhthuckyluat }}</td>
+                                                    <td>{{ $item->nambatdau . " " . $item->namketthuc }}</td>
+                                                    <td>{{ $item->hocky }}</td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="7">
+                                                        Sinh viên này không có thông tin kỷ luật!
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                            </tbody>
+                                        </table>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="kyluat" role="tabpanel" aria-labelledby="kyluat-tab">
-                            <div class="table-responsive">
-                                <div class="table-wrapper">
-                                    <div class="table-title">
-                                        <div class="row">
-                                            <div class="col-sm-5">
-                                                <h6>Kỷ luật</h6>
-                                            </div>
-                                            <div class="col-sm-7">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nội dung</th>
-                                            <th>Cấp khen kỷ luật</th>
-                                            <th>Số quyết định</th>
-                                            <th>Năm học</th>
-                                            <th>Học kỳ</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @php
-                                            $i = 0;
-                                        @endphp
-                                        @forelse ($kyluat as $item)
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">{{ $i += 1 }}</td>
-                                                <td>{{ $item->noidung }}</td>
-                                                <td>{{ $item->capquyetdinh }}</td>
-                                                <td>{{ $item->soquyetdinh }}</td>
-                                                <td>{{ $item->hinhthuckyluat }}</td>
-                                                <td>{{ $item->nambatdau . " " . $item->namketthuc }}</td>
-                                                <td>{{ $item->hocky }}</td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="7">
-                                                    Sinh viên này không có thông tin kỷ luật!
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                        </tbody>
-                                    </table>
 
-                                </div>
-                            </div>
                         </div>
                         <div class="tab-pane fade" id="renluyen" role="tabpanel" aria-labelledby="renluyen-tab">
                             <div>
@@ -395,7 +427,9 @@
                                         @endforelse
                                         </tbody>
                                     </table>
-
+                                    <div class="mb-3 bg-white p-3" style="width: 100%; height: 30vh; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                                        <canvas id="line-chart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -449,23 +483,23 @@
                         <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
                             <div class="bg-white p-3">
                                 <h6>Nhật kí hoạt động</h6>
+                                <hr/>
                                 <ul class="list-unstyled timeline">
-                                    @forelse($timeline as $item)
+                                    @forelse($log_sinhvien as $item)
                                         <li>
                                             <div class="block">
                                                 <div class="tags">
                                                     <a href="" class="tag">
-                                                        <span>{{$item->danhmuc}}</span>
+                                                        <span>{{$item->module}}</span>
                                                     </a>
                                                 </div>
                                                 <div class="block_content">
                                                     <h2 class="title">
-                                                        <a>{{$item->tieude}}</a>
+                                                        <a>{{$item->action}}</a>
                                                     </h2>
                                                     <div class="byline">
-                                                        <span>{{\Carbon\Carbon::create($item->thoigian)->format('d-m-Y')}}</span>
+                                                        <span>{{\Carbon\Carbon::create($item->created_at)->format('d-m-Y')}}</span>
                                                     </div>
-                                                    <p class="excerpt">{{$item->noidung}}</p>
                                                 </div>
                                             </div>
                                         </li>
@@ -480,416 +514,6 @@
             </div>
         </div>
     </div>
-{{--    <div class="row">--}}
-{{--        <div class="col-md-12">--}}
-{{--            <div class="x_panel">--}}
-{{--                <div class="x_title">--}}
-{{--                    <h2>Hồ sơ sinh viên</h2>--}}
-{{--                    <ul class="nav navbar-right panel_toolbox">--}}
-{{--                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>--}}
-{{--                        </li>--}}
-{{--                        <li class="dropdown">--}}
-{{--                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>--}}
-{{--                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">--}}
-{{--                                <a class="dropdown-item" href="#">Settings 1</a>--}}
-{{--                                <a class="dropdown-item" href="#">Settings 2</a>--}}
-{{--                            </div>--}}
-{{--                        </li>--}}
-{{--                        <li><a class="close-link"><i class="fa fa-close"></i></a>--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
-{{--                    <div class="clearfix"></div>--}}
-{{--                </div>--}}
-{{--                <div class="x_content">--}}
-{{--                    <div class="col-md-3 col-sm-3  profile_left">--}}
-{{--                        <div class="profile_img">--}}
-{{--                            <div id="crop-avatar d-flex">--}}
-{{--                                <img class="img-account-profile rounded-circle mb-2 " src="{{getTruongTinh('avatar}}" alt="Avatar" title="Change the avatar">--', $sinhvien)}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <!-- Thông tin cá nhân -->--}}
-{{--                        <h3>{{getTruongTinh('hodem." ".$sinhvien->ten}}</h3>--', $sinhvien)}}
-{{--                        <ul class="list-unstyled user_data">--}}
-{{--                            <li>--}}
-{{--                                <i class="fa fa-map-marker user-profile-icon"></i> {{getTruongTinh('thon_to .", ". $sinhvien->xa_phuong.", ". $sinhvien->quan_huyen.", ".$sinhvien->tinh_thanh}}--', $sinhvien)}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <i class="fa fa-indent user-profile-icon"></i> Mã sinh viên: {{getTruongTinh('masv}}--', $sinhvien)}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <i class="fa fa-mail-reply-all user-profile-icon"></i> {{getTruongTinh('email}}--', $sinhvien)}}
-{{--                            </li>--}}
-{{--                            <li>--}}
-{{--                                <i class="fa fa-briefcase user-profile-icon"></i> {{getTruongTinh('tennganh}}--', $sinhvien)}}
-{{--                            </li>--}}
-
-{{--                            <li class="m-top-xs">--}}
-{{--                                <i class="fa fa-external-link user-profile-icon"></i>--}}
-{{--                                <a href="{{"https://".$sinhvien->facebook}}" target="_blank">{{getTruongTinh('facebook}}</a>--', $sinhvien)}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
-
-{{--                        <a class="btn btn-primary" style="color: #fff" href="{{route('ad.suasinhvien.canhan', ['masv' => $sinhvien->masv])}}"><i class="fa fa-edit m-right-xs"></i>Sửa hồ sơ</a>--}}
-{{--                        <br>--}}
-
-{{--                    </div>--}}
-{{--                    <div class="col-md-9 col-sm-9 ">--}}
-{{--                            <!-- Danh sách tab -->--}}
-{{--                            <div class="" role="tabpanel" data-example-id="togglable-tabs">--}}
-{{--                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">--}}
-{{--                                    <li role="presentation" class="active"><a href="#tab_content1" id="thongtincanhan" role="tab" data-toggle="tab" aria-expanded="true">Thông tin cá nhân</a>--}}
-{{--                                    </li>--}}
-{{--                                    <li role="presentation" class=""><a href="#tab_content2" id="anh" role="tab" data-toggle="tab" aria-expanded="false">Ảnh</a>--}}
-{{--                                    </li>--}}
-{{--                                    <li role="presentation" class=""><a href="#tab_content3" id="khen-kyluat" role="tab" data-toggle="tab" aria-expanded="false">Khen thưởng</a>--}}
-{{--                                    </li>--}}
-{{--                                    <li role="presentation" class=""><a href="#tab_content4" role="tab" id="renluyen" data-toggle="tab" aria-expanded="false">Kỷ luật</a>--}}
-{{--                                    </li>--}}
-{{--                                    <li role="presentation" class=""><a href="#tab_content5" role="tab" id="renluyen"--}}
-{{--                                                                        data-toggle="tab" aria-expanded="false">Đánh giá rèn luyện</a>--}}
-{{--                                    </li>--}}
-{{--                                    <li role="presentation" class=""><a href="#tab_content6" role="tab" id="tamtru" data-toggle="tab" aria-expanded="false">Tạm trú tạm vắng</a>--}}
-{{--                                    </li>--}}
-{{--                                    <li role="presentation" class=""><a href="#tab_content7" role="tab" id="dongthoigian"--}}
-{{--                                                                        data-toggle="tab" aria-expanded="false">Dòng thời gian</a>--}}
-{{--                                    </li>--}}
-
-{{--                                </ul>--}}
-{{--                                <div id="myTabContent" class="tab-content">--}}
-{{--                                    <div role="tabpanel" class="tab-pane active" id="tab_content1" aria-labelledby="thongtincanhan">--}}
-{{--                                        <div class="profile_title"><!-- Thông tin cá nhân -->--}}
-{{--                                            <div class="col-md-12">--}}
-{{--                                                <h2>Thông tin cá nhân</h2>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="row pl-3 pr-3 pb-2">--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Họ và tên</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('hodem." ".$sinhvien->ten}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Ngày sinh</div>--}}
-{{--                                                <div class="content">{{\Carbon\Carbon::parse($sinhvien->ngaysinh)->format("d-m-Y")}}</div>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Giới tính</div>--}}
-{{--                                                <div class="content">@if($sinhvien->gioitinh == 1) Nữ @else Nam @endif</div>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <!-- Line2 -->--}}
-{{--                                        <div class="row pl-3 pr-3 pb-2">--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">CMND</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('cmnd}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Ngày cấp</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('ngaycap}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Nơi cấp</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('noicap}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <!-- Line2 -->--}}
-{{--                                        <div class="row pl-3 pr-3 pb-2">--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Dân tộc</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('dantoc}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Tôn giáo</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('tongiao}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Đoàn thể</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('doanthe}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Mã số thẻ BHYT</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('ma_bhyt}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <!-- End Thông tin cá nhân -->--}}
-{{--                                        <!-- Thông tin gia đình -->--}}
-{{--                                        <div class="profile_title">--}}
-{{--                                            <div class="col-md-12">--}}
-{{--                                                <h2>Thông tin gia đình</h2>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="row pl-3 pr-3 pb-2">--}}
-{{--                                            <div class="col-md-6 hoso_block">--}}
-{{--                                                <div class="title">Họ và tên cha</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('hotencha}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-6 hoso_block">--}}
-{{--                                                <div class="title">Năm sinh cha</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('namsinhcha}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="row pl-3 pr-3 pb-2">--}}
-{{--                                            <div class="col-md-6 hoso_block">--}}
-{{--                                                <div class="title">Họ và tên mẹ</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('hotenme}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-6 hoso_block">--}}
-{{--                                                <div class="title">Năm sinh mẹ</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('namsinhme}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <!-- Line2 -->--}}
-{{--                                        <div class="row pl-3 pr-3 pb-2">--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Hộ khẩu (Thôn xã)</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('thon_to}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Hộ khẩu (Xã phường)</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('xa_phuong}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Hộ khẩu (Quận huyện)</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('quan_huyen}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <!-- Line2 -->--}}
-{{--                                        <div class="row pl-3 pr-3 pb-2">--}}
-{{--                                            <div class="col-md-4 hoso_block">--}}
-{{--                                                <div class="title">Hộ khẩu (Tính/ TP)</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('tinh_thanh}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-8 hoso_block">--}}
-{{--                                                <div class="title">Địa chỉ liên lạc</div>--}}
-{{--                                                <div class="content">{{getTruongTinh('dia_chi_lien_lac}}</div>--', $sinhvien)}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div role="tabpanel" class="tab-pane" id="tab_content2" aria-labelledby="anh">--}}
-{{--                                            <h6>Ảnh hiện tại</h6>--}}
-{{--                                            <hr/>--}}
-{{--                                            <div class="row">--}}
-{{--                                                <div class="col-md-3">--}}
-{{--                                                    <img class="img-fluid" src="{{getTruongTinh('avatar}}"/>--', $sinhvien)}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                            <h6 class="mt-3">Ảnh đang chờ duyệt</h6>--}}
-{{--                                            <hr/>--}}
-{{--                                            @if($sinhvien->avatar_temp)--}}
-{{--                                                <div class="row">--}}
-{{--                                                    <div class="col-md-3">--}}
-{{--                                                        <img class="img-fluid" src="{{asset($sinhvien->avatar_temp)}}"/>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                                <div class="row mt-3">--}}
-{{--                                                    <div class="col-md-3">--}}
-{{--                                                        <a href="{{route('ad.duyetanh', ['masv' => $sinhvien->masv])}}" class="btn btn-primary">Duyệt</a>--}}
-{{--                                                        <a href="#" class="btn btn-danger">Không duyệt</a>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            @else--}}
-{{--                                                <div>Không có ảnh nào chờ duyệt!</div>--}}
-{{--                                            @endif--}}
-{{--                                            <h6 class="mt-3">Ảnh đã duyệt</h6>--}}
-{{--                                            <hr/>--}}
-{{--                                            <div class="row">--}}
-{{--                                                @forelse($anhdatailen as $item)--}}
-{{--                                                    <div class="col-md-3">--}}
-{{--                                                        <div class="anhhoso-container">--}}
-{{--                                                            <img style="width: 100%;height: auto" src="{{asset($item->duongdan)}}"/>--}}
-{{--                                                            <div--}}
-{{--                                                                class="anhoso-badge">{{Carbon\Carbon::parse($item->created_at)->format('d-m-Y h:m')}}</div>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                @empty--}}
-{{--                                                    <div class="col-12">Chưa có ảnh đã tải lên!</div>--}}
-{{--                                                @endforelse--}}
-{{--                                            </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div role="tabpanel" class="tab-pane" id="tab_content3" aria-labelledby="khen-kyluat">--}}
-{{--                                        <table class="table table-striped jambo_table bulk_action">--}}
-{{--                                            <thead>--}}
-{{--                                            <tr class="headings">--}}
-{{--                                                <th class="column-title">STT</th>--}}
-{{--                                                <th class="column-title">Cấp khen thưởng</th>--}}
-{{--                                                <th class="column-title">Số quyết định</th>--}}
-{{--                                                <th class="column-title">Nội dung</th>--}}
-{{--                                                <th class="column-title">Thời gian</th>--}}
-{{--                                            </tr>--}}
-{{--                                            </thead>--}}
-{{--                                            <tbody>--}}
-{{--                                            @php--}}
-{{--                                                $i = 0;--}}
-{{--                                            @endphp--}}
-{{--                                            @foreach ($khenthuong as $item)--}}
-{{--                                                <tr role="row" class="odd">--}}
-{{--                                                    <td class="sorting_1">{{ $i += 1 }}</td>--}}
-{{--                                                    <td>{{ $item->capkhenthuong }}</td>--}}
-{{--                                                    <td>{{ $item->soquyetdinh }}</td>--}}
-{{--                                                    <td>{{ $item->noidung }}</td>--}}
-{{--                                                    <td>{{ $item->thoigian }}</td>--}}
-{{--                                                </tr>--}}
-{{--                                                @endforeach--}}
-{{--                                                </tr>--}}
-{{--                                            </tbody>--}}
-{{--                                        </table>--}}
-{{--                                    </div>--}}
-{{--                                    <div role="tabpanel" class="tab-pane fade" id="tab_content4" aria-labelledby="kyluat">--}}
-{{--                                        <table class="table table-striped jambo_table bulk_action">--}}
-{{--                                            <thead>--}}
-{{--                                            <tr class="headings">--}}
-{{--                                                <th class="column-title">STT</th>--}}
-{{--                                                <th class="column-title">Cấp quyết định</th>--}}
-{{--                                                <th class="column-title">Số quyết định</th>--}}
-{{--                                                <th class="column-title">Nội dung</th>--}}
-{{--                                                <th class="column-title">Hình thức</th>--}}
-{{--                                                <th class="column-title">Thời gian</th>--}}
-{{--                                            </tr>--}}
-{{--                                            </thead>--}}
-{{--                                            <tbody>--}}
-{{--                                            @php--}}
-{{--                                                $i = 0;--}}
-{{--                                            @endphp--}}
-{{--                                            @forelse ($kyluat as $item)--}}
-{{--                                                <tr role="row" class="odd">--}}
-{{--                                                    <td class="sorting_1">{{ $i += 1 }}</td>--}}
-{{--                                                    <td>{{ $item->capquyetdinh }}</td>--}}
-{{--                                                    <td>{{ $item->soquyetdinh }}</td>--}}
-{{--                                                    <td>{{ $item->noidung }}</td>--}}
-{{--                                                    <td>{{ $item->hinhthuckyluat }}</td>--}}
-{{--                                                    <td>{{ $item->thoigian }}</td>--}}
-{{--                                                </tr>--}}
-{{--                                            @empty--}}
-{{--                                                <tr>--}}
-{{--                                                    <td colspan="7">--}}
-{{--                                                        Sinh viên này không có thông tin kỷ luật!--}}
-{{--                                                    </td>--}}
-{{--                                                </tr>--}}
-{{--                                                @endforelse--}}
-{{--                                                </tr>--}}
-{{--                                            </tbody>--}}
-{{--                                        </table>--}}
-{{--                                    </div>--}}
-{{--                                    <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="renluyen">--}}
-{{--                                        <h6>Điểm rèn luyện</h6>--}}
-{{--                                        <table class="table table-striped jambo_table bulk_action">--}}
-{{--                                            <thead>--}}
-{{--                                            <tr class="headings">--}}
-{{--                                                <th class="column-title">STT</th>--}}
-{{--                                                <th class="column-title">Năm học</th>--}}
-{{--                                                <th class="column-title">Học kì</th>--}}
-{{--                                                <th class="column-title">Điểm</th>--}}
-{{--                                                <th class="column-title">Xếp loại</th>--}}
-{{--                                            </tr>--}}
-{{--                                            </thead>--}}
-{{--                                            <tbody>--}}
-{{--                                            @php--}}
-{{--                                                $i = 0--}}
-{{--                                            @endphp--}}
-
-{{--                                            @forelse($renluyen as $item)--}}
-{{--                                                <tr role="row" class="odd">--}}
-{{--                                                    <td class="sorting_1">{{ $i += 1 }}</td>--}}
-{{--                                                    <td>{{ $item->namhoc}}</td>--}}
-{{--                                                    <td>{{ $item->hocky }}</td>--}}
-{{--                                                    <td>{{ $item->diem }}</td>--}}
-{{--                                                    <td>{{ $item->xeploai }}</td>--}}
-{{--                                                </tr>--}}
-{{--                                            @empty--}}
-{{--                                                <tr>--}}
-{{--                                                    <td colspan="7">--}}
-{{--                                                        <div class="alert alert-danger">--}}
-{{--                                                            Chưa có đánh giá rèn luyện--}}
-{{--                                                        </div>--}}
-{{--                                                    </td>--}}
-{{--                                                </tr>--}}
-{{--                                                @endforelse--}}
-{{--                                                </tr>--}}
-{{--                                            </tbody>--}}
-{{--                                        </table>--}}
-{{--                                    </div>--}}
-{{--                                    <div role="tabpanel" class="tab-pane fade" id="tab_content6" aria-labelledby="tamtru">--}}
-{{--                                        <table class="table table-striped jambo_table bulk_action">--}}
-{{--                                            <thead>--}}
-{{--                                            <tr class="headings">--}}
-{{--                                                <th>--}}
-{{--                                                    <div class="icheckbox_flat-green" style="position: relative;"><input--}}
-{{--                                                            type="checkbox" id="check-all" class="flat"--}}
-{{--                                                            style="position: absolute; opacity: 0;">--}}
-{{--                                                        <ins class="iCheck-helper"--}}
-{{--                                                             style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>--}}
-{{--                                                    </div>--}}
-{{--                                                </th>--}}
-{{--                                                <th class="column-title">Địa chỉ</th>--}}
-{{--                                                <th class="column-title">Tên chủ hộ</th>--}}
-{{--                                                <th class="column-title">SĐT chủ hộ</th>--}}
-{{--                                                <th class="column-title">Thời gian</th>--}}
-{{--                                                <th class="column-title">Học kỳ</th>--}}
-{{--                                                <th class="column-title">Năm học</th>--}}
-{{--                                            </tr>--}}
-{{--                                            </thead>--}}
-{{--                                            <tbody>--}}
-{{--                                            @php--}}
-{{--                                                $i = 0--}}
-{{--                                            @endphp--}}
-
-{{--                                            @forelse($tamtru as $item)--}}
-{{--                                                <tr role="row" class="odd">--}}
-{{--                                                    <td class="sorting_1">{{ $i += 1 }}</td>--}}
-{{--                                                    <td>{{ $item->so_nha.", ". $item->thon_to.", ".$item->xa_phuong.", ".$item->quan_huyen.", ".$item->tinh_thanh}}</td>--}}
-{{--                                                    <td>{{ $item->tenchuho }}</td>--}}
-{{--                                                    <td>{{ $item->sdtchuho }}</td>--}}
-{{--                                                    <td>{{ $item->thoigian }}</td>--}}
-{{--                                                    <td>{{ $item->hocky }}</td>--}}
-{{--                                                    <td>{{ $item->nambatdau."-".$item->namketthuc }}</td>--}}
-{{--                                                </tr>--}}
-{{--                                            @empty--}}
-{{--                                                <tr>--}}
-{{--                                                    <td colspan="7">--}}
-{{--                                                        <div class="alert alert-danger">--}}
-{{--                                                            Bạn chưa khai báo trong học kì này! Vui lòng bổ sung khai báo tạm trú trong chỉnh sửa hồ sơ!--}}
-{{--                                                        </div>--}}
-{{--                                                    </td>--}}
-{{--                                                </tr>--}}
-{{--                                                @endforelse--}}
-{{--                                                </tr>--}}
-{{--                                            </tbody>--}}
-{{--                                        </table>--}}
-{{--                                    </div>--}}
-{{--                                    <div role="tabpanel" class="tab-pane fade" id="tab_content7" aria-labelledby="dongthoigian">--}}
-{{--                                        <h6>Nhật kí hoạt động</h6>--}}
-{{--                                        <ul class="list-unstyled timeline">--}}
-{{--                                            @forelse($timeline as $item)--}}
-{{--                                                <li>--}}
-{{--                                                    <div class="block">--}}
-{{--                                                        <div class="tags">--}}
-{{--                                                            <a href="" class="tag">--}}
-{{--                                                                <span>{{$item->danhmuc}}</span>--}}
-{{--                                                            </a>--}}
-{{--                                                        </div>--}}
-{{--                                                        <div class="block_content">--}}
-{{--                                                            <h2 class="title">--}}
-{{--                                                                <a>{{$item->tieude}}</a>--}}
-{{--                                                            </h2>--}}
-{{--                                                            <div class="byline">--}}
-{{--                                                                <span>{{\Carbon\Carbon::create($item->thoigian)->format('d-m-Y')}}</span>--}}
-{{--                                                            </div>--}}
-{{--                                                            <p class="excerpt">{{$item->noidung}}</p>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                </li>--}}
-{{--                                            @empty--}}
-{{--                                            @endforelse--}}
-{{--                                        </ul>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--    </form>--}}
 @endsection
 @section('custom-css')
     <style>
@@ -901,4 +525,55 @@
         .image_area {
             position: relative;
         }</style>
+@endsection
+@section('custom-script')
+
+    <script src="{{asset('vendors/Chart.js/dist/Chart.min.js')}}"></script>
+    <script>
+        $(document).ready(()=>{
+            const lineChart = new Chart(document.getElementById("line-chart"), {
+                type: 'line',
+                data: {
+                    labels: @json($renluyen_chart['label']),
+                    datasets: [{
+                        data: @json($renluyen_chart['value']),
+                        label: "Điểm",
+                        borderColor: "#3e95cd",
+                        fill: true,
+                    }                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Biểu đồ điểm rèn luyện'
+                    },
+                    response:true,
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Học kỳ'
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: false,
+                                steps: 10,
+                                stepValue: 10,
+                                max: 100,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Điểm'
+                            }
+                        }]
+                    },
+                }
+            });
+            lineChart.resize(300, 500);
+        })
+    </script>
 @endsection

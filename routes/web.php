@@ -20,6 +20,7 @@ Route::prefix('tools')->group(function (){
     Route::get('crawl_student_image', 'ToolController@crawlAvatar');
 });
 
+
 Route::get('sv/login', 'SvAuthController@webLoginView')->name('sv.login.view');
 Route::post('sv/login', 'SvAuthController@webLogin')->name('sv.login');
 
@@ -27,7 +28,7 @@ Route::get('admin/login', 'AdminAuthController@webLoginView')->name('admin.login
 Route::post('admin/login', 'AdminAuthController@webLogin')->name('admin.login');
 Route::get('admin/logout', 'AdminAuthController@webLogout')->name('admin.logout');
 
-
+Route::get('sv/ly-lich/{masv}', 'SvLyLichController@getLyLich')->name('sv.getlylich');
 Route::prefix('sv')->middleware('sv')->group(function () {
     Route::prefix('hoso')->group(function () {
         //Ho so
@@ -38,7 +39,7 @@ Route::prefix('sv')->middleware('sv')->group(function () {
         Route::post('suahoso', 'SvHoSoController@suahosoStore')->name('suahosoStore');
         Route::get('xuatpdf', 'SvHoSoController@exportPDF');
         //Ly Lich
-        Route::get('ly-lich', 'SvLyLichController@getLyLich')->name('sv.getlylich');
+
     });
     Route::prefix('tam-tru')->group(function(){
         //Tam tru
@@ -210,3 +211,4 @@ Route::prefix('zalo_api')->group(function (){
 
 
 Route::get('test-field', 'AdDonTuController@getStaticFieldData');
+Route::get('email', 'AdQuanLySv@getEmail');

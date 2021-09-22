@@ -7,13 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class SvLyLichController extends Controller
 {
-    function getLyLich (Request $request){
-        $sinhvien = DB::table('table_sinhvien')
-            ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
-            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
-            ->join('table_nganh', 'table_sinhvien.nganh_id', '=', 'table_nganh.id')
-            ->where('table_sinhvien.masv', '=', session('masv'))
-            ->first();
+    function getLyLich (Request $request, $masv){
+        $sinhvien = getSinhVienData($request->masv);
         $tamtru = DB::table('table_sinhvien_tamtru')
             ->join('table_static_provinces', 'table_sinhvien_tamtru.tinhthanh_id', 'table_static_provinces.id')
             ->join('table_static_districts', 'table_sinhvien_tamtru.quanhuyen_id', 'table_static_districts.id')

@@ -7,7 +7,7 @@
                 <hr/>
                 <div class="profile-usermenu">
                     <ul class="nav">
-                        <li class="active">
+                        <li>
                             <a href="{{route('admin.quanlylop.chitietlop', ['lop_id' => $lop_id])}}">
                                 <i class="glyphicon glyphicon-home"></i>
                                 Danh sách lớp </a>
@@ -22,7 +22,7 @@
                                 <i class="glyphicon glyphicon-user"></i>
                                 Kết quả rèn luyện</a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="{{route('admin.quanlylop.bancansu', ['lop_id' => $lop_id])}}">
                                 <i class="glyphicon glyphicon-user"></i>
                                 Ban cán sự</a>
@@ -51,9 +51,10 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Họ đệm</th>
-                                <th>Tên</th>
+                                <th>Họ và tên</th>
                                 <th>Mã sinh viên</th>
+                                <th>Số điện thoại</th>
+                                <th>Email</th>
                                 <th>Vai trò</th>
                             </tr>
                             </thead>
@@ -61,9 +62,10 @@
                             @foreach($bancansu as $key => $item)
                                 <tr>
                                     <td>{{$key+=1}}</td>
-                                    <td>{{$item->hodem}}</td>
-                                    <td>{{$item->ten}}</td>
+                                    <td><img src="{{asset($item->avatar)}}" class="avatar"/>{{$item->hodem}} {{$item->ten}}</td>
                                     <td>{{$item->masv}}</td>
+                                    <td>{{$item->dienthoai}}</td>
+                                    <td>{{$item->email}}</td>
                                     <td>{{$item->chucvu}}</td>
                                 </tr>
                             @endforeach

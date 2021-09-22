@@ -11,6 +11,7 @@ function getSinhVienData($masv){
         ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
         ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
         ->join('table_nganh', 'table_sinhvien.nganh_id', '=', 'table_nganh.id')
+        ->leftJoin('table_nganh as table_nganh_nested', 'table_nganh.id_chuyennganh', '=', 'table_nganh_nested.id')
         ->where('table_sinhvien.masv', $masv)
         ->first([
             //Sinhvien
@@ -55,6 +56,7 @@ function getSinhVienData($masv){
             'table_sinhvien_chitiet.thanhphangiadinh',
             //Lien he
             'table_sinhvien_chitiet.dienthoai',
+            'table_sinhvien_chitiet.dienthoaigiadinh',
             'table_sinhvien_chitiet.avatar',
             'table_sinhvien_chitiet.facebook',
             'table_sinhvien_chitiet.zalo',
@@ -67,9 +69,9 @@ function getSinhVienData($masv){
             'table_lopsh.tenlop',
             'table_lopsh.khoaK',
             // Nganh
-            'table_nganh.tennganh',
+            'table_nganh.tennganh as tenchuyennganh',
+            'table_nganh_nested.tennganh as tennganh'
         ]);
-
     return $sinhvien;
 }
 function getTruongTinh($key, $data){
@@ -86,7 +88,7 @@ function getTruongTinh($key, $data){
         case 'ngaysinh':
             return vnDate($data->ngaysinh);
         case 'gioitinh':
-            return $data->gioitinh ? 'Nam' : 'Nữ';
+            return $data->gioitinh ? 'Nữ' : 'Nam';
         case 'email':
             return $data->email;
         case 'dantoc':
@@ -149,6 +151,8 @@ function getTruongTinh($key, $data){
             return $data->thanhphangiadinh;
         case 'dienthoai':
             return $data->dienthoai;
+        case 'dienthoaigiadinh':
+            return $data->dienthoaigiadinh;
         case 'facebook':
             return $data->facebook;
         case 'zalo':
@@ -165,13 +169,22 @@ function getTruongTinh($key, $data){
                     return "Đảng viên";
             }
         case 'ngayketnap':
-            return vnDate($data->ngayketnap);
+            return $data->ngayketnap ? vnDate($data->ngayketnap) : "";
         case 'tenlop':
             return $data->tenlop;
         case 'khoa':
             return $data->khoaK;
         case 'tennganh':
-            return $data->tennganh;
-
+            if($data->tennganh && $data->tenchuyennganh){
+                return $data->tennganh;
+            } else {
+                return $data->tenchuyennganh;
+            }
+        case 'tenchuyennganh':
+            if($data->tenchuyennganh != null && $data->tennganh != null){
+                return $data->tenchuyennganh;
+            } else {
+                return null;
+            }
     }
 }

@@ -150,35 +150,35 @@
 </div>
 <div style="width: 100%;">
     <div class="line">
-        <div class="col f-12" style="width: 45%;">Họ và tên: {{$sv->hodem . ' ' . $sv->ten}}</div>
+        <div class="col f-12" style="width: 45%;">Họ và tên: {{getTruongTinh('hoten', $sv)}}</div>
         <div class="col f-12" style="width:30%">Giới tính: {{ $sv->gioitinh ? 'Nam' : 'Nữ' }}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 40%;">Ngày, tháng, năm sinh: {{\Carbon\Carbon::make($sv->ngaysinh)->format('d/m/Y')}}</div>
-        <div class="col f-12" style="width:20%">Dân tộc: {{$sv->dantoc}}</div>
-        <div class="col f-12" style="width:30%">Tôn giáo: {{$sv->tongiao}}</div>
+        <div class="col f-12" style="width: 40%;">Ngày, tháng, năm sinh: {{getTruongTinh('ngaysinh', $sv)}}</div>
+        <div class="col f-12" style="width:20%">Dân tộc: {{getTruongTinh('dantoc', $sv)}}</div>
+        <div class="col f-12" style="width:30%">Tôn giáo: {{getTruongTinh('tongiao', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 20%;">Lớp: {{$sv->tenlop}}</div>
-        <div class="col f-12" style="width:30%">Mã sinh viên: {{$sv->masv}}</div>
-        <div class="col f-12" style="width:30%">Ngành: {{$sv->tennganh}}</div>
+        <div class="col f-12" style="width: 20%;">Lớp: {{getTruongTinh('tenlop', $sv)}}</div>
+        <div class="col f-12" style="width:30%">Mã sinh viên: {{getTruongTinh('masv', $sv)}}</div>
+        <div class="col f-12" style="width:30%">Ngành: {{getTruongTinh('tennganh', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 98%;">Nơi sinh: {{$sv->noisinh}}</div>
+        <div class="col f-12" style="width: 98%;">Nơi sinh: {{getTruongTinh('noisinh', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 35%;">Số CMND/CCCD: {{$sv->cmnd}}</div>
-        <div class="col f-12" style="width:27%">Ngày cấp: {{$sv->ngaycap}}</div>
-        <div class="col f-12" style="width:27%">Nơi cấp: {{$sv->noicap}}</div>
+        <div class="col f-12" style="width: 35%;">Số CMND/CCCD: {{getTruongTinh('cmnd', $sv)}}</div>
+        <div class="col f-12" style="width:27%">Ngày cấp: {{getTruongTinh('ngaycap', $sv)}}</div>
+        <div class="col f-12" style="width:27%">Nơi cấp: {{getTruongTinh('noicap', $sv)}}</div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 60%">Hộ khẩu thường trú: Số nhà/đường: </div>
-        <div class="col f-12" style="width: 35%">Thôn/Tổ: {{$sv->thon_to}}</div>
+        <div class="col f-12" style="width: 35%">Thôn/Tổ: {{getTruongTinh('thon_to', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 32%;">Xã phường: {{$sv->xa_phuong}}</div>
-        <div class="col f-12" style="width:32%">Quận huyện: {{$sv->quan_huyen}}</div>
-        <div class="col f-12" style="width:32%">Tỉnh/TP: {{$sv->tinh_thanh}}</div>
+        <div class="col f-12" style="width: 32%;">Xã phường: {{getTruongTinh('xa_phuong', $sv)}}</div>
+        <div class="col f-12" style="width:32%">Quận huyện: {{getTruongTinh('quan_huyen', $sv)}}</div>
+        <div class="col f-12" style="width:32%">Tỉnh/TP: {{getTruongTinh('tinh_thanh', $sv)}}</div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 47%;">Học tại trường THPT: </div>
@@ -194,11 +194,11 @@
             TNLĐ, mồ côi cha mẹ, hộ nghèo, cận nghèo): </div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 98%;">Mã số bảo hiểm y tế (ghi rõ cả phần chữ và số): {{$sv->ma_bhyt}}</div>
+        <div class="col f-12" style="width: 98%;">Mã số bảo hiểm y tế (ghi rõ cả phần chữ và số): {{getTruongTinh('ma_bhyt', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 56%;">Là Đoàn viên/Đảng viên: {{$sv->doanthe}}</div>
-        <div class="col f-12" style="width:40%">Thời gian kết nạp: {{$sv->ngayketnap}}</div>
+        <div class="col f-12" style="width: 56%;">Là Đoàn viên/Đảng viên: {{getTruongTinh('doanthe', $sv)}}</div>
+        <div class="col f-12" style="width:40%">Thời gian kết nạp: {{getTruongTinh('ngayketnap', $sv)}}</div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 98%;">Nhập học theo hình thức xét tuyển (xét kết quả học tập, tuyển sinh
@@ -208,55 +208,55 @@
 <div class="heading">II. PHẦN THÔNG TIN GIA ĐÌNH SINH VIÊN</div>
 <div class="">
     <div class="line">
-        <div class="col f-12" style="width: 55%;">Họ và tên Cha {{$sv->hotencha}}:</div>
-        <div class="col f-12" style="width:42%">Ngày sinh cha: {{$sv->namsinhcha}}</div>
+        <div class="col f-12" style="width: 55%;">Họ và tên Cha {{getTruongTinh('hotencha', $sv)}}:</div>
+        <div class="col f-12" style="width:42%">Ngày sinh cha: {{getTruongTinh('namsinhcha', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 20%;">Dân tộc: {{$sv->dantoc_cha}}</div>
-        <div class="col f-12" style="width: 28%;">Nghề nghiệp: {{$sv->nghenghiep_cha}}</div>
-        <div class="col f-12" style="width:48%">Số CMND/CCCD: {{$sv->cmnd_cha}}</div>
+        <div class="col f-12" style="width: 20%;">Dân tộc: {{getTruongTinh('dantoc_cha', $sv)}}</div>
+        <div class="col f-12" style="width: 28%;">Nghề nghiệp: {{getTruongTinh('nghenghiep_cha', $sv)}}</div>
+        <div class="col f-12" style="width:48%">Số CMND/CCCD: {{getTruongTinh('cmnd_cha', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 98%;">Nơi ở: {{$sv->diachi_cha}}</div>
+        <div class="col f-12" style="width: 98%;">Nơi ở: {{getTruongTinh('diachi_cha', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 48%;">Email (nếu có): {{$sv->email_cha}}</div>
-        <div class="col f-12" style="width:48%">Số điện thoại: {{$sv->sdt_cha}}</div>
+        <div class="col f-12" style="width: 48%;">Email (nếu có): {{getTruongTinh('email_cha', $sv)}}</div>
+        <div class="col f-12" style="width:48%">Số điện thoại: {{getTruongTinh('sdt_cha', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 55%;">Họ và tên Mẹ: {{$sv->hotenme}}</div>
-        <div class="col f-12" style="width:42%">Ngày sinh Mẹ: {{$sv->namsinhme}}</div>
+        <div class="col f-12" style="width: 55%;">Họ và tên Mẹ: {{getTruongTinh('hotenme', $sv)}}</div>
+        <div class="col f-12" style="width:42%">Ngày sinh Mẹ: {{getTruongTinh('namsinhme', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 20%;">Dân tộc: {{$sv->dantoc_me}}</div>
-        <div class="col f-12" style="width: 28%;">Nghề nghiệp: {{$sv->nghenghiep_me}}</div>
-        <div class="col f-12" style="width:48%">Số CMND/CCCD: {{$sv->cmnd_me}}</div>
+        <div class="col f-12" style="width: 20%;">Dân tộc: {{getTruongTinh('dantoc_me', $sv)}}</div>
+        <div class="col f-12" style="width: 28%;">Nghề nghiệp: {{getTruongTinh('nghenghiep_me', $sv)}}</div>
+        <div class="col f-12" style="width:48%">Số CMND/CCCD: {{getTruongTinh('cmnd_me', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 98%;">Nơi ở: {{$sv->diachi_me}}</div>
+        <div class="col f-12" style="width: 98%;">Nơi ở: {{getTruongTinh('diachi_me', $sv)}}</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 48%;">Email (nếu có): {{$sv->email_me}}</div>
-        <div class="col f-12" style="width:48%">Số điện thoại: {{$sv->sdt_me}}</div>
+        <div class="col f-12" style="width: 48%;">Email (nếu có): {{getTruongTinh('email_me', $sv)}}</div>
+        <div class="col f-12" style="width:48%">Số điện thoại: {{getTruongTinh('sdt_me', $sv)}}</div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 98%;">* Thành phần gia đình gồm những ai (ghi rõ họ tên của anh/chị/em,
-            ...): {{$sv->thanhphangiadinh}}</div>
+            ...): {{getTruongTinh('thanhphangiadinh', $sv)}}</div>
     </div>
 </div>
 <div class="heading">III. PHẦN LIÊN LẠC VỚI SINH VIÊN:</div>
 <div class="">
     <div class="line">
-        <div class="col f-12" style="width: 55%;">Số điện thoại: {{$sv->dienthoai}}</div>
-        <div class="col f-12" style="width:42%">Email: {{$sv->email_khac}}</div>
+        <div class="col f-12" style="width: 55%;">Số điện thoại: {{getTruongTinh('dienthoai', $sv)}}</div>
+        <div class="col f-12" style="width:42%">Email: {{getTruongTinh('email_khac', $sv)}}</div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 98%;"> Địa chỉ liên lạc khi cần: phải ghi cụ thể, chính xác, nếu ở trọ
             thì ghi địa chỉ nhà trọ, nếu ở nhà thì ghi địa chỉ nhà: @if($tamtru != null) {{$tamtru->sonha . ", " . $tamtru->thonto .", ".$tamtru->xaphuong." ".$tamtru->quanhuyen. " " . $tamtru->tinhthanh}} @endif</div>
     </div>
     <div class="line">
-        <div class="col f-12" style="width: 55%;">Họ tên người nhận: {{$sv->hodem . ' ' . $sv->ten}}</div>
-        <div class="col f-12" style="width:42%">Số điện thoại:@if($tamtru != null) {{$sv->dienthoai}} @endif </div>
+        <div class="col f-12" style="width: 55%;">Họ tên người nhận: {{getTruongTinh('hoten', $sv)}}</div>
+        <div class="col f-12" style="width:42%">Số điện thoại:@if($tamtru != null) {{getTruongTinh('dienthoai', $sv)}} @endif </div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 55%;">Thôn (tổ dân phố, số nhà): @if($tamtru != null){{$tamtru->thonto}}  @endif </div>

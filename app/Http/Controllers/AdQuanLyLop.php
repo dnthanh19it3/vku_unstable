@@ -100,10 +100,35 @@ class AdQuanLyLop extends Controller
             ->where('table_danhgiarenluyen.namhoc', $namhoc_hocky[0])
             ->where('table_danhgiarenluyen.hocky', $namhoc_hocky[1])
             ->get();
+        $ketquadanhgia_thongke = ['xeploai' => [], 'soluong' => []];
+        $ketquadanhgia_thongkeraw = DB::table("table_danhgiarenluyen")
+            ->join('table_sinhvien', 'table_danhgiarenluyen.masv', '=', 'table_sinhvien.masv')
+            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
+            ->join("table_namhoc_hocky", function ($join){
+                $join->on("table_danhgiarenluyen.namhoc", "=", "table_namhoc_hocky.id");
+                $join->on("table_danhgiarenluyen.hocky", "=", "table_namhoc_hocky.hocky");
+            })
+            ->where('table_sinhvien.lopsh_id', $lop_id)
+            ->where('table_danhgiarenluyen.namhoc', $namhoc_hocky[0])
+            ->where('table_danhgiarenluyen.hocky', $namhoc_hocky[1])
+            ->addSelect('table_danhgiarenluyen.xeploai')
+            ->distinct()
+            ->selectRaw('count(table_danhgiarenluyen.xeploai) as count')
+            ->groupBy('table_danhgiarenluyen.xeploai')
+            ->get();
+        foreach ($ketquadanhgia_thongkeraw as $key => $value){
+            array_push($ketquadanhgia_thongke['xeploai'], $value->xeploai);
+            array_push($ketquadanhgia_thongke['soluong'], $value->count);
+        }
+
+
+
         return view('Admin.QuanLyLop.DiemRenLuyen')->with([
             'danhsachhocky' => $danhsachhocky,
             'ketquadanhgia' => $ketquadanhgia,
-            "lop_id" => $request->lop_id
+            "lop_id" => $request->lop_id,
+            'namhoc_hocky' => $request->namhoc_hocky,
+            'ketquadanhgia_thongke' => $ketquadanhgia_thongke
         ]);
     }
     /**
@@ -114,6 +139,7 @@ class AdQuanLyLop extends Controller
         $bancansu = DB::table('table_lopsh_bancansu')
             ->join('table_lopsh_chucvu', 'table_lopsh_bancansu.chucvu_id', '=', 'table_lopsh_chucvu.id')
             ->join('table_sinhvien', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien.masv')
+            ->join('table_sinhvien_chitiet', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien_chitiet.masv')
             ->where('table_lopsh_bancansu.lopsh_id', $lop_id)
             ->where('table_lopsh_bancansu.trangthai', 1)
             ->get();
@@ -160,30 +186,21 @@ class AdQuanLyLop extends Controller
             }
         }
 
-
         foreach ($output_data as $key => $item){
             $tontai = DB::table('table_lopsh_bancansu')
                 ->where('lopsh_id', $item['lopsh_id'])
                 ->where('chucvu_id', $item['chucvu_id'])
-                ->where('trangthai', 1)
                 ->first();
-
 
             if($tontai != null){
                 if($item['masv'] == $tontai->masv){
                     continue;
                 } else {
-                    $update = DB::table('table_lopsh_bancansu')->where('id', $tontai->id)->update(['trangthai' => 0, 'updated_at' => Carbon::now()]);
-                    if($update){
-                        $insert = DB::table('table_lopsh_bancansu')->insert($item);
-                        if(!$insert){
-                            $success = 0;
-                        }
-                    } else {
+                    $update = DB::table('table_lopsh_bancansu')->where('id', $tontai->id)->update($item);
+                    if(!$update){
                         $success = 0;
                     }
                 }
-
             } else {
                 $insert = DB::table('table_lopsh_bancansu')->insert($item);
                 if(!$insert){
@@ -191,7 +208,6 @@ class AdQuanLyLop extends Controller
                 }
             }
         }
-
-        dd($success);
+        return back();
     }
 }

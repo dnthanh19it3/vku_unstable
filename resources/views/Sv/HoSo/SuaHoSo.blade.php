@@ -285,7 +285,7 @@
                                             <input type="text" class="form-control rounded" name="dienthoaigiadinh" value="{{$sinhvien->dienthoaigiadinh}}" disabled/>
                                         </div>
                                         <div class="col-md-4 form-group">
-                                            <div class="label">Email khác</div>
+                                            <div class="label">Facebook cá nhân</div>
                                             <input type="text" class="form-control rounded" name="facebook" value="{{$sinhvien->facebook}}"/>
                                         </div>
                                     </div>
@@ -294,12 +294,16 @@
                         </div>
                     </div>
                     <div class="row mt-3 pl-3">
+                        <div class="col-md-12 mb-3">
+                           Sinh viên liên hệ <a href="https://www.facebook.com/ctsv.vku.udn.vn"><i class="fab fa-facebook ml-1 mr-1"></i>Phòng công tác sinh viên</a> hoặc <a href="tel:0236 3667 129"><i class="fas fa-phone mr-1"></i>0236 3667 129</a> nếu có thay đổi chi tiết thông tin cá nhân
+                        </div>
                         <div class="col-md-12">
                             <button type="submit" class="btn btn-sm btn-primary pl-3 pr-3"><i class="fa fa-save mr-3"></i> Lưu</button>
                         </div>
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 @endsection

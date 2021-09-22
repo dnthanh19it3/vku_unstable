@@ -51,12 +51,7 @@ class AdQuanLySv extends Controller
 
     function chiTietSinhVienView(Request $request, $masv)
     {   //Thong tin sinh vien
-        $sinhvien = DB::table('table_sinhvien')
-            ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
-            ->join('table_lopsh', 'table_sinhvien.lopsh_id', '=', 'table_lopsh.id')
-            ->join('table_nganh', 'table_sinhvien.nganh_id', '=', 'table_nganh.id')
-            ->where('table_sinhvien.masv', '=', $masv)
-            ->first();
+        $sinhvien = getSinhVienData($masv);
         //Thanh phan gia dinh
         $sinhvien->thanhphangiadinh = $sinhvien->thanhphangiadinh ? explode('|', $sinhvien->thanhphangiadinh) : null;
         //Thong tin tam tru
@@ -105,7 +100,7 @@ class AdQuanLySv extends Controller
             ->where("table_sinhvien_kyluat.masv", $masv)
             ->get();
         //Timeline
-        $timeline = DB::table("table_sinhvien_timeline")->where("masv", $masv)->orderBy("thoigian", "DESC")->get();
+        $log_sinhvien = DB::table('table_log_sinhvien')->join('table_log_loai', 'table_log_sinhvien.id_log_loai', '=', 'table_log_loai.id')->where('masv', $masv)->orderBy('created_at', 'DESC')->get();
         //Ren luyen
         $renluyen = DB::table("table_danhgiarenluyen")
             ->where("table_danhgiarenluyen.masv", $masv)
@@ -114,6 +109,15 @@ class AdQuanLySv extends Controller
                 $join->on("table_danhgiarenluyen.hocky", "=", "table_namhoc_hocky.hocky");
             })
             ->get();
+        //Get Chart data
+        $renluyen_chart = [
+            'value' => [],
+            'label' => []
+        ];
+        foreach ($renluyen as $key => $item){
+            array_push($renluyen_chart['value'], $item->diem);
+            array_push($renluyen_chart['label'], 'HK '.$item->hocky .' '.$item->nambatdau."-".$item->namketthuc);
+        }
         //Avatar
         if (isset($sinhvien->avatar)) {
             $sinhvien->avatar = asset($sinhvien->avatar);
@@ -126,7 +130,8 @@ class AdQuanLySv extends Controller
             ->with("kyluat", $kyluat)
             ->with("khenthuong", $khenthuong)
             ->with("renluyen", $renluyen)
-            ->with("timeline", $timeline);
+            ->with('log_sinhvien', $log_sinhvien)
+            ->with('renluyen_chart', $renluyen_chart);;
     }
     /*
      Sua ho so
@@ -159,54 +164,46 @@ class AdQuanLySv extends Controller
      * */
     public function caNhanStore(Request $request, $masv)
     {
-//        dd($request->all());
-//        $sinhvien = $request->validate([
-//            "hodem" => ["required", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
-//            "ten" => ["required", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
-//            "ngaysinh" => "required|date",
-//            "gioitinh" => ["required", "regex:/[01]/"],
-//        ]);
-
-        $sinhvien_chitiet = $request->validate([
-            "cmnd" => ["required", "regex:/[0-9]{9,12}/"],
-            "ngaycap" => "nullable|date",
-            "noicap" => ["required", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
-            "ma_bhyt" => "nullable",
-            "doanthe" => "nullable",
-            "ngayketnap" => "nullable|date",
-            "tongiao" => "nullable",
+        $sinhvien_chitiet = [
+            "cmnd" => $request->cmnd,
+            "ngaycap" => $request->ngaycap,
+            "noicap" => $request->noicap,
+            "ma_bhyt" => $request->ma_bhyt,
+            "doanthe" => $request->doanthe,
+            "ngayketnap" => $request->ngayketnap,
+            "tongiao" => $request->tongiao,
             //Thong tin cha
-            "hotencha" => ["nullable", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
-            "namsinhcha" => "nullable",
-            "dantoc_cha" => "nullable",
-            "cmnd_cha" => ["nullable", "regex:/[0-9]{9,12}/"],
-            "nghenghiep_cha" => "nullable",
-            "sdt_cha" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})/"],
-            "email_cha" => "nullable|email",
-            "diachi_cha" => ["nullable", "regex:/^([a-zA-Z0-9,.-ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
+            "hotencha" => $request->hotencha,
+            "namsinhcha" => $request->namsinhcha,
+            "dantoc_cha" => $request->dantoc_cha,
+            "cmnd_cha" => $request->cmnd_cha,
+            "nghenghiep_cha" => $request->nghenghiep_cha,
+            "sdt_cha" => $request->sdt_cha,
+            "email_cha" => $request->email_cha,
+            "diachi_cha" => $request->diachi_cha,
             //Thong tin me
-            "hotenme" => ["nullable", "regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
-            "namsinhme" => "nullable",
-            "dantoc_me" => "nullable",
-            "cmnd_me" => ["nullable", "regex:/[0-9]{9,12}/"],
-            "nghenghiep_me" => "nullable",
-            "sdt_me" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})/"],
-            "email_me" => "nullable|email",
-            "diachi_me" => ["nullable", "regex:/^([a-zA-Z0-9,.-ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i"],
+            "hotenme" => $request->hotenme,
+            "namsinhme" => $request->namsinhme,
+            "dantoc_me" => $request->dantoc_me,
+            "cmnd_me" => $request->cmnd_me,
+            "nghenghiep_me" => $request->nghenghiep_me,
+            "sdt_me" => $request->sdt_me,
+            "email_me" => $request->email_me,
+            "diachi_me" => $request->diachi_me,
             // Thanh phan gia
-            "thanhphangiadinh" => "nullable",
-            "tinh_thanh" => "required",
-            "quan_huyen" => "required",
-            "xa_phuong" => "required",
-            "thon_to" => "required",
+            "thanhphangiadinh" => $request->thanhphangiadinh,
+            "tinh_thanh" => $request->tinh_thanh,
+            "quan_huyen" => $request->quan_huyen,
+            "xa_phuong" => $request->xa_phuong,
+            "thon_to" => $request->thon_to,
             //Thong tin lien he
-            "dia_chi_lien_lac" => "required",
-            "email_khac" => "nullable|email",
-            "facebook" => ["nullable", "regex:/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/"],
-            "dienthoai" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
-            "dienthoaigiadinh" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
-            "zalo" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"]
-        ]);
+            "dia_chi_lien_lac" => $request->dia_chi_lien_lac,
+            "email_khac" => $request->email_khac,
+            "facebook" => $request->facebook,
+            "dienthoai" => $request->dienthoai,
+            "dienthoaigiadinh" => $request->dienthoaigiadinh,
+            "zalo" => $request->zalo
+        ];
         // Xử lý thành phần gia đình
         $str_thanhphangiadinh = "";
         if(isset($sinhvien_chitiet['thanhphangiadinh'])){
@@ -216,9 +213,17 @@ class AdQuanLySv extends Controller
         }
         $str_thanhphangiadinh = rtrim($str_thanhphangiadinh, "|");
         $sinhvien_chitiet['thanhphangiadinh'] = $str_thanhphangiadinh;
-
-//        $update_sinhvien = DB::table("table_sinhvien")->where("masv", $masv)->update($sinhvien);
         $update_sinhvien_chitiet = DB::table("table_sinhvien_chitiet")->where("masv", $masv)->update($sinhvien_chitiet);
+        if(!$update_sinhvien_chitiet){
+            $flag = 0;
+        }
+        //Log
+        $log = DB::table('table_log_sinhvien')->insert([
+            'masv' => $masv,
+            'id_log_loai' => 3,
+            'created_at' => now()
+        ]);
+        // Return back
 
 
         if ($update_sinhvien_chitiet) {
@@ -344,6 +349,15 @@ class AdQuanLySv extends Controller
             "created_at" => Carbon::now()
         ];
         $response = DB::table("table_sinhvien_khenthuong")->insert($data);
+        if($response){
+            //Log
+            $log = DB::table('table_log_sinhvien')->insert([
+                'masv' => $masv,
+                'id_log_loai' => 4,
+                'created_at' => now()
+            ]);
+        }
+
         pushNotify($response);
         return redirect()->back();
     }
@@ -371,7 +385,14 @@ class AdQuanLySv extends Controller
             "updated_at" => Carbon::now()
         ];
         $response = DB::table("table_sinhvien_khenthuong")->where("id", $id)->update($data);
-
+        if($response){
+            //Log
+            $log = DB::table('table_log_sinhvien')->insert([
+                'masv' => $masv,
+                'id_log_loai' => 6,
+                'created_at' => now()
+            ]);
+        }
 
         pushNotify($response);
         return redirect()->back();
@@ -407,6 +428,14 @@ class AdQuanLySv extends Controller
             "created_at" => Carbon::now()
         ];
         $response = DB::table("table_sinhvien_kyluat")->insert($data);
+        if($response){
+            //Log
+            $log = DB::table('table_log_sinhvien')->insert([
+                'masv' => $masv,
+                'id_log_loai' => 5,
+                'created_at' => now()
+            ]);
+        }
         pushNotify($response);
         return redirect()->back();
     }
@@ -435,6 +464,14 @@ class AdQuanLySv extends Controller
             "updated_at" => Carbon::now()
         ];
         $response = DB::table("table_sinhvien_kyluat")->where("id", $id)->update($data);
+        if($response){
+            //Log
+            $log = DB::table('table_log_sinhvien')->insert([
+                'masv' => $masv,
+                'id_log_loai' => 7,
+                'created_at' => now()
+            ]);
+        }
         pushNotify($response);
         return redirect()->back();
     }
@@ -442,6 +479,16 @@ class AdQuanLySv extends Controller
         $xoa = DB::table("table_sinhvien_kyluat")->where("id", $id)->delete();
         pushNotify($xoa);
         return redirect()->back();
+    }
+
+    //Temp route
+    function getEmail(){
+        $email = "";
+        $user = DB::table('table_sinhvien')->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')->where('table_sinhvien.lopsh_id', 17)->get('table_sinhvien.email');
+        foreach ($user as $value){
+            $email = $email . $value->email . ',';
+        }
+        return $email;
     }
 }
 //public function caNhanView(Request $request, $masv){
