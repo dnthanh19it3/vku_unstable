@@ -48,6 +48,11 @@
                         <li><a href="{{route("admin.quanlylop.danhsach")}}">Danh sách lớp</a></li>
                     </ul>
                 </li>
+                <li><a><i class="fa fa-book"></i> Khảo sát <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="{{route("admin.khaosat.danhsachmau")}}">Danh sách khảo sát</a></li>
+                    </ul>
+                </li>
                 <li><a><i class="fa fa-home"></i> Quản sự kiện <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="{{route("ad.sukien.danhsach")}}">Danh sách sự kiện</a></li>

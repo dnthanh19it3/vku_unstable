@@ -15,12 +15,12 @@
                         </li>
                         <li>
                             <a href="{{route('admin.quanlylop.khenthuongkyluat', ['lop_id' => $lop_id])}}">
-                                <i class="glyphicon glyphicon-user"></i>
+                                <i class="glyphicon glyphicon-star"></i>
                                 Khen thưởng kỷ luật</a>
                         </li>
                         <li  class="active">
                             <a href="{{route('admin.quanlylop.diemrenluyen', ['lop_id' => $lop_id])}}">
-                                <i class="glyphicon glyphicon-user"></i>
+                                <i class="glyphicon glyphicon-random"></i>
                                 Kết quả rèn luyện</a>
                         </li>
                         <li>

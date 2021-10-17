@@ -141,7 +141,6 @@ class AdQuanLyLop extends Controller
             ->join('table_sinhvien', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien.masv')
             ->join('table_sinhvien_chitiet', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien_chitiet.masv')
             ->where('table_lopsh_bancansu.lopsh_id', $lop_id)
-            ->where('table_lopsh_bancansu.trangthai', 1)
             ->get();
         return view('Admin.QuanLyLop.BanCanSu')->with([
             'bancansu' => $bancansu,

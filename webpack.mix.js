@@ -13,4 +13,5 @@ let mix = require('laravel-mix');
 
 mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/admin_css.scss', 'public/css')
+    .sass('resources/assets/sass/survey.scss', 'public/css')
     .sass('resources/assets/sass/cv_css.scss', 'public/css');

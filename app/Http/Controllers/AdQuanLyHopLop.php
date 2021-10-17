@@ -54,8 +54,9 @@ class AdQuanLyHopLop extends Controller
         $thongke = [
             'danop' => 0,
             'chuanop' => 0,
-            'tongso' => count($arrayBienBan)
+
         ];
+
 
         foreach ($arrayBienBan as $item) {
             if ($item != null) {
@@ -70,6 +71,7 @@ class AdQuanLyHopLop extends Controller
             'thang_text' => Carbon::create()->month($thang)->format('M'),
             'bienban' => $arrayBienBan,
         ]);
+
 
         return view('Admin.HopLop.ListBienBan')->with([
             'arrayMonth' => $arrayMonth,
@@ -193,7 +195,6 @@ class AdQuanLyHopLop extends Controller
             ->join('table_sinhvien', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien.masv')
             ->join('table_sinhvien_chitiet', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien_chitiet.masv')
             ->where('table_lopsh_bancansu.lopsh_id', $data->lopsh)
-            ->where('table_lopsh_bancansu.trangthai', 1)
             ->orderBy('table_lopsh_chucvu.id', 'ASC')
             ->get();
 

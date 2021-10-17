@@ -29,4 +29,35 @@
         @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 2])
     </div>
 </div>
+
+
+    <div class="row mt-3 mb-3">
+        <div class="col-12 bg-white don_block">
+            <div class="row row-eq-height don_item">
+                <div class="col-md-6 left_content">
+                    <div class="content_wrapper">
+                       <div class="content_text">
+                           Xin cấp giấy xác nhận sinh viên để:
+                           Vay vốn tại địa phương/ Tạm hoãn nghĩa vụ
+                           quân sự/ Giảm trừ thuế TNCN của phụ huynh/
+                           Nhận học bổng khuyến học ở địa phương/
+                           Nộp cho trung tâm để giảm lệ phí thi anh văn,
+                           tin học/ Đăng kí ở kí túc xá thành phố..
+                       </div>
+                    </div>
+                </div>
+                <div class="col-md-6 right_content">
+                    <div class="content_wrapper">
+                       <div class="content_text">
+                           Đăng nhập vào: http://due.udn.vn
+                           (Bằng tài khoản cá nhân của Sinh viên)
+                           <br/>
+                           => Chọn Phòng <br/>=> Phòng Công tác Sinh viên<br/>
+                           => Đăng ký Giấy xác nhận Sinh viên.
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

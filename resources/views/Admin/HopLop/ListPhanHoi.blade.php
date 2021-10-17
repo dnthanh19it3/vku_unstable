@@ -33,11 +33,6 @@
                     @endforeach
                 </div>
             </div>
-            <div class="bg-white p-3 mb-3">
-                <h6><i class="fas fa-chart-pie mr-2"></i>Thống kê</h6>
-                <hr/>
-                <span>Đã nộp</span>
-            </div>
         </div>
         <div class="col-md-9">
             <div class="bg-white p-3">

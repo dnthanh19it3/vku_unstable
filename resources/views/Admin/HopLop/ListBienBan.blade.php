@@ -36,11 +36,7 @@
             <div class="bg-white p-3 mb-3">
                 <h6><i class="fas fa-chart-pie mr-2"></i>Thống kê</h6>
                 <hr/>
-                @php $total = $thongke->danop + $thongke->chuanop; $danop_percent = ceil($thongke->danop / $total * 100)  @endphp
-                <span>Đã nộp</span>
-{{--                <div class="progress">--}}
-{{--                    <div class="progress-bar" role="progressbar" style="width: {{$danop_percent}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{$danop_percent}}%</div>--}}
-{{--                </div>--}}
+                <canvas id="thongke"></canvas>
             </div>
         </div>
         <div class="col-md-9">
@@ -98,19 +94,37 @@
     </div>
 @endsection
 @section('custom-script')
-{{--    <script>--}}
-{{--        $(document).ready(()=>{--}}
-{{--            let link = "{{route('ad.hoplop.listhoplop.nullable')}}";--}}
-{{--            let fillter = $('#fillter');--}}
-{{--            fillter.submit((event) => {--}}
-{{--                event.preventDefault();--}}
-{{--                let namhoc = $('#namhoc').val();--}}
-{{--                let hocky = $('#hocky').val();--}}
-{{--                if((!isNaN(namhoc)) && !isNaN(hocky)){--}}
-{{--                    let redirect_link = (link+"/"+namhoc+"/"+hocky);--}}
-{{--                    window.location = redirect_link;--}}
-{{--                }--}}
-{{--            });--}}
-{{--        });--}}
-{{--    </script>--}}
+    <script src="{{asset('vendors/Chart.js/dist/Chart.min.js')}}"></script>
+    <script>
+
+        const label = ['Đã nộp', 'Chưa nộp'];
+        const soluong = @json(array_values((array)$thongke));
+
+
+        new Chart(document.getElementById("thongke"), {
+            type: 'pie',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: "Trạng thái nộp",
+                    backgroundColor: ["#e8c3b9","#c45850"],
+                    data: soluong
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: "Biểu đồ phân hoá xếp loại rèn luyện",
+                }
+            }
+        });
+
+
+
+
+        $(document).ready(()=>{
+            var ctx = document.getElementById('thongke').getContext('2d');
+            window.myPie = new Chart(ctx, config);
+        })
+    </script>
 @endsection

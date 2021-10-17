@@ -30,6 +30,10 @@ Route::get('admin/logout', 'AdminAuthController@webLogout')->name('admin.logout'
 
 Route::get('sv/ly-lich/{masv}', 'SvLyLichController@getLyLich')->name('sv.getlylich');
 Route::prefix('sv')->middleware('sv')->group(function () {
+    Route::prefix('khao-sat')->group(function () {
+        Route::get('lam-khao-sat/{slug}', 'SvKhaoSatController@lamKhaoSat')->name('sv.khaosat.lamkhaosat');
+        Route::post('lam-khao-sat', 'SvKhaoSatController@lamKhaoSatPost')->name('sv.khaosat.lamkhaosat.post');
+    });
     Route::prefix('hoso')->group(function () {
         //Ho so
         Route::post('upload', 'SvHoSoController@imgUpload')->name('upload');
@@ -86,6 +90,15 @@ Route::prefix('sv')->middleware('sv')->group(function () {
 
 
 Route::prefix('admin')->middleware('chuyenvien')->group(function(){
+    Route::prefix('khao-sat')->group(function (){
+        Route::get('danh-sach-mau', 'AdKhaoSatController@danhSachMau')->name('admin.khaosat.danhsachmau');
+        Route::get('tao-mau', 'AdKhaoSatController@taoKhaoSat')->name('admin.khaosat.taokhaosat');
+        Route::post('tao-mau', 'AdKhaoSatController@taoKhaoSatPost')->name('admin.khaosat.taokhaosat.post');
+        Route::get('sua-mau/{id}', 'AdKhaoSatController@suaKhaoSat')->name('admin.khaosat.suakhaosat');
+        Route::post('sua-mau/{id}', 'AdKhaoSatController@suaKhaoSatPost')->name('admin.khaosat.suakhaosat.post');
+        Route::get('xoa-mau/{id}', 'AdKhaoSatController@getXoaKhaoSat')->name('admin.khaosat.xoakhaosat');
+        Route::get('bao-cao/{id}', 'AdKhaoSatController@getBaoCao')->name('admin.khaosat.baocao');
+    });
     Route::prefix('danhgiarenluyen')->group(function (){
         Route::get('/', 'AdDanhGiaRenLuyen@danhGiaRenLuyenView')->name('admin.danhgiarenluyen.index');
         Route::get('/xem/{lop_id}', 'AdDanhGiaRenLuyen@xemDiemRenluyen')->name('admin.danhgiarenluyen.xem');
