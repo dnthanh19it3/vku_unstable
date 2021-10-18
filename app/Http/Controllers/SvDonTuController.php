@@ -151,10 +151,14 @@ class SvDonTuController extends Controller
             } else { // Thất bại báo vào biến
                 $flag = 0;
             }
+            if(!$flag){
+                break;
+            }
             DB::commit();
             return back();
         }
         DB::rollBack();
+        return back();
     }
 
     // Chi tiet mau

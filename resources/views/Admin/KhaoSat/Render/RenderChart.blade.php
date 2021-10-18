@@ -1,32 +1,10 @@
 @switch($item['loai'])
     @case(1)
-{{--    <div class="row">--}}
-{{--        <div class="col-md-7 d-flex align-items-center">--}}
-{{--            <h5 class="text-red-soft">{{$item['cauhoi']}}</h5>--}}
-{{--        </div>--}}
-{{--        <div class="col-md-5 hailong_wrapper">--}}
-{{--            <div class="hailong_item">--}}
-{{--                <img title="Hoàn toàn không đồng ý" src="{{asset('img/khaosat/hoantoankhongdongy.png')}}" alt="">--}}
-{{--                <div class="chuthich">Hoàn toàn không dồng ý</div>--}}
-{{--            </div>--}}
-{{--            <div class="hailong_item">--}}
-{{--                <img title="Không đồng ý" src="{{asset('img/khaosat/khongdongy.png')}}" alt="">--}}
-{{--                <div class="chuthich">Không dồng ý</div>--}}
-{{--            </div>--}}
-{{--            <div class="hailong_item">--}}
-{{--                <img title="Đồng ý một phần" src="{{asset('img/khaosat/dongymotphan.png')}}" alt="">--}}
-{{--                <div class="chuthich">Đồng ý một phần</div>--}}
-{{--            </div>--}}
-{{--            <div class="hailong_item">--}}
-{{--                <img title="Đồng ý" src="{{asset('img/khaosat/dongy.png')}}" alt="">--}}
-{{--                <div class="chuthich">Đồng ý</div>--}}
-{{--            </div>--}}
-{{--            <div class="hailong_item">--}}
-{{--                <img title="Hoàn toàn đồng ý" src="{{asset('img/khaosat/hoantoandongy.png')}}" alt="">--}}
-{{--                <div class="chuthich">Hoàn toàn dồng ý</div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+    <div class="row">
+        <div class="col-md-12 d-flex align-items-center">
+            <h5 class="text-red-soft">{{$item['cauhoi']}}</h5>
+        </div>
+    </div>
     @break
     @case(2)
     <div class="row poll-hover">
@@ -39,10 +17,11 @@
     </div>
     @break
     @case(3)
-    {{--    <div class="form-group">--}}
-    {{--        <h5 style="color:red" class="col-md-12 col-sm-12 col-xs-12" for="tenmau"><b>{!! $item['cauhoi'] !!}</b>--}}
-    {{--        </h5>--}}
-    {{--    </div>--}}
+    <div class="row">
+        <div class="col-md-12 d-flex align-items-center">
+            <h5 class="text-red-soft">{{$item['cauhoi']}}</h5>
+        </div>
+    </div>
     @break
     @case(4)
     <div class="row poll-hover">

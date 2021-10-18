@@ -2,6 +2,7 @@
 @section('body')
     <form method="post" action="{{route('admin.khaosat.suakhaosat.post', ['id' => $mau->id])}}" class="row">
        {{csrf_field()}}
+        <input id="delete_key_input" name="delete_key" type="text" hidden>
        <div class="col-md-5">
            <div class="bg-white p-3 mb-3">
                <h6><i class="fa fa-info-circle mr-2"></i>Thông tin khảo sát</h6>
@@ -44,7 +45,8 @@
                                 </select>
                             </div>
                             <div class="col-md-1">
-                                <button class="btn btn-danger btn-sm form-control" onclick="this.parentElement.parentElement.remove()" type="button">Xoá</button>
+                                <input type="hidden" id="quest{{{$item->id}}}" value="{{$item->id}}">
+                                <button class="btn btn-danger btn-sm form-control" onclick="xoaFunction(this, quest{{{$item->id}}})" type="button"><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     @endforeach
@@ -102,6 +104,15 @@
         const noidungkhaosat = $('#noidungkhaosat');
         const loai_html = "@foreach($ds_loai as $value) <option value='{{$value->id}}'>{{$value->tenloai}}</option> @endforeach";
         let dapan = 0;
+        let add = [];
+        let remove = [];
+        function xoaFunction(element, element_id){
+            let delete_key = element_id.value;
+            remove.push(delete_key);
+            let delete_key_input = document.getElementById('delete_key_input');
+            delete_key_input.value = remove.join(',');
+            element.parentElement.parentElement.remove();
+        }
         $(document).ready(attr=>{
             $('#btn_themcauhoi').click(function (attr){
                 /**
@@ -115,19 +126,19 @@
                 //Btn xoa
                 let btn_xoa = document.createElement('button');
                 btn_xoa.classList.add('btn', 'btn-danger', 'btn-sm', 'form-control')
-                btn_xoa.innerHTML = "Xoá";
+                btn_xoa.innerHTML = "<i class=\"fa fa-trash\"></i>";
                 btn_xoa.setAttribute('onclick', 'this.parentElement.parentElement.remove()');
                 btn_xoa.setAttribute('type', 'button');
 
                 //Input
                 let input_noidung = document.createElement('input');
                 input_noidung.classList.add('form-control', 'rounded');
-                input_noidung.name = 'noidungcauhoi[]';
+                input_noidung.name = 'noidungcauhoi_add[]';
                 //Loai
                 let select_loai = document.createElement('select');
                 select_loai.classList.add('form-control', 'rounded');
                 select_loai.innerHTML = loai_html;
-                select_loai.name = "loai[]";
+                select_loai.name = "loai_add[]";
 
                 divcau.classList.add('form-group', 'row', 'poll-hover');
                 divnoidungcauhoi.classList.add('col-md-8');

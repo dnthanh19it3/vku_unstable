@@ -174,6 +174,8 @@ function getTruongTinh($key, $data){
             return $data->tenlop;
         case 'khoa':
             return $data->khoaK;
+        case 'thuongtru':
+            return $data->khoaK;
         case 'tennganh':
             if($data->tennganh && $data->tenchuyennganh){
                 return $data->tennganh;

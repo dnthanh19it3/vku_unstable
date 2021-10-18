@@ -190,6 +190,9 @@ class AdDonTuController extends Controller
             if(!$delete){
                 $flag = 0;
             }
+            if(!$flag){
+                break;
+            }
             DB::commit();
             return redirect()->back();
         }

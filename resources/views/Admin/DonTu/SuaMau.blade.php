@@ -236,7 +236,6 @@
     </script>
     <script type="text/javascript">
 
-
         var str = @json($maudon->truong);
         let listtruong = str.split(',');
 

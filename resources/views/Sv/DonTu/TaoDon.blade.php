@@ -37,23 +37,14 @@
                 <div class="col-md-6 left_content">
                     <div class="content_wrapper">
                        <div class="content_text">
-                           Xin cấp giấy xác nhận sinh viên để:
-                           Vay vốn tại địa phương/ Tạm hoãn nghĩa vụ
-                           quân sự/ Giảm trừ thuế TNCN của phụ huynh/
-                           Nhận học bổng khuyến học ở địa phương/
-                           Nộp cho trung tâm để giảm lệ phí thi anh văn,
-                           tin học/ Đăng kí ở kí túc xá thành phố..
+                           <b>Giấy xác nhận sinh viên (để vay vốn Ngân hàng)</b>
                        </div>
                     </div>
                 </div>
                 <div class="col-md-6 right_content">
                     <div class="content_wrapper">
                        <div class="content_text">
-                           Đăng nhập vào: http://due.udn.vn
-                           (Bằng tài khoản cá nhân của Sinh viên)
-                           <br/>
-                           => Chọn Phòng <br/>=> Phòng Công tác Sinh viên<br/>
-                           => Đăng ký Giấy xác nhận Sinh viên.
+                           Giấy xác nhận vay vốn sinh viên là mẫu giấy xác nhận dành cho sinh viên Khoa Công nghệ Thông tin & Truyền thông khi muốn tham gia vay vốn, thực hiện đúng thủ tục và trình tự, giúp hỗ trợ tài chính sinh viên và gia đình giải quyết, giảm nhẹ các khó khăn về tài chính cho sinh viên
                        </div>
                     </div>
                 </div>
