@@ -20,7 +20,7 @@
                       <table class="table table-striped table-hover">
                           <thead>
                           <tr>
-                              <th>#</th>
+                              <th>STT</th>
                               <th>Tháng</th>
                               <th>Trạng thái nộp</th>
                               <th>Trạng thái duyệt</th>
@@ -30,11 +30,12 @@
                           </tr>
                           </thead>
                           <tbody>
+                          @php $i = 0; @endphp
                           @foreach($arrayMonth as $key => $value)
-
+                              @php $i ++; @endphp
                               @if(isset($value->bienban))
                                   <tr>
-                                      <td>#</td>
+                                      <td>{{$i}}</td>
                                       <td>Họp lớp tháng {{$value->thang_text}}</td>
                                       <td><span class="status text-success">•</span>Đã nộp</td>
                                       <td>
@@ -51,7 +52,7 @@
                                   </tr>
                               @else
                                   <tr>
-                                      <td>#</td>
+                                      <td>{{$i}}</td>
                                       <td>Họp lớp tháng {{$value->thang_text}}</td>
                                       <td colspan="5" style="text-align: center">
                                           <a href="{{route("sv.hoplop.taobienban", ['thang' => $value->thang])}}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xe147;</i>Tạo biên bản</a>

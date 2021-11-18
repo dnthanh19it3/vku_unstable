@@ -172,6 +172,7 @@
 
 <!-- jQuery -->
 <script src="{{asset('vendors/jquery/dist/jquery.min.js')}}"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <!-- Bootstrap -->
 <script src="{{asset('vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
 <!-- FastClick -->
@@ -181,10 +182,9 @@
 <script src="{{asset('vendors/iCheck/icheck.min.js')}}"></script>
 <!-- Table JS -->
 <script src="{{asset('js/table-render.js')}}"></script>
-
 <!-- Custom Theme Scripts -->
-<script src="{{asset('build/js/custom.min.js')}}"></script>
 
+<script src="{{asset('build/js/custom.min.js')}}"></script>
 @yield('custom-script')
 </body>
 </html>

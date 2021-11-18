@@ -949,61 +949,41 @@ div.nav {
 }
 
 //New Don CSS
-
-.don_block {
-  font-family: 'Varela Round', sans-serif !important;
-  font-weight: 400;
-  .don_item {
-    .left_content {
-      min-height: 100%;
-      padding: 32px;
-
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      min-height: 100%;
-
-      .content_wrapper {
-        display: flex;
-        flex-direction: row;
-        border-bottom: 1px solid #cdcdcd;
-        max-width: 600px;
-        width: 100%;
-        height: 100%;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        .content_text {
-          font-size: 18px;
-          padding: 3px 0px;
-        }
-      }
-    }
-    .right_content {
-      background: linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
-      padding: 32px;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      min-height: 100%;
-      .content_wrapper {
-        border-bottom: 1px solid #fff3cd;
-        height: 100%;
-        max-width: 600px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        .content_text {
-          padding: 3px 0px;
-          font-size: 18px;
-          color: white;
-        }
+.right-panel {
+  background: rgb(2,0,36);
+  color: white;
+  padding-right: 32px;
+  >.inner-panel {
+    font-size: 16px;
+    border-bottom: 1px solid white;
+    padding: 16px;
+  }
+}
+.left-panel {
+  color: #070724;
+  padding-left: 32px;
+  >.inner-panel {
+    font-size: 16px;
+    border-bottom: 1px solid #003651;
+    justify-content: right;
+    padding: 16px;
+  }
+}
+.inner-panel {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.don-item {
+  &:last-child {
+    >div {
+      >div {
+        border-bottom: none;
       }
     }
   }
 }
+
 //Survey CSS
 .khaosat_heading1 {
   font-size: 18px;

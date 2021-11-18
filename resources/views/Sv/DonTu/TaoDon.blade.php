@@ -13,42 +13,22 @@
         </div>
     </div>
     <div class="applicant-content">
-        <h6>Phòng đào tạo</h6>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 8])
-        <hr/>
-        <h6>Phòng công tác sinh viên</h6>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 7])
-        <hr/>
-        <h6>Phòng khảo thí</h6>
-        <hr/>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 10])
-        <h6>Phòng kế hoạch tài chính</h6>
-        <hr/>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 9])
-        <h6>Đoàn thanh niên</h6>
-        @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 2])
-    </div>
-</div>
+        <div class="row">
+            {{--        <h6>Phòng đào tạo</h6>--}}
+            @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 8])
 
+            {{--        <h6>Phòng công tác sinh viên</h6>--}}
+            @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 7])
 
-    <div class="row mt-3 mb-3">
-        <div class="col-12 bg-white don_block">
-            <div class="row row-eq-height don_item">
-                <div class="col-md-6 left_content">
-                    <div class="content_wrapper">
-                       <div class="content_text">
-                           <b>Giấy xác nhận sinh viên (để vay vốn Ngân hàng)</b>
-                       </div>
-                    </div>
-                </div>
-                <div class="col-md-6 right_content">
-                    <div class="content_wrapper">
-                       <div class="content_text">
-                           Giấy xác nhận vay vốn sinh viên là mẫu giấy xác nhận dành cho sinh viên Khoa Công nghệ Thông tin & Truyền thông khi muốn tham gia vay vốn, thực hiện đúng thủ tục và trình tự, giúp hỗ trợ tài chính sinh viên và gia đình giải quyết, giảm nhẹ các khó khăn về tài chính cho sinh viên
-                       </div>
-                    </div>
-                </div>
-            </div>
+            {{--        <h6>Phòng khảo thí</h6>--}}
+
+            @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 10])
+            {{--        <h6>Phòng kế hoạch tài chính</h6>--}}
+
+            @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 9])
+            {{--        <h6>Đoàn thanh niên</h6>--}}
+            @include('Sv.DonTu.ShowList', ['list' => $danhsachdon, 'donvi' => 2])
         </div>
     </div>
+</div>
 @endsection

@@ -96,6 +96,9 @@ function getTruongTinh($key, $data){
         case 'noisinh':
             return $data->noisinh;
         case 'tongiao':
+            if($data->tongiao == 0){
+                return "Không";
+            }
             return $data->tongiao;
         case 'tinh_thanh':
             return $data->tinh_thanh;
@@ -173,8 +176,8 @@ function getTruongTinh($key, $data){
         case 'tenlop':
             return $data->tenlop;
         case 'khoa':
-            return $data->khoaK;
-        case 'thuongtru':
+            return "Chưa có dữ liệu";
+        case 'khoaK':
             return $data->khoaK;
         case 'tennganh':
             if($data->tennganh && $data->tenchuyennganh){
@@ -188,5 +191,7 @@ function getTruongTinh($key, $data){
             } else {
                 return null;
             }
+        case 'hokhauthuongtru':
+            return $data->xa_phuong . ', ' . $data->quan_huyen . ', ' . $data->tinh_thanh;
     }
 }

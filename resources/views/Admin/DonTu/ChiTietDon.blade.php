@@ -39,7 +39,7 @@
                                     <div class="col-md-6 p-3 vien-net-dut">
                                         <div class="col-md-6 control-label" style="font-size: 16px;"><h6>{{ $item->tentruong }}</h6></div>
                                         <div class="col-md-6" style="font-size: 16px">
-                                            {{$item->lienket != null ? getTruongTinh($item->lienket, $sinhvien):""}}
+                                            {{ $item->lienket != null ? getTruongTinh($item->lienket, $sinhvien) : $item->noidung }}
                                         </div>
                                     </div>
                                     @endif

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 
 class SvDonTuController extends Controller
@@ -62,6 +61,7 @@ class SvDonTuController extends Controller
         }
         return $output;
     }
+
     //Validate logic
     function setValidateLogic($type, $required = null){
         switch ($type){
@@ -71,7 +71,7 @@ class SvDonTuController extends Controller
                 return   'required|date';
             case "text_area":
             case "text":
-                return ['required', 'regex:/^([a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+)$/i'];
+                return 'required';
             case "file":
                 return 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:10240';
         }
@@ -108,57 +108,57 @@ class SvDonTuController extends Controller
         $validated_data = $this->validate($request, $validate_logic);
         DB::beginTransaction();
 
-        while($flag) {
-
-            //Chèn thông tin cơ bản của đơn
-            $donid = DB::table('table_don')->insertGetId($thongtindon);
-            //Check và insert data
-            if ($donid) { //Thành công thì prepare dữ liệu và add vào array insert data
-                $insert_data = array();
-                foreach ($validated_data as $key => $value) {
-                    if (is_object($value)) {
-                        $file_path = $this->uploadGoogleDrive($item);
-                        if($file_path){
-                            $record = [
-                                'don_id' => $donid,
-                                'truong_id' => ltrim($key, "field"),
-                                'noidung' => $file_path,
-                                'created_at' => now()
-                            ];
-                            array_push($insert_data, $record);
-                        }
-                    } else {
+        //Chèn thông tin cơ bản của đơn
+        $donid = DB::table('table_don')->insertGetId($thongtindon);
+        //Check và insert data
+        if ($donid) { //Thành công thì prepare dữ liệu và add vào array insert data
+            $insert_data = array();
+            foreach ($validated_data as $key => $value) {
+                if (is_object($value)) {
+                    $file_path = $this->uploadGoogleDrive($item);
+                    if ($file_path) {
                         $record = [
                             'don_id' => $donid,
                             'truong_id' => ltrim($key, "field"),
-                            'noidung' => $value,
+                            'noidung' => $file_path,
                             'created_at' => now()
                         ];
                         array_push($insert_data, $record);
                     }
-                }
-                $insert = DB::table('table_don_chitiet')->insert($insert_data);
-                if (!$insert) { // Thất bại báo vào biến
-                    $flag = 0;
                 } else {
-                    $addLog =  DB::table('table_don_logs')->insert([
+                    $record = [
                         'don_id' => $donid,
-                        'thoigian' => Carbon::now(),
-                        'trangthai' => 0,
-                        'noidung' => "Nộp đơn"
-                    ]);
+                        'truong_id' => ltrim($key, "field"),
+                        'noidung' => $value,
+                        'created_at' => now()
+                    ];
+                    array_push($insert_data, $record);
                 }
-            } else { // Thất bại báo vào biến
+            }
+            $insert = DB::table('table_don_chitiet')->insert($insert_data);
+            if (!$insert) { // Thất bại báo vào biến
                 $flag = 0;
+            } else {
+                $addLog = DB::table('table_don_logs')->insert([
+                    'don_id' => $donid,
+                    'thoigian' => Carbon::now(),
+                    'trangthai' => 0,
+                    'noidung' => "Nộp đơn"
+                ]);
             }
-            if(!$flag){
-                break;
-            }
-            DB::commit();
-            return back();
+        } else { // Thất bại báo vào biến
+            $flag = 0;
         }
-        DB::rollBack();
-        return back();
+        if (!$flag) {
+            DB::rollBack();
+            return back()->with(['flash_level'=>'danger','flash_message'=>'Thất bại!']);
+        } else {
+            DB::commit();
+            return back()->with(['flash_level'=>'success','flash_message'=>'Thành công!']);
+        }
+
+
+
     }
 
     // Chi tiet mau
@@ -175,6 +175,7 @@ class SvDonTuController extends Controller
                 array_push($mangTruong, $rs);
             }
         }
+
         return view('Sv.DonTu.ChiTietMau')->with([
             'truong' => $mangTruong,
             'maudon_id' => $request->maudon_id,
@@ -193,6 +194,7 @@ class SvDonTuController extends Controller
             ->get();
         return view('Sv/DonTu/DonDaNop')->with(['dondanop' => $dondanop]);
     }
+
     // Xem đơn
     function donChiTiet(Request $request, $don_id){
         $don = DB::table('table_don')
@@ -233,6 +235,7 @@ class SvDonTuController extends Controller
             }
         }
 
+//        dd($mangTruong);
 
         return view('Sv.DonTu.ChiTietDon')->with([
             'mangTruong' => $mangTruong,
@@ -264,6 +267,7 @@ class SvDonTuController extends Controller
 
         ]);
     }
+
     // Lưu sửa đổi
     function capnhatdonStore(Request $request, $don_id){
         $flag = 1;

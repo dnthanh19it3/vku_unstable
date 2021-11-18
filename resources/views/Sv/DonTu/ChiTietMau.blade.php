@@ -131,8 +131,6 @@
         $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
         // Turn input element into a pond
         $('.filepond').filepond();
-
-
         $.fn.filepond.setDefaults({
             maxFileSize: '10MB',
             acceptedFileTypes: [
@@ -146,8 +144,6 @@
             storeAsFile: true,
             allowImagePreview: true
         });
-
-
     </script>
     <script>
         $("#submit").prop('disabled', true);

@@ -151,6 +151,13 @@
                 <div class="row">
                     <div class="col-12">
                         {!! renderNotify()  !!}
+                        @if(session('success') != null)
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Thành công</strong> Thao tác thực hiện thành công!
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                        @endif
                     </div>
                 </div>
 {{--                <div class="row">--}}
@@ -181,11 +188,26 @@
 <script src="{{asset('vendors/font-awesome-pro/js/all.min.js')}}"></script>
 <!-- NProgress -->
 <script src="{{asset('vendors/nprogress/nprogress.js')}}"></script>
+<script src="{{asset('vendors/iCheck/icheck.min.js')}}"></script>
 
 <!-- Custom Theme Scripts -->
 <script src="{{asset('build/js/custom.min.js')}}"></script>
 <!-- Table JS -->
 <script src="{{asset('js/table-render.js')}}"></script>
+<!-- Sumo Select -->
+<script src="{{asset('vendors/bootstrap-select/js/bootstrap-select.min.js')}}"></script>
+<!-- jQueryUI -->
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<!-- filepond -->
+<script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
+<script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.js"></script>
+<script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.js"></script>
+<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 @yield('custom-script')
 </body>
 </html>

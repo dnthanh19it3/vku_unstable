@@ -90,6 +90,23 @@ Route::prefix('sv')->middleware('sv')->group(function () {
 
 
 Route::prefix('admin')->middleware('chuyenvien')->group(function(){
+    Route::prefix('hrm')->group(function (){
+        Route::prefix('get-danh-muc')->group(function (){
+            Route::get('bac-luong/{ngach}/{bac}', 'AdHrmController@getBacLuong')->name('ad.hrm.dm.bluong');
+            Route::get('bac-luong', 'AdHrmController@getBacLuong')->name('ad.hrm.dm.bluong.noparam');
+            Route::get('ma-loai', 'AdHrmController@getMaLoai')->name('ad.hrm.dm.maloai.noparam');
+            Route::get('ma-loai/{ngach}', 'AdHrmController@getMaLoai')->name('ad.hrm.dm.maloai');
+            Route::get('linh-vuc', 'AdHrmController@getKhoiNganh')->name('ad.hrm.dm.linhvuc.noparam');
+            Route::get('linh-vuc/{khoinganh}', 'AdHrmController@getKhoiNganh')->name('ad.hrm.dm.linhvuc');
+        });
+        Route::prefix('quan-ly-nhan-vien')->group(function (){
+            Route::get('them', 'AdHrmController@themNhanVienView')->name('ad.hrm.nhanvien.them');
+            Route::post('them', 'AdHrmController@themNhanVienPost')->name('ad.hrm.nhanvien.them.post');
+            Route::get('sua', 'AdHrmController@suaNhanVienView')->name('ad.hrm.nhanvien.sua');
+            Route::get('sua', 'AdHrmController@suaNhanVienView')->name('ad.hrm.nhanvien.sua');
+            Route::post('sua', 'AdHrmController@suaNhanVienPost')->name('ad.hrm.nhanvien.sua.post');
+        });
+    });
     Route::prefix('khao-sat')->group(function (){
         Route::get('danh-sach-mau', 'AdKhaoSatController@danhSachMau')->name('admin.khaosat.danhsachmau');
         Route::get('tao-mau', 'AdKhaoSatController@taoKhaoSat')->name('admin.khaosat.taokhaosat');
@@ -218,10 +235,17 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
     });
 });
 Route::prefix('zalo_api')->group(function (){
-    Route::get('get_follower', 'ZaloAPI@getDanhSachTheoDoi');
+    Route::get('connect', 'ZaloAPI@linkPage')->name('zalo.linkpage');
+    Route::post('connect', 'ZaloAPI@linkPagePost')->name('zalo.linkpage.post');
+    Route::prefix('follower')->group(function (){
+        Route::get('user_info', 'ZaloAPI@getThongTinNguoiDung');
+    });
     Route::get('send_msg_text', 'ZaloAPI@guiTinNhanText');
 });
 
 
 Route::get('test-field', 'AdDonTuController@getStaticFieldData');
 Route::get('email', 'AdQuanLySv@getEmail');
+Route::get('get_regex', 'AdGiangVienChitietController@getInfo');
+Route::get('test_ui', 'AdGiangVienChitietController@testui');
+Route::get('test_zalo', 'ZaloAPI@test');

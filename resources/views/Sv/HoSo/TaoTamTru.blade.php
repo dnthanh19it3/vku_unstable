@@ -5,8 +5,8 @@
 @section('body')
     <form action="{{route('taotamtru.store')}}" method="post" class="row">
         {{ csrf_field() }}
-        <div class="col-md-12">
-            <h6>Nhập thông tin</h6>
+        <div class="col-md-12 bg-white p-3">
+            <h6><i class="fas fa-address-card mr-2"></i>Nhập thông tin</h6>
             <hr/>
             <div class="form-row">
                 <div class="form-group col-md-3">

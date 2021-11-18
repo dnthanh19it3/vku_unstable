@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\View\View;
 use mikehaertl\pdftk\Pdf;
 
 class SvHosoController extends Controller
@@ -17,31 +15,36 @@ class SvHosoController extends Controller
      */
     public function suahosoStore(Request $request){
         $flag = 1;
-        while ($flag){
-            $data = $this->validate($request,
-                [
-                    "email_khac" => "nullable|email",
-                    "dienthoai" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
-                    "zalo" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
-                    "facebook" => ["nullable", "regex:/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/"],
-                ],
-                [
-                    "email_khac" => "Định dạng email không đúng",
-                    "dienthoai" => "Định dạng số điện thoại không đúng",
-                    "zalo" => "Định dạng số điện thoại không đúng",
-                    "facebook" => "Định dạng số link facebook không đúng",
-                ]);
-            $update = DB::table('table_sinhvien_chitiet')->where('masv', session('masv'))->update($data);
-            if(!$update){
-                $flag = 0;
-            }
-            //Log
-            $log = DB::table('table_log_sinhvien')->insert([
-                'masv' => session('masv'),
-                'id_log_loai' => 1,
-                'created_at' => now()
+        DB::beginTransaction();
+        $data = $this->validate($request,
+            [
+                "email_khac" => "nullable|email",
+                "dienthoai" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
+                "zalo" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
+                "facebook" => ["nullable", "regex:/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/"],
+            ],
+            [
+                "email_khac" => "Định dạng email không đúng",
+                "dienthoai" => "Định dạng số điện thoại không đúng",
+                "zalo" => "Định dạng số điện thoại không đúng",
+                "facebook" => "Định dạng số link facebook không đúng",
             ]);
-            // Return back
+        $update = DB::table('table_sinhvien_chitiet')->where('masv', session('masv'))->update($data);
+        if (!$update) {
+            $flag = 0;
+        }
+        //Log
+        $log = DB::table('table_log_sinhvien')->insert([
+            'masv' => session('masv'),
+            'id_log_loai' => 1,
+            'created_at' => now()
+        ]);
+
+        if ($flag) {
+            DB::commit();
+            return back();
+        } else {
+            DB::rollBack();
             return back();
         }
     }

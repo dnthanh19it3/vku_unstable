@@ -32,42 +32,40 @@ class AdKhaoSatController extends Controller
         $flag = 1;
         $noidungcauhoi = $request->noidungcauhoi;
         $loai = $request->loai;
-        while ($flag){
-            DB::beginTransaction();
-            $thongtin = [
-                'tenmau' => $request->tenmau,
-                'mota' => $request->mota,
-                'slug' => $request->slug,
-                'trangthai' => 1,
-                'created_at' => now()
-            ];
-            $mau_id = DB::table('khaosat_mau')->insertGetId($thongtin);
-            if($mau_id){
-                $array_cauhoi = [];
-                foreach ($noidungcauhoi as $key => $cauhoi){
-                    $cauhoi_temp = [];
-                    $cauhoi_temp['cauhoi'] = $cauhoi;
-                    $cauhoi_temp['loai'] = $loai[$key];
-                    $cauhoi_temp['mau_id'] = $mau_id;
-                    $cauhoi_temp['trangthai'] = 1;
-                    $cauhoi_temp['created_at'] = now();
-                    array_push($array_cauhoi, $cauhoi_temp);
-                }
-                $insert = DB::table('khaosat_cauhoi')->insert($array_cauhoi);
-
-
-                if($insert){
-                    DB::commit();
-                    dd($insert);
-                    return back();
-                } else {
-                    $flag = 0;
-                }
-            } else {
+        DB::beginTransaction();
+        $thongtin = [
+            'tenmau' => $request->tenmau,
+            'mota' => $request->mota,
+            'slug' => $request->slug,
+            'trangthai' => 1,
+            'created_at' => now()
+        ];
+        $mau_id = DB::table('khaosat_mau')->insertGetId($thongtin);
+        if ($mau_id) {
+            $array_cauhoi = [];
+            foreach ($noidungcauhoi as $key => $cauhoi) {
+                $cauhoi_temp = [];
+                $cauhoi_temp['cauhoi'] = $cauhoi;
+                $cauhoi_temp['loai'] = $loai[$key];
+                $cauhoi_temp['mau_id'] = $mau_id;
+                $cauhoi_temp['trangthai'] = 1;
+                $cauhoi_temp['created_at'] = now();
+                array_push($array_cauhoi, $cauhoi_temp);
+            }
+            $insert = DB::table('khaosat_cauhoi')->insert($array_cauhoi);
+            if (!$insert) {
                 $flag = 0;
             }
+        } else {
+            $flag = 0;
         }
-        DB::rollBack();
+        if ($flag) {
+            DB::commit();
+            return back();
+        } else {
+            DB::rollBack();
+            return back();
+        }
     }
 
     /**
@@ -93,70 +91,67 @@ class AdKhaoSatController extends Controller
         $delete_cauhoi = null;
 
         //Check delete cau hoi
-        if($delete != null){
+        if ($delete != null) {
             $delete = explode(',', $delete);
             $delete_cauhoi = DB::table('khaosat_cauhoi')->whereIn('id', $delete)->update(['trangthai' => 2, 'updated_at' => now()]);
         }
 
-        while ($flag){
-            DB::beginTransaction();
-            $thongtin = [
-                'tenmau' => $request->tenmau,
-                'mota' => $request->mota,
-                'slug' => $request->slug,
-                'updated_at' => now()
-            ];
-            $update_mau = DB::table('khaosat_mau')->where('id', $id)->update($thongtin);
 
+        DB::beginTransaction();
+        $thongtin = [
+            'tenmau' => $request->tenmau,
+            'mota' => $request->mota,
+            'slug' => $request->slug,
+            'updated_at' => now()
+        ];
+        $update_mau = DB::table('khaosat_mau')->where('id', $id)->update($thongtin);
 
-            if(true){
-                // Cap nhat cau hoi cu
-                $array_cauhoi = [];
-                foreach ($noidungcauhoi as $key => $cauhoi){
-                    $cauhoi_temp = [];
-                    $cauhoi_temp['cauhoi'] = $cauhoi;
-                    $cauhoi_temp['loai'] = $loai[$key];
-                    $cauhoi_temp['mau_id'] = $id;
-                    $cauhoi_temp['updated_at'] = now();
-                    array_push($array_cauhoi, $cauhoi_temp);
-                }
-                $update_cauhoi = 0;
-                foreach ($array_cauhoi as $key => $item){
-                    $update = DB::table('khaosat_cauhoi')->where('id', $request->cauhoi_id[$key])->update($item);
-                    if($update){
-                        $update_cauhoi = 1;
-                    }
-                }
-                // Them cau hoi moi
-                $insert_cauhoi = null;
-                if($noidungcauhoi_add != null){
-                    $array_cauhoi_add = [];
-                    foreach ($noidungcauhoi_add as $key => $cauhoi){
-                        $cauhoi_temp = [];
-                        $cauhoi_temp['cauhoi'] = $cauhoi;
-                        $cauhoi_temp['loai'] = $loai_add[$key];
-                        $cauhoi_temp['mau_id'] = $id;
-                        $cauhoi_temp['trangthai'] = 1;
-                        $cauhoi_temp['created_at'] = now();
-                        array_push($array_cauhoi_add, $cauhoi_temp);
-                    }
-                    $insert = DB::table('khaosat_cauhoi')->insert($array_cauhoi_add);
-                    if(!$insert){
-                        $flag = 0;
-                    }
-                }
-
-                if($update_mau || $update_cauhoi || $insert_cauhoi || $delete_cauhoi){
-                    if(!$flag){
-                        break;
-                    }
-                    DB::commit();
-                    return back();
-                }
+        // Cap nhat cau hoi cu
+        $array_cauhoi = [];
+        foreach ($noidungcauhoi as $key => $cauhoi) {
+            $cauhoi_temp = [];
+            $cauhoi_temp['cauhoi'] = $cauhoi;
+            $cauhoi_temp['loai'] = $loai[$key];
+            $cauhoi_temp['mau_id'] = $id;
+            $cauhoi_temp['updated_at'] = now();
+            array_push($array_cauhoi, $cauhoi_temp);
+        }
+        $update_cauhoi = 0;
+        foreach ($array_cauhoi as $key => $item) {
+            $update = DB::table('khaosat_cauhoi')->where('id', $request->cauhoi_id[$key])->update($item);
+            if ($update) {
+                $update_cauhoi = 1;
             }
         }
-        DB::rollBack();
-        return back();
+        // Them cau hoi moi
+        $insert_cauhoi = null;
+        if ($noidungcauhoi_add != null) {
+            $array_cauhoi_add = [];
+            foreach ($noidungcauhoi_add as $key => $cauhoi) {
+                $cauhoi_temp = [];
+                $cauhoi_temp['cauhoi'] = $cauhoi;
+                $cauhoi_temp['loai'] = $loai_add[$key];
+                $cauhoi_temp['mau_id'] = $id;
+                $cauhoi_temp['trangthai'] = 1;
+                $cauhoi_temp['created_at'] = now();
+                array_push($array_cauhoi_add, $cauhoi_temp);
+            }
+            $insert = DB::table('khaosat_cauhoi')->insert($array_cauhoi_add);
+            if (!$insert) {
+                $flag = 0;
+            }
+        }
+        if (!$flag) {
+            DB::rollBack();
+            return back()->with(['flash_level'=>'danger','flash_message'=>'Thất bại!']);
+        } else {
+            if ($update_mau || $update_cauhoi || $insert_cauhoi || $delete_cauhoi) {
+                DB::commit();
+                return back()->with(['flash_level'=>'success','flash_message'=>'Thành công!']);
+            }
+        }
+
+
     }
     /**
      * Xoa khao sat (trangthai => 2)

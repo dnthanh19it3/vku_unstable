@@ -84,49 +84,55 @@ class SvTamTruController extends Controller
      */
     public function taoTamTruStore(Request $request){
         $flag = 1;
-        while ($flag){
-            $hocky_info = DB::table('table_namhoc_hocky')->where('hienhanh',1)->first(); // Thông tin học kì
-            $tamtrucu = DB::table('table_sinhvien_tamtru')->where('masv', session('masv'))->where('trangthai', 1)->first();    //Tạm trú cũ
+        $hocky_info = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first(); // Thông tin học kì
+        $tamtrucu = DB::table('table_sinhvien_tamtru')->where('masv', session('masv'))->where('trangthai', 1)->first();    //Tạm trú cũ
 
-            $data = $request->validate([
-                'sonha' => ['required', 'regex:/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/'],
-                'thonto' => ['required', 'regex:/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/'],
-                'xaphuong_id' => 'required|numeric',
-                'quanhuyen_id' => 'required|numeric',
-                'tinhthanh_id' => 'required|numeric',
-                'tenchuho' => ['required', 'regex:/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/'],
-                'sdtchuho' => ['required', 'regex:/(84|0[3|5|7|8|9])+([0-9]{8})/'],
-                'thoigianbatdau' => 'required|before:'.now(),
-            ]);
-            $data['trangthai'] = 1;
-            $data['created_at'] = now();
-            $data['masv'] = session('masv');
-            $data['namhoc'] = $hocky_info->id;
-            $data['hocky'] = $hocky_info->hocky;
+        $data = $request->validate([
+            'sonha' => ['required', 'regex:/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/'],
+            'thonto' => 'required',
+            'xaphuong_id' => 'required|numeric',
+            'quanhuyen_id' => 'required|numeric',
+            'tinhthanh_id' => 'required|numeric',
+            'tenchuho' => ['required', 'regex:/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/'],
+            'sdtchuho' => ['required', 'regex:/(84|0[3|5|7|8|9])+([0-9]{8})/'],
+            'thoigianbatdau' => 'required|before:' . now(),
+        ]);
+        $data['trangthai'] = 1;
+        $data['created_at'] = now();
+        $data['masv'] = session('masv');
+        $data['namhoc'] = $hocky_info->id;
+        $data['hocky'] = $hocky_info->hocky;
 
-            foreach ($data as $key => $value){
-                $value = trim($value);
-            }
-            // Đổi trạng thái tạm trú cũ sang 0
-            if(isset($tamtrucu)){
-                $disabletamtrucu = DB::table('table_sinhvien_tamtru')
-                    ->where('id', $tamtrucu->id)
-                    ->update(['trangthai' => 0]);
-            }
-            // Tạo bản ghi mới
-            $insert = DB::table('table_sinhvien_tamtru')->insert($data);
-            if(!$insert){
-                $flag = 0;
-            }
+        foreach ($data as $key => $value) {
+            $value = trim($value);
+        }
+        // Đổi trạng thái tạm trú cũ sang 0
+        if (isset($tamtrucu)) {
+            $disabletamtrucu = DB::table('table_sinhvien_tamtru')
+                ->where('id', $tamtrucu->id)
+                ->update(['trangthai' => 0]);
+        }
+        // Tạo bản ghi mới
+        $insert = DB::table('table_sinhvien_tamtru')->insert($data);
+        if (!$insert) {
+            $flag = 0;
+        } else {
             //Log
             $log = DB::table('table_log_sinhvien')->insert([
                 'masv' => session('masv'),
                 'id_log_loai' => 2,
                 'created_at' => now()
             ]);
-            // Return back
+        }
+        // Return back
+        if($flag){
+            return back()->with(['flash_level'=>'success','flash_message'=>'Thành công!']);
+            return back();
+        } else {
+            return back()->with(['flash_level'=>'danger','flash_message'=>'Thất bại!']);
             return back();
         }
+
     }
 
     /**

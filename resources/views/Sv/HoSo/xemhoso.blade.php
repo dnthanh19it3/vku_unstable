@@ -476,13 +476,22 @@
             }
     </script>
     <script>
+        let label = @json($renluyen_chart['label']);
+        let data = @json($renluyen_chart['value']);
+        if(label.length == 1){
+            label.push("");
+            label.unshift("");
+            data.push(null);
+            data.unshift(null);
+        }
+
         $(document).ready(()=>{
             const lineChart = new Chart(document.getElementById("line-chart"), {
                 type: 'line',
                 data: {
-                    labels: @json($renluyen_chart['label']),
+                    labels: label,
                     datasets: [{
-                        data: @json($renluyen_chart['value']),
+                        data: data,
                         label: "Điểm",
                         borderColor: "#3e95cd",
                         fill: true,
@@ -510,11 +519,12 @@
                                 steps: 10,
                                 stepValue: 10,
                                 max: 100,
+                                min: 60,
                             },
                             scaleLabel: {
                                 display: true,
                                 labelString: 'Điểm'
-                            }
+                            },
                         }]
                     },
                 }

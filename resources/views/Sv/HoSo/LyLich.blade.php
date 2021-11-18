@@ -151,7 +151,7 @@
 <div style="width: 100%;">
     <div class="line">
         <div class="col f-12" style="width: 45%;">Họ và tên: {{getTruongTinh('hoten', $sv)}}</div>
-        <div class="col f-12" style="width:30%">Giới tính: {{ $sv->gioitinh ? 'Nam' : 'Nữ' }}</div>
+        <div class="col f-12" style="width:30%">Giới tính: {{ getTruongTinh('gioitinh', $sv) }}</div>
     </div>
     <div class="line">
         <div class="col f-12" style="width: 40%;">Ngày, tháng, năm sinh: {{getTruongTinh('ngaysinh', $sv)}}</div>
@@ -208,7 +208,7 @@
 <div class="heading">II. PHẦN THÔNG TIN GIA ĐÌNH SINH VIÊN</div>
 <div class="">
     <div class="line">
-        <div class="col f-12" style="width: 55%;">Họ và tên Cha {{getTruongTinh('hotencha', $sv)}}:</div>
+        <div class="col f-12" style="width: 55%;">Họ và tên Cha: {{getTruongTinh('hotencha', $sv)}}</div>
         <div class="col f-12" style="width:42%">Ngày sinh cha: {{getTruongTinh('namsinhcha', $sv)}}</div>
     </div>
     <div class="line">

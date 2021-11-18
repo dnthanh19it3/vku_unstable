@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class AdDonTuController extends Controller
 {
@@ -40,6 +40,7 @@ class AdDonTuController extends Controller
             'phongban' => $phongban
         ]);
     }
+
     //Ajax search truong
     function ajaxSearchTruong(Request $request)
     {
@@ -53,6 +54,7 @@ class AdDonTuController extends Controller
         $result = DB::table('table_maudon_chitiet')->where('tentruong', 'LIKE', '%' . $request->tentruong . '%')->get();
         return $result;
     }
+
     //Lưu đơn
     function maudonStore(Request $request)
     {
@@ -68,6 +70,7 @@ class AdDonTuController extends Controller
         pushNotify($response1);
         return redirect()->back();
     }
+
     function maudonUpdate(Request $request, $mau_id)
     {
         $value1 = [
@@ -82,6 +85,7 @@ class AdDonTuController extends Controller
         pushNotify($response1);
         return redirect()->back();
     }
+
     //Lưu trường dữ liệu
     function truongStore(Request $request)
     {
@@ -99,6 +103,7 @@ class AdDonTuController extends Controller
         }
         return json_encode($response2);
     }
+
     // Danh sách mẫu
     function danhSachMauView(Request $request)
     {
@@ -113,6 +118,7 @@ class AdDonTuController extends Controller
             'danhsachmau' => $danhsachmau
         ]);
     }
+
     // Chi tiết mẫu
     function chiTietMauView(Request $request, $mau_id)
     {
@@ -144,61 +150,63 @@ class AdDonTuController extends Controller
                 'fileType' => $fileType,
                 'phongban' => $phongban]);
     }
+
     function xoaMau(Request $request, $mau_id)
     {
         $flag = 1;
         $flag_delete_field = 0;
         DB::beginTransaction();
-        while ($flag){
-            // Get form DB
-            $maudon = DB::table('table_maudon')->where('maudon_id', $mau_id)->first();
-            $listmauddon = DB::table('table_maudon')->where('maudon_id', '<>', $mau_id)->get();
-            // Convert to array
-            $maudon->truong = explode(',', $maudon->truong);
-            foreach ($listmauddon as $key => $item){
-                $item->truong = explode(',', $item->truong);
-            }
-            //Loop for compare
-            foreach ($maudon->truong as $key_truongxoa => $value_truongxoa){
-                foreach ($listmauddon as $key_maudon => $value_maudon){
-                    $check = array_search($value_truongxoa, $value_maudon->truong);
-                    dump($value_maudon, $value_truongxoa, $check);
-                    if(is_numeric($check)){
-                        echo "Tìm $value_truongxoa | Tìm thấy | $check | Bỏ qua<hr/>";
-                        unset($maudon->truong[$key_truongxoa]);
-                        break;
-                    } else {
-                        echo "Tìm $value_truongxoa |Không tìm thấy, tìm tiếp<hr/>";
-                    }
 
+        // Get form DB
+        $maudon = DB::table('table_maudon')->where('maudon_id', $mau_id)->first();
+        $listmauddon = DB::table('table_maudon')->where('maudon_id', '<>', $mau_id)->get();
+        // Convert to array
+        $maudon->truong = explode(',', $maudon->truong);
+        foreach ($listmauddon as $key => $item){
+            $item->truong = explode(',', $item->truong);
+        }
+        //Loop for compare
+        foreach ($maudon->truong as $key_truongxoa => $value_truongxoa){
+            foreach ($listmauddon as $key_maudon => $value_maudon){
+                $check = array_search($value_truongxoa, $value_maudon->truong);
+                dump($value_maudon, $value_truongxoa, $check);
+                if(is_numeric($check)){
+                    echo "Tìm $value_truongxoa | Tìm thấy | $check | Bỏ qua<hr/>";
+                    unset($maudon->truong[$key_truongxoa]);
+                    break;
+                } else {
+                    echo "Tìm $value_truongxoa |Không tìm thấy, tìm tiếp<hr/>";
                 }
-            }
-            // Tìm trường không phải trường tĩnh (Họ tên, ngày sinh, giới tính, blah blah
-            $dynamic_field = array();
-            foreach ($maudon->truong as $key => $item){
-                $item = DB::table('table_maudon_chitiet')->where('id', $item)->where('lienket', null)->first();
-                array_push($dynamic_field, $item);
-            }
 
-            foreach ($dynamic_field as $key => $item){
-                $delete = DB::table('table_maudon_chitiet')->delete($item->id);
-                if(!$delete){
-                    $flag = 0;
-                }
             }
-            $delete = DB::table('table_maudon')->where('maudon_id', $mau_id)->delete();
+        }
+        // Tìm trường không phải trường tĩnh (Họ tên, ngày sinh, giới tính, blah blah
+        $dynamic_field = array();
+        foreach ($maudon->truong as $key => $item){
+            $item = DB::table('table_maudon_chitiet')->where('id', $item)->where('lienket', null)->first();
+            array_push($dynamic_field, $item);
+        }
+
+        foreach ($dynamic_field as $key => $item){
+            $delete = DB::table('table_maudon_chitiet')->delete($item->id);
             if(!$delete){
                 $flag = 0;
             }
-            if(!$flag){
-                break;
-            }
-            DB::commit();
-            return redirect()->back();
         }
-        DB::rollBack();
-        return redirect()->back();
+        $delete = DB::table('table_maudon')->where('maudon_id', $mau_id)->delete();
+        if(!$delete){
+            $flag = 0;
+        }
 
+
+
+        if(!$flag){
+            DB::rollBack();
+            return back()->with(['flash_level'=>'danger','flash_message'=>'Thất bại!']);
+        } else {
+            DB::commit();
+            return back()->with(['flash_level'=>'success','flash_message'=>'Thành công!']);
+        }
     }
 
 
@@ -207,7 +215,6 @@ class AdDonTuController extends Controller
     /*
         Xử lý đơn controller
     */
-
 
 
     // List hồ sơ
@@ -263,8 +270,7 @@ class AdDonTuController extends Controller
 
             if($item->hoanthanh == 0 && $item->trangthai > 0) {
                 $item->tentrangthai = "Đang xử lý";
-            }
-            elseif($item->trangthai == 0) {
+            } elseif($item->trangthai == 0) {
                 $item->tentrangthai = "Chưa hoàn thành";
             } elseif($item->hoanthanh == 1){
                 $item->hoanthanh = "Hoàn thành";
@@ -337,8 +343,9 @@ class AdDonTuController extends Controller
             'timeline' => $timeline,
             'phongban' => $phongban,
             'lancap' => $landcap
-            ]);
+        ]);
     }
+
     // Controller xử lý
     function tiepNhanHoSo(Request $request, $don_id)
     {
@@ -360,6 +367,7 @@ class AdDonTuController extends Controller
         pushNotify($addLog);
         return redirect()->back();
     }
+
     function duyet(Request $request, $don_id) {
         $loai = $this->getLoaiDon($don_id);
         $addLog =  DB::table('table_don_logs')->insert([
@@ -378,6 +386,7 @@ class AdDonTuController extends Controller
         pushNotify($addLog);
         return redirect()->back();
     }
+
     function chuyenTiep(Request $request, $don_id){
         $don = DB::table('table_don')->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')->where('don_id', '=', $don_id)->first();
         $update = DB::table("table_don")->where('don_id', '=', $don_id)->update([
@@ -395,6 +404,7 @@ class AdDonTuController extends Controller
         ]);
         return redirect()->back();
     }
+
     function daXacNhan(Request $request, $don_id) {
         $loai = $this->getLoaiDon($don_id);
         $addLog =  DB::table('table_don_logs')->insert([
@@ -427,6 +437,7 @@ class AdDonTuController extends Controller
         notify($to, $data);
         return redirect()->back();
     }
+
     function tuchoiHoSo(Request $request, $don_id)
     {
         $loai = $this->getLoaiDon($don_id);
@@ -504,14 +515,11 @@ class AdDonTuController extends Controller
         }
 
 
-
-
         $chotiepnhan = array();
         $dangxuly = array();
         $hethanhomnay = array();
         $dahethan = array();
         $hethantuannay = array();
-
 
 
         foreach ($chuahoanthanh as $key => $item){
@@ -562,8 +570,6 @@ class AdDonTuController extends Controller
             'quahan' => $quahan,
             'quahan_percent' => $quahan_percent
         ];
-
-
 
 
         return view('Admin/DonTu/DonTuDash')->with([

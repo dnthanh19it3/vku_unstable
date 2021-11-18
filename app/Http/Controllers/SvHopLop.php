@@ -76,7 +76,6 @@ class SvHopLop extends Controller
             ->join('table_sinhvien', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien.masv')
             ->join('table_sinhvien_chitiet', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien_chitiet.masv')
             ->where('table_lopsh_bancansu.lopsh_id', $lopsh->id)
-            ->where('table_lopsh_bancansu.trangthai', 1)
             ->orderBy('table_lopsh_chucvu.id', 'ASC')
             ->get();
         $dexuat = DB::table('table_gvcn_noidungdukien')->where(
@@ -161,7 +160,6 @@ class SvHopLop extends Controller
             ->join('table_sinhvien', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien.masv')
             ->join('table_sinhvien_chitiet', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien_chitiet.masv')
             ->where('table_lopsh_bancansu.lopsh_id', $data->lopsh)
-            ->where('table_lopsh_bancansu.trangthai', 1)
             ->orderBy('table_lopsh_chucvu.id', 'ASC')
             ->get();
         return view('Sv.LopSH.XemBienBan')->with([
@@ -207,7 +205,6 @@ class SvHopLop extends Controller
             ->join('table_sinhvien', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien.masv')
             ->join('table_sinhvien_chitiet', 'table_lopsh_bancansu.masv', '=', 'table_sinhvien_chitiet.masv')
             ->where('table_lopsh_bancansu.lopsh_id', $data->lopsh)
-            ->where('table_lopsh_bancansu.trangthai', 1)
             ->orderBy('table_lopsh_chucvu.id', 'ASC')
             ->get();
 
