@@ -107,20 +107,17 @@
                 labels: label,
                 datasets: [{
                     label: "Trạng thái nộp",
-                    backgroundColor: ["#e8c3b9","#c45850"],
+                    backgroundColor: ["#0b97c4","#ff6161"],
                     data: soluong
                 }]
             },
             options: {
                 title: {
                     display: true,
-                    text: "Biểu đồ phân hoá xếp loại rèn luyện",
+                    text: "Biểu đồ tiến độ nộp biên bản",
                 }
             }
         });
-
-
-
 
         $(document).ready(()=>{
             var ctx = document.getElementById('thongke').getContext('2d');

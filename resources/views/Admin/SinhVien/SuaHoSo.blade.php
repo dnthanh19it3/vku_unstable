@@ -43,8 +43,8 @@
                         <div class="form-group col-md-4">
                             <label class=" mb-1" for="inputOrgName">Giói tính</label>
                             <select id="gioitinh" name="gioitinh" class="custom-select">
-                                <option value="1">Nam</option>
-                                <option value="0">Nữ</option>
+                                <option value="1" {{$sinhvien->gioitinh ? "" : "selected"}}>Nam</option>
+                                <option value="0" {{$sinhvien->gioitinh ? "selected" : ""}}>Nữ</option>
                             </select>
                         </div>
                         <!-- Form Group (location)-->

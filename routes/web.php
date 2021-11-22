@@ -100,11 +100,44 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
             Route::get('linh-vuc/{khoinganh}', 'AdHrmController@getKhoiNganh')->name('ad.hrm.dm.linhvuc');
         });
         Route::prefix('quan-ly-nhan-vien')->group(function (){
+            // Them nhan vien
             Route::get('them', 'AdHrmController@themNhanVienView')->name('ad.hrm.nhanvien.them');
             Route::post('them', 'AdHrmController@themNhanVienPost')->name('ad.hrm.nhanvien.them.post');
-            Route::get('sua', 'AdHrmController@suaNhanVienView')->name('ad.hrm.nhanvien.sua');
-            Route::get('sua', 'AdHrmController@suaNhanVienView')->name('ad.hrm.nhanvien.sua');
-            Route::post('sua', 'AdHrmController@suaNhanVienPost')->name('ad.hrm.nhanvien.sua.post');
+            Route::prefix('{ma_gv}')->group(function (){
+                //Sua nhan vien
+                Route::get('sua', 'AdHrmController@suaNhanVienView')->name('ad.hrm.nhanvien.sua');
+                Route::post('sua', 'AdHrmController@suaNhanVienPost')->name('ad.hrm.nhanvien.sua.post');
+                //Cong tac nuoc ngoai
+                Route::get('cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiView')->name('ad.hrm.congtacnuocngoai.view');
+                Route::get('getdata-cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiGetData')->name('ad.hrm.congtacnuocngoai.getdata');
+                Route::post('them-cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiThemPost')->name('ad.hrm.congtacnuocngoai.them.post');
+                Route::post('sua-cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiSuaPost')->name('ad.hrm.congtacnuocngoai.sua.post');
+                Route::get('xoa-cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiXoa')->name('ad.hrm.congtacnuocngoai.xoa');
+                //Cong tac
+                Route::get('cong-tac', 'AdHrmController@congTacView')->name('ad.hrm.congtac.view');
+                Route::get('getdata-cong-tac', 'AdHrmController@congTacGetData')->name('ad.hrm.congtac.getdata');
+                Route::post('them-cong-tac', 'AdHrmController@congTacThemPost')->name('ad.hrm.congtac.them.post');
+                Route::post('sua-cong-tac', 'AdHrmController@congTacSuaPost')->name('ad.hrm.congtac.sua.post');
+                Route::get('xoa-cong-tac', 'AdHrmController@congTacXoa')->name('ad.hrm.congtac.xoa');
+                //Nghi phep
+                Route::get('nghi-phep', 'AdHrmController@nghiPhepView')->name('ad.hrm.nghiphep.view');
+                Route::get('getdata-nghiphep', 'AdHrmController@nghiPhepGetData')->name('ad.hrm.nghiphep.getdata');
+                Route::post('them-nghi-phep', 'AdHrmController@nghiPhepThemPost')->name('ad.hrm.nghiphep.them.post');
+                Route::post('sua-nghi-phep', 'AdHrmController@nghiPhepSuaPost')->name('ad.hrm.nghiphep.sua.post');
+                Route::get('xoa-nghi-phep', 'AdHrmController@nghiPhepXoa')->name('ad.hrm.nghiphep.xoa');
+                //Khen thuong
+                Route::get('khen-thuong', 'AdHrmController@khenThuongView')->name('ad.hrm.khenthuong.view');
+                Route::get('getdata-khenthuong', 'AdHrmController@khenThuongGetData')->name('ad.hrm.khenthuong.getdata');
+                Route::post('them-khen-thuong', 'AdHrmController@khenThuongThemPost')->name('ad.hrm.khenthuong.them.post');
+                Route::post('sua-khen-thuong', 'AdHrmController@khenThuongSuaPost')->name('ad.hrm.khenthuong.sua.post');
+                Route::get('xoa-khen-thuong', 'AdHrmController@khenThuongXoa')->name('ad.hrm.khenthuong.xoa');
+                //Ky luat
+                Route::get('ky-luat', 'AdHrmController@kyLuatView')->name('ad.hrm.kyluat.view');
+                Route::get('getdata-kyluat', 'AdHrmController@kyLuatGetData')->name('ad.hrm.kyluat.getdata');
+                Route::post('them-ky-luat', 'AdHrmController@kyLuatThemPost')->name('ad.hrm.kyluat.them.post');
+                Route::post('sua-ky-luat', 'AdHrmController@kyLuatSuaPost')->name('ad.hrm.kyluat.sua.post');
+                Route::get('xoa-ky-luat', 'AdHrmController@kyLuatXoa')->name('ad.hrm.kyluat.xoa');
+            });
         });
     });
     Route::prefix('khao-sat')->group(function (){
@@ -134,7 +167,6 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
             Route::get('tong-hop-phan-hoi', 'AdQuanLyHopLop@listPhanHoiIndex')->name('ad.hoplop.tonghopphanhoi');
             Route::get('noi-dung-du-kien', 'AdQuanLyHopLop@noiDungDeXuatIndex')->name('ad.hoplop.noidungdukien');
             Route::post('tao-noi-dung-du-kien', 'AdQuanLyHopLop@duKienStore')->name('ad.hoplop.noidungdukien.tao');
-
         });
         // Duyệt chưa có tham số
         Route::get('danh-sach', 'AdQuanLyHopLop@listHopLopIndex')->name('ad.hoplop.listhoplop.nullable');

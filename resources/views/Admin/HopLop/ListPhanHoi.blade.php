@@ -1,5 +1,5 @@
 @extends('layout.admin_layout')
-@section('title', 'Xem hồ sơ')
+@section('title', 'Tổng hợp phản hồi')
 @section('header')
 @endsection
 @section('body')

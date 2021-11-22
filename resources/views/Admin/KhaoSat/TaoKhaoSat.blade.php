@@ -22,7 +22,6 @@
                    <div class="col-md-12"><button type="submit" class="form-control btn btn-primary btn-sm">Lưu</button></div>
                </div>
            </div>
-
        </div>
         <div class="col-md-7">
             <div class="bg-white p-3">

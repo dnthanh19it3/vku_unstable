@@ -35,7 +35,7 @@
                                 <a href="{{route('admin.hoplop.duyet.ctsv', ['id' => $data->id])}}" class="btn btn-primary"><i class="fas fa-check-circle mr-2"></i>Duyệt biên bản (CTSV)</a>
                             @endif
                         @endif
-                        <!--Nút duyệt CTSV-->
+                        <!--Nút duyệt BGH-->
                         @if($data->xacnhan_khoa)
                             @if($data->xacnhan_bgh)
                                 <a href="{{route('admin.hoplop.duyet.bgh', ['id' => $data->id])}}" class="btn btn-danger"><i class="fas fa-check-circle mr-2"></i>Bỏ duyệt biên bản (BGH)</a>

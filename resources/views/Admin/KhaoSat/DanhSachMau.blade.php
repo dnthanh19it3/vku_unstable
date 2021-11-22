@@ -39,7 +39,7 @@
                                     <td>{{ $item->updated_at }}</td>
                                     <td style="display: flex;flex-direction: row">
                                         <a class="btn btn-outline-blue btn-sm btn-primary text-white" href="{{route('admin.khaosat.suakhaosat', ['id' => $item->id])}}"><i class="fa fa-pencil"></i></a>
-                                        <a class="btn btn-outline-blue btn-sm btn-success text-white" href={{route('admin.khaosat.baocao', ['id' => $item->id])}}><i class="fa fa-chart-pie"></i></a>
+                                        <a class="btn btn-outline-blue btn-sm btn-success text-white" href="{{route('admin.khaosat.baocao', ['id' => $item->id])}}"><i class="fa fa-chart-pie"></i></a>
                                         <button type="button" class="btn btn-outline-blue btn-sm btn-danger text-white" onclick="confirm('{{route('admin.khaosat.xoakhaosat', ['id' => $item->id])}}')"><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>

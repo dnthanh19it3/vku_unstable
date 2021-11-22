@@ -57,7 +57,7 @@
                                     <div class="col-md-4 mb-2">
                                         <div class="mb-1" style="font-size: 16px">{{ $item->tentruong }}</div>
                                         <textarea id="tenmaudon" name="field{{ $item->id }}" placeholder=""
-                                                  class="form-control rounded" required="required">value="{{$item->lienket != null ? getTruongTinh($item->lienket, $sinhvien):""}}" @isset($item->lienket) disabled @endisset</textarea>
+                                                  class="form-control rounded" required="required">{{$item->lienket != null ? getTruongTinh($item->lienket, $sinhvien):""}} @isset($item->lienket) disabled @endisset</textarea>
                                         @isset($item->ghichutruong)
                                             <div class="mb-1">{{ $item->ghichutruong}}</div>
                                         @endisset

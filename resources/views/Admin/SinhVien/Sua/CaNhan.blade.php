@@ -79,8 +79,8 @@
                         <div class="col-md-2 form-group">
                             <div class="label">Giới tính</div>
                             <select type="text" class="form-control rounded" selected="{{$sinhvien->gioitinh}}" name="gioitinh" disabled>
-                                <option value="0" {{$sinhvien->gioitinh ? "" : "selected"}}>Nữ</option>
-                                <option value="1" {{$sinhvien->gioitinh ? "selected" : ""}}>Nam</option>
+                                <option value="0" {{$sinhvien->gioitinh ? "" : "selected"}}>Nam</option>
+                                <option value="1" {{$sinhvien->gioitinh ? "selected" : ""}}>Nữ</option>
                             </select>
                         </div>
                         <div class="col-md-2 form-group">
