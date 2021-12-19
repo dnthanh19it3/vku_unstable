@@ -14,14 +14,14 @@ class AdGiangVienChitietController extends Controller
 {
     function getInfo(){
 
-        $json = '[{"key":"","kyluat":"--"},{"key":"1","kyluat":"Buộc thôi việc"},{"key":"2","kyluat":"Cảnh cáo"},{"key":"3","kyluat":"Cách chức"},{"key":"4","kyluat":"Hạ bậc"},{"key":"5","kyluat":"Hạ ngạch"},{"key":"6","kyluat":"Khai trừ Đảng"},{"key":"7","kyluat":"Khiển trách"}]';
+        $json = '[{"key":"3","quanhegiadinh":"Cha"},{"key":"4","quanhegiadinh":"mẹ"},{"key":"5","quanhegiadinh":"Anh/ Chị/ Em"},{"key":"8","quanhegiadinh":"Vợ"},{"key":"9","quanhegiadinh":"Chồng"},{"key":"10","quanhegiadinh":"Con"}]';
         $obj = json_decode($json);
-        $table = 'table_giangvien_dm_kyluat';
+        $table = 'table_giangvien_dm_quanhegiadinh';
         Schema::dropIfExists($table);
         Schema::create($table, function (Blueprint $table) {
                     $table->increments('id');
                     $table->string('key');
-                    $table->string('kyluat');
+                    $table->string('quanhegiadinh');
                     $table->timestamps();
                 });
 

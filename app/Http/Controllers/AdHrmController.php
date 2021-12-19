@@ -245,7 +245,7 @@ class AdHrmController extends Controller
         $quocgia = DB::table('table_giangvien_dm_quocgia')->get();
         $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
         $data = DB::table('table_giangvien_congtacnuocngoai')->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
-            ->join('table_giangvien_dm_quocgia', 'table_giangvien_congtacnuocngoai.quocgia_id', 'table_giangvien_dm_quocgia.key')
+            ->leftJoin('table_giangvien_dm_quocgia', 'table_giangvien_congtacnuocngoai.quocgia_id', 'table_giangvien_dm_quocgia.key')
             ->select(['table_giangvien_congtacnuocngoai.*', 'table_giangvien_dm_quocgia.quocgia'])
             ->get();
 
@@ -325,7 +325,7 @@ class AdHrmController extends Controller
     function nghiPhepView(Request $request, $ma_gv= null){
         $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
         $data = DB::table('table_giangvien_nghiphep')
-            ->join('table_giangvien_dm_nghi_baohiemxahoi', 'table_giangvien_nghiphep.nghi_baohiemxahoi_id', 'table_giangvien_dm_nghi_baohiemxahoi.key')
+            ->leftJoin('table_giangvien_dm_nghi_baohiemxahoi', 'table_giangvien_nghiphep.nghi_baohiemxahoi_id', 'table_giangvien_dm_nghi_baohiemxahoi.key')
             ->select(['table_giangvien_nghiphep.*', 'table_giangvien_dm_nghi_baohiemxahoi.nghi_baohiemxahoi'])
             ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
             ->get();
@@ -366,7 +366,7 @@ class AdHrmController extends Controller
     function khenthuongView(Request $request, $ma_gv= null){
         $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
         $data = DB::table('table_giangvien_khenthuong')
-            ->join('table_giangvien_dm_khenthuong', 'table_giangvien_khenthuong.khenthuong_id', 'table_giangvien_dm_khenthuong.key')
+            ->leftJoin('table_giangvien_dm_khenthuong', 'table_giangvien_khenthuong.khenthuong_id', 'table_giangvien_dm_khenthuong.key')
             ->select(['table_giangvien_khenthuong.*', 'table_giangvien_dm_khenthuong.khenthuong'])
             ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
             ->get();
@@ -407,7 +407,7 @@ class AdHrmController extends Controller
     function kyLuatView(Request $request, $ma_gv= null){
         $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
         $data = DB::table('table_giangvien_kyluat')
-            ->join('table_giangvien_dm_kyluat', 'table_giangvien_kyluat.kyluat_id', 'table_giangvien_dm_kyluat.key')
+            ->leftJoin('table_giangvien_dm_kyluat', 'table_giangvien_kyluat.kyluat_id', 'table_giangvien_dm_kyluat.key')
             ->select(['table_giangvien_kyluat.*', 'table_giangvien_dm_kyluat.kyluat'])
             ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
             ->get();
@@ -439,6 +439,308 @@ class AdHrmController extends Controller
     function kyLuatXoa(Request $request, $ma_gv = null){
         $data = ['updated_at' => now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_kyluat')->where('id', $request->id)->update($data);
+        dd($delete);
+    } //OK
+
+    /**
+     *   Dao tao
+     **/
+    function daoTaoView(Request $request, $ma_gv= null){
+        $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
+        $data = DB::table('table_giangvien_daotao')
+            ->leftJoin('table_giangvien_dm_quocgia', 'table_giangvien_daotao.quocgia_id', 'table_giangvien_dm_quocgia.key')
+            ->leftJoin('table_giangvien_dm_khoinganh', 'table_giangvien_daotao.khoinganh_id', 'table_giangvien_dm_khoinganh.key')
+            ->leftJoin('table_giangvien_dm_linhvuc', 'table_giangvien_daotao.linhvuc_id', 'table_giangvien_dm_linhvuc.key')
+            ->leftJoin('table_giangvien_dm_trinhdochuyenmon', 'table_giangvien_daotao.trinhdochuyenmon_id', 'table_giangvien_dm_trinhdochuyenmon.key')
+            ->leftJoin('table_giangvien_dm_hinhthucdaotao', 'table_giangvien_daotao.hinhthucdaotao_id', 'table_giangvien_dm_hinhthucdaotao.key')
+            ->select(['table_giangvien_daotao.*',
+                'table_giangvien_dm_quocgia.quocgia',
+                'table_giangvien_dm_khoinganh.khoinganh',
+                'table_giangvien_dm_linhvuc.linhvuc',
+                'table_giangvien_dm_trinhdochuyenmon.trinhdochuyenmon',
+                'table_giangvien_dm_hinhthucdaotao.hinhthucdaotao',
+                ])
+            ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
+            ->get();
+        $khoinganh = DB::table('table_giangvien_dm_khoinganh')->get();
+        $linhvuc = DB::table('table_giangvien_dm_linhvuc')->get();
+        $trinhdochuyenmon = DB::table('table_giangvien_dm_trinhdochuyenmon')->get();
+        $quocgia = DB::table('table_giangvien_dm_quocgia')->get();
+        $hinhthucdaotao = DB::table('table_giangvien_dm_hinhthucdaotao')->get();
+//        dd($data);
+        return view('Admin.HRM.QuaTrinh.DaoTao')->with([
+            'giangvien' => $giangvien,
+            'data' => $data,
+            'khoinganh' => $khoinganh,
+            'linhvuc' => $linhvuc,
+            'trinhdochuyenmon' => $trinhdochuyenmon,
+            'quocgia' => $quocgia,
+            'hinhthucdaotao' => $hinhthucdaotao
+        ]);
+    } // OK
+    function daoTaoGetData(Request $request, $ma_gv= null){
+        $data = DB::table('table_giangvien_daotao')->where('id', $request->id)->first();
+        return json_encode($data);
+    } //
+    function daoTaoThemPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Quatrinhdaotao'];
+        $data['created_at'] = now();
+        $data['trangthai'] = 1;
+        $insert = DB::table('table_giangvien_daotao')->insert($data);
+        dd($insert);
+    } //OK
+    function daoTaoSuaPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Quatrinhdaotao'];
+        unset($data['ma_gv']);
+        $data['updated_at'] = now();
+        $update = DB::table('table_giangvien_daotao')->where('id', $request->id)->update($data);
+        dd($update);
+    } //OK
+    function daoTaoXoa(Request $request, $ma_gv = null){
+        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $delete = DB::table('table_giangvien_daotao')->where('id', $request->id)->update($data);
+        dd($delete);
+    } //
+    /**
+     * Bồi dưỡng
+     **/
+    function boiDuongView(Request $request, $ma_gv= null){
+        $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
+        $data = DB::table('table_giangvien_boiduong')
+            ->leftJoin('table_giangvien_dm_nganhdaotao', 'table_giangvien_boiduong.nganhdaotao_id', 'table_giangvien_dm_nganhdaotao.key')
+            ->select(['table_giangvien_boiduong.*', 'table_giangvien_dm_nganhdaotao.nganhdaotao'])
+            ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
+            ->get();
+        $nganhdaotao = DB::table('table_giangvien_dm_nganhdaotao')->get();
+//        dd($data);
+        return view('Admin.HRM.QuaTrinh.BoiDuong')->with([
+            'giangvien' => $giangvien,
+            'data' => $data,
+            'nganhdaotao' => $nganhdaotao
+        ]);
+    } // OK
+    function boiDuongGetData(Request $request, $ma_gv= null){
+        $data = DB::table('table_giangvien_boiduong')->where('id', $request->id)->first();
+        return json_encode($data);
+    } //
+    function boiDuongThemPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Quatrinhboiduong'];
+        $data['created_at'] = now();
+        $data['trangthai'] = 1;
+        $insert = DB::table('table_giangvien_boiduong')->insert($data);
+        dd($insert);
+    } //OK
+    function boiDuongSuaPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Quatrinhboiduong'];
+        unset($data['ma_gv']);
+        $data['updated_at'] = now();
+        $update = DB::table('table_giangvien_boiduong')->where('id', $request->id)->update($data);
+        dd($update);
+    } //OK
+    function boiDuongXoa(Request $request, $ma_gv = null){
+        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $delete = DB::table('table_giangvien_boiduong')->where('id', $request->id)->update($data);
+        dd($delete);
+    } //
+
+    /**
+     * Quan he gia dinh
+     **/
+    function thanNhanTrongNuocView(Request $request, $ma_gv= null){
+        $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
+        $data = DB::table('table_giangvien_thannhantrongnuoc')
+            ->leftJoin('table_giangvien_dm_quanhegiadinh', 'table_giangvien_thannhantrongnuoc.quanhegiadinh_id', 'table_giangvien_dm_quanhegiadinh.key')
+            ->select(['table_giangvien_thannhantrongnuoc.*', 'table_giangvien_dm_quanhegiadinh.quanhegiadinh'])
+            ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
+            ->get();
+        $quanhegiadinh = DB::table('table_giangvien_dm_quanhegiadinh')->get();
+//        dd($data);
+        return view('Admin.HRM.QuaTrinh.ThanNhanTrongNuoc')->with([
+            'giangvien' => $giangvien,
+            'data' => $data,
+            'quanhegiadinh' => $quanhegiadinh
+        ]);
+    } // OK
+    function thanNhanTrongNuocGetData(Request $request, $ma_gv= null){
+        $data = DB::table('table_giangvien_thannhantrongnuoc')->where('id', $request->id)->first();
+        return json_encode($data);
+    } //
+    function thanNhanTrongNuocThemPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Thannhantrongnuoc'];
+        $data['created_at'] = now();
+        $data['trangthai'] = 1;
+        $insert = DB::table('table_giangvien_thannhantrongnuoc')->insert($data);
+        dd($insert);
+    } //OK
+    function thanNhanTrongNuocSuaPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Thannhantrongnuoc'];
+        unset($data['ma_gv']);
+        $data['updated_at'] = now();
+        $update = DB::table('table_giangvien_thannhantrongnuoc')->where('id', $request->id)->update($data);
+        dd($update);
+    } //OK
+    function thanNhanTrongNuocXoa(Request $request, $ma_gv = null){
+        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $delete = DB::table('table_giangvien_thannhantrongnuoc')->where('id', $request->id)->update($data);
+        dd($delete);
+    } //
+    /**
+     * Than nhan nuoc ngoai
+     **/
+    function thanNhanNgoaiNuocView(Request $request, $ma_gv= null){
+        $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
+        $data = DB::table('table_giangvien_thannhanngoainuoc')
+            ->leftJoin('table_giangvien_dm_quanhegiadinh', 'table_giangvien_thannhanngoainuoc.quanhegiadinh_id', 'table_giangvien_dm_quanhegiadinh.key')
+            ->select(['table_giangvien_thannhanngoainuoc.*', 'table_giangvien_dm_quanhegiadinh.quanhegiadinh'])
+            ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
+            ->get();
+        $quanhegiadinh = DB::table('table_giangvien_dm_quanhegiadinh')->get();
+//        dd($data);
+        return view('Admin.HRM.QuaTrinh.ThanNhanNgoaiNuoc')->with([
+            'giangvien' => $giangvien,
+            'data' => $data,
+            'quanhegiadinh' => $quanhegiadinh
+        ]);
+    } // OK
+    function thanNhanNgoaiNuocGetData(Request $request, $ma_gv= null){
+        $data = DB::table('table_giangvien_thannhanngoainuoc')->where('id', $request->id)->first();
+        return json_encode($data);
+    } //
+    function thanNhanNgoaiNuocThemPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Thannhanngoainuoc'];
+        $data['created_at'] = now();
+        $data['trangthai'] = 1;
+        $insert = DB::table('table_giangvien_thannhanngoainuoc')->insert($data);
+        dd($insert);
+    } //OK
+    function thanNhanNgoaiNuocSuaPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Thannhanngoainuoc'];
+        unset($data['ma_gv']);
+        $data['updated_at'] = now();
+        $update = DB::table('table_giangvien_thannhanngoainuoc')->where('id', $request->id)->update($data);
+        dd($update);
+    } //OK
+    function thanNhanNgoaiNuocXoa(Request $request, $ma_gv = null){
+        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $delete = DB::table('table_giangvien_thannhanngoainuoc')->where('id', $request->id)->update($data);
+        dd($delete);
+    } //
+    /**
+     * Tham gia LLVT
+     **/
+    function thamGiaLlvtView(Request $request, $ma_gv= null){
+        $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
+        $data = DB::table('table_giangvien_thamgiallvt')
+            ->select(['table_giangvien_thamgiallvt.*'])
+            ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
+            ->get();
+//        dd($data);
+        return view('Admin.HRM.QuaTrinh.ThamGiaLlvt')->with([
+            'giangvien' => $giangvien,
+            'data' => $data
+        ]);
+    } // OK
+    function thamGiaLlvtGetData(Request $request, $ma_gv= null){
+        $data = DB::table('table_giangvien_thamgiallvt')->where('id', $request->id)->first();
+        return json_encode($data);
+    } //
+    function thamGiaLlvtThemPost(Request $request, $ma_gv= null){
+        $data = $request['data']['ThamgiaLlvt'];
+        $data['created_at'] = now();
+        $data['trangthai'] = 1;
+        $insert = DB::table('table_giangvien_thamgiallvt')->insert($data);
+        dd($insert);
+    } //OK
+    function thamGiaLlvtSuaPost(Request $request, $ma_gv= null){
+        $data = $request['data']['ThamgiaLlvt'];
+        unset($data['ma_gv']);
+        $data['updated_at'] = now();
+        $update = DB::table('table_giangvien_thamgiallvt')->where('id', $request->id)->update($data);
+        dd($update);
+    } //OK
+    function thamGiaLlvtXoa(Request $request, $ma_gv = null){
+        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $delete = DB::table('table_giangvien_thamgiallvt')->where('id', $request->id)->update($data);
+        dd($delete);
+    } //
+    /**
+     *   Huong luong
+     **/
+    function huongLuongView(Request $request, $ma_gv= null){
+        $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
+        $data = DB::table('table_giangvien_huongluong')
+            ->leftJoin('table_giangvien_dm_ngachcc', 'table_giangvien_huongluong.ngachcc_id', 'table_giangvien_dm_ngachcc.key')
+            ->select(['table_giangvien_huongluong.*', 'table_giangvien_dm_ngachcc.ngachcc'])
+            ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
+            ->get();
+        $ngachcc = DB::table('table_giangvien_dm_ngachcc')->get();
+        return view('Admin.HRM.QuaTrinh.HuongLuong')->with([
+            'giangvien' => $giangvien,
+            'data' => $data,
+            'ngachcc' => $ngachcc
+        ]);
+    } //OK
+    function huongLuongGetData(Request $request, $ma_gv= null){
+        $data = DB::table('table_giangvien_huongluong')->where('id', $request->id)->first();
+        return json_encode($data);
+    } //OK
+    function huongLuongThemPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Quatrinhhuongluong'];
+        $data['created_at'] = now();
+        $data['trangthai'] = 1;
+        $insert = DB::table('table_giangvien_huongluong')->insert($data);
+        dd($insert);
+    } //OK
+    function huongLuongSuaPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Quatrinhhuongluong'];
+        unset($data['ma_gv']);
+        $data['updated_at'] = now();
+        $update = DB::table('table_giangvien_huongluong')->where('id', $request->id)->update($data);
+        dd($update);
+    } //OK
+    function huongLuongXoa(Request $request, $ma_gv = null){
+        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $delete = DB::table('table_giangvien_huongluong')->where('id', $request->id)->update($data);
+        dd($delete);
+    } //OK
+    /**
+     *   Hop dong
+     **/
+    function hopDongView(Request $request, $ma_gv= null){
+        $giangvien = DB::table('table_giangvien')->where('ma_gv', $ma_gv)->first();
+        $data = DB::table('table_giangvien_hopdong')
+            ->leftJoin('table_giangvien_dm_loaicanbo', 'table_giangvien_hopdong.loaicanbo_id', 'table_giangvien_dm_loaicanbo.key')
+            ->select(['table_giangvien_hopdong.*', 'table_giangvien_dm_loaicanbo.loaicanbo'])
+            ->where(['ma_gv' => $ma_gv, 'trangthai' => 1])
+            ->get();
+        $loaicanbo = DB::table('table_giangvien_dm_loaicanbo')->get();
+        return view('Admin.HRM.QuaTrinh.HopDong')->with([
+            'giangvien' => $giangvien,
+            'data' => $data,
+            'loaicanbo' => $loaicanbo
+        ]);
+    } //OK
+    function hopDongGetData(Request $request, $ma_gv= null){
+        $data = DB::table('table_giangvien_hopdong')->where('id', $request->id)->first();
+        return json_encode($data);
+    } //OK
+    function hopDongThemPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Hopdong'];
+        $data['created_at'] = now();
+        $data['trangthai'] = 1;
+        $insert = DB::table('table_giangvien_hopdong')->insert($data);
+        dd($insert);
+    } //OK
+    function hopDongSuaPost(Request $request, $ma_gv= null){
+        $data = $request['data']['Hopdong'];
+        unset($data['ma_gv']);
+        $data['updated_at'] = now();
+        $update = DB::table('table_giangvien_hopdong')->where('id', $request->id)->update($data);
+        dd($update);
+    } //OK
+    function hopDongXoa(Request $request, $ma_gv = null){
+        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $delete = DB::table('table_giangvien_hopdong')->where('id', $request->id)->update($data);
         dd($delete);
     } //OK
 }

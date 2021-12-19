@@ -1,7 +1,4 @@
 @extends('layout.admin_layout')
-@section('title', 'Danh sách biên bản')
-@section('header')
-@endsection
 @section('body')
     <div class="row">
         <div class="col-md-3">

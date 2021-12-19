@@ -108,11 +108,11 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
                 Route::get('sua', 'AdHrmController@suaNhanVienView')->name('ad.hrm.nhanvien.sua');
                 Route::post('sua', 'AdHrmController@suaNhanVienPost')->name('ad.hrm.nhanvien.sua.post');
                 //Cong tac nuoc ngoai
-                Route::get('cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiView')->name('ad.hrm.congtacnuocngoai.view');
-                Route::get('getdata-cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiGetData')->name('ad.hrm.congtacnuocngoai.getdata');
-                Route::post('them-cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiThemPost')->name('ad.hrm.congtacnuocngoai.them.post');
-                Route::post('sua-cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiSuaPost')->name('ad.hrm.congtacnuocngoai.sua.post');
-                Route::get('xoa-cong-tac-nuoc-ngoai', 'AdHrmController@congTacNuocNgoaiXoa')->name('ad.hrm.congtacnuocngoai.xoa');
+                Route::get('cong-tac-ngoai-nuoc', 'AdHrmController@congTacNuocNgoaiView')->name('ad.hrm.congtacnuocngoai.view');
+                Route::get('getdata-cong-tac-ngoai-nuoc', 'AdHrmController@congTacNuocNgoaiGetData')->name('ad.hrm.congtacnuocngoai.getdata');
+                Route::post('them-cong-tac-ngoai-nuoc', 'AdHrmController@congTacNuocNgoaiThemPost')->name('ad.hrm.congtacnuocngoai.them.post');
+                Route::post('sua-cong-tac-ngoai-nuoc', 'AdHrmController@congTacNuocNgoaiSuaPost')->name('ad.hrm.congtacnuocngoai.sua.post');
+                Route::get('xoa-cong-tac-ngoai-nuoc', 'AdHrmController@congTacNuocNgoaiXoa')->name('ad.hrm.congtacnuocngoai.xoa');
                 //Cong tac
                 Route::get('cong-tac', 'AdHrmController@congTacView')->name('ad.hrm.congtac.view');
                 Route::get('getdata-cong-tac', 'AdHrmController@congTacGetData')->name('ad.hrm.congtac.getdata');
@@ -137,6 +137,48 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
                 Route::post('them-ky-luat', 'AdHrmController@kyLuatThemPost')->name('ad.hrm.kyluat.them.post');
                 Route::post('sua-ky-luat', 'AdHrmController@kyLuatSuaPost')->name('ad.hrm.kyluat.sua.post');
                 Route::get('xoa-ky-luat', 'AdHrmController@kyLuatXoa')->name('ad.hrm.kyluat.xoa');
+                //Dao tao
+                Route::get('dao-tao', 'AdHrmController@daoTaoView')->name('ad.hrm.daotao.view');
+                Route::get('getdata-daotao', 'AdHrmController@daoTaoGetData')->name('ad.hrm.daotao.getdata');
+                Route::post('them-dao-tao', 'AdHrmController@daoTaoThemPost')->name('ad.hrm.daotao.them.post');
+                Route::post('sua-dao-tao', 'AdHrmController@daoTaoSuaPost')->name('ad.hrm.daotao.sua.post');
+                Route::get('xoa-dao-tao', 'AdHrmController@daoTaoXoa')->name('ad.hrm.daotao.xoa');
+                //Boi duong
+                Route::get('boi-duong', 'AdHrmController@boiDuongView')->name('ad.hrm.boiduong.view');
+                Route::get('getdata-boiduong', 'AdHrmController@boiDuongGetData')->name('ad.hrm.boiduong.getdata');
+                Route::post('them-boi-duong', 'AdHrmController@boiDuongThemPost')->name('ad.hrm.boiduong.them.post');
+                Route::post('sua-boi-duong', 'AdHrmController@boiDuongSuaPost')->name('ad.hrm.boiduong.sua.post');
+                Route::get('xoa-boi-duong', 'AdHrmController@boiDuongXoa')->name('ad.hrm.boiduong.xoa');
+                //Than nhan trong nuoc
+                Route::get('than-nhan-trong-nuoc', 'AdHrmController@thanNhanTrongNuocView')->name('ad.hrm.thannhantrongnuoc.view');
+                Route::get('getdata-thannhantrongnuoc', 'AdHrmController@thanNhanTrongNuocGetData')->name('ad.hrm.thannhantrongnuoc.getdata');
+                Route::post('them-than-nhan-trong-nuoc', 'AdHrmController@thanNhanTrongNuocThemPost')->name('ad.hrm.thannhantrongnuoc.them.post');
+                Route::post('sua-than-nhan-trong-nuoc', 'AdHrmController@thanNhanTrongNuocSuaPost')->name('ad.hrm.thannhantrongnuoc.sua.post');
+                Route::get('xoa-than-nhan-trong-nuoc', 'AdHrmController@thanNhanTrongNuocXoa')->name('ad.hrm.thannhantrongnuoc.xoa');
+                //Than nhan nuoc ngoai
+                Route::get('than-nhan-ngoai-nuoc', 'AdHrmController@thanNhanNgoaiNuocView')->name('ad.hrm.thannhanngoainuoc.view');
+                Route::get('getdata-thannhanngoainuoc', 'AdHrmController@thanNhanNgoaiNuocGetData')->name('ad.hrm.thannhanngoainuoc.getdata');
+                Route::post('them-than-nhan-ngoai-nuoc', 'AdHrmController@thanNhanNgoaiNuocThemPost')->name('ad.hrm.thannhanngoainuoc.them.post');
+                Route::post('sua-than-nhan-ngoai-nuoc', 'AdHrmController@thanNhanNgoaiNuocSuaPost')->name('ad.hrm.thannhanngoainuoc.sua.post');
+                Route::get('xoa-than-nhan-ngoai-nuoc', 'AdHrmController@thanNhanNgoaiNuocXoa')->name('ad.hrm.thannhanngoainuoc.xoa');
+                //Tham gia llvt
+                Route::get('tham-gia-llvt', 'AdHrmController@thamGiaLlvtView')->name('ad.hrm.thamgiallvt.view');
+                Route::get('getdata-thamgiallvt', 'AdHrmController@thamGiaLlvtGetData')->name('ad.hrm.thamgiallvt.getdata');
+                Route::post('them-tham-gia-llvt', 'AdHrmController@thamGiaLlvtThemPost')->name('ad.hrm.thamgiallvt.them.post');
+                Route::post('sua-tham-gia-llvt', 'AdHrmController@thamGiaLlvtSuaPost')->name('ad.hrm.thamgiallvt.sua.post');
+                Route::get('xoa-tham-gia-llvt', 'AdHrmController@thamGiaLlvtXoa')->name('ad.hrm.thamgiallvt.xoa');
+                //Huong luong
+                Route::get('huong-luong', 'AdHrmController@huongLuongView')->name('ad.hrm.huongluong.view');
+                Route::get('getdata-huongluong', 'AdHrmController@huongLuongGetData')->name('ad.hrm.huongluong.getdata');
+                Route::post('them-huong-luong', 'AdHrmController@huongLuongThemPost')->name('ad.hrm.huongluong.them.post');
+                Route::post('sua-huong-luong', 'AdHrmController@huongLuongSuaPost')->name('ad.hrm.huongluong.sua.post');
+                Route::get('xoa-huong-luong', 'AdHrmController@huongLuongXoa')->name('ad.hrm.huongluong.xoa');
+                //Hop dong
+                Route::get('hop-dong', 'AdHrmController@hopDongView')->name('ad.hrm.hopdong.view');
+                Route::get('getdata-hopdong', 'AdHrmController@hopDongGetData')->name('ad.hrm.hopdong.getdata');
+                Route::post('them-hop-dong', 'AdHrmController@hopDongThemPost')->name('ad.hrm.hopdong.them.post');
+                Route::post('sua-hop-dong', 'AdHrmController@hopDongSuaPost')->name('ad.hrm.hopdong.sua.post');
+                Route::get('xoa-hop-dong', 'AdHrmController@hopDongXoa')->name('ad.hrm.hopdong.xoa');
             });
         });
     });

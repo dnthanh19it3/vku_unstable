@@ -136,7 +136,7 @@
                     <thead>
                     <tr class="headings">
                         <th>
-                            <div class="icheckbox_flat-green" style="position: relative;"><input type="checkbox" id="check-all" class="flat" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                           <input type="checkbox" id="check-all" class="flat">
                         </th>
                         <th class="column-title">STT </th>
                         <th class="column-title">Từ ngày </th>
@@ -159,7 +159,7 @@
                         @forelse($data as $key => $item)
                             <tr class="even pointer">
                                 <td class="a-center ">
-                                    <div class="icheckbox_flat-green" style="position: relative;"><input type="checkbox" class="flat" name="table_records" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                                    <input type="checkbox" class="flat" name="table_records">
                                 </td>
                                 <td class=" ">{{$i++}}</td>
                                 <td class=" ">{{$item->tungay}}</td>

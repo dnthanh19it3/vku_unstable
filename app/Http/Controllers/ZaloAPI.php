@@ -35,7 +35,8 @@ class ZaloAPI extends Controller
         return view("Khach.Zalo.LinkPage");
     }
     public function linkPagePost(Request $request){
-        $phone = $request->phone;
+        $phone = (int) $request->phone;
+
         $checkSinhVien = DB::table('table_sinhvien')
             ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
             ->where('table_sinhvien_chitiet.dienthoai', $phone)
@@ -205,18 +206,60 @@ class ZaloAPI extends Controller
         }
     }
 
-    function traCuuDiem($uid, $masv, $hocky)
-    {
-        $diem_t4 = "http://daotao.vku.udn.vn/api/diem_sv?namhoc=4&hocky=2&masv=$masv";
-        $diem_t10 = "http://daotao.vku.udn.vn/api/diem_sv_t10?namhoc=4&hocky=2&masv=$masv";
+    function  getHocKy(){
+        // Hiện hành
+        $output= null;
 
         $client = new Client();
+        $hocky_url = "http://daotao.vku.udn.vn/api/get_namhochocky";
+        $response_hocky = $client->get($hocky_url)->getBody()->getContents();
+        $hocky_array = json_decode($response_hocky);
+        $output = array_multisort(array_column($hocky_array, 'nambatdau'),  SORT_ASC,
+            array_column($hocky_array, 'hocky'), SORT_ASC,
+            $hocky_array);
+        foreach ($hocky_array as $key => $item){
+            if($item->hienhanh == 1){
+                $tam = $hocky_array[$key - 1];
+                if($tam->hocky == 3){
+                    $output = $hocky_array[$key - 2];
+                    break;
+                } else {
+                    $output = $tam;
+                    break;
+                }
+            }
+        }
+        return $output;
+    }
+
+    function traCuuDiem($uid, $masv)
+    {
+        $hocky = ZaloAPI::getHocKy();
+        ZaloAPI::getHocKy();
+        $tips = "";
+        $hocluc = "";
+        $client = new Client();
+        $diem_t4 = "http://daotao.vku.udn.vn/api/diem_sv?namhoc=$hocky->id&hocky=$hocky->hocky&masv=$masv";
+        $diem_t10 = "http://daotao.vku.udn.vn/api/diem_sv_t10?namhoc=$hocky->id&hocky=$hocky->hocky&masv=$masv";
         $response_t4 = $client->get($diem_t4)->getBody()->getContents();
         $response_t10 = $client->get($diem_t10)->getBody()->getContents();
 
-        $diem = "Kết quả học tập của sinh viên $masv:\nThang 4: $response_t4\nThang 10: $response_t10";
+
+
+
+        $diem = "🔔🔔🔔 Kết quả học tập của bạn trong học kỳ $hocky->hocky năm học $hocky->nambatdau - $hocky->namketthuc là:\n🔟 Thang 4: $response_t4\n4️⃣Thang 10: $response_t10";
+
+        $response_t4 = (float) $response_t4;
+        if($response_t4 > 3.19){
+            $tips = "😇 Bạn đạt học lực giỏi trong kì này. Chúc bạn luôn dồi dào sức khoẻ và luôn đạt được thành tích cao trong học tập và... suôn sẻ trong tình duyên nhé!";
+        } elseif ($response_t4 > 2.2 && $diem_t4 <3.2){
+            $tips = "😎 Bạn đạt học lực khá trong kì này. Chúc bạn luôn dồi dào sức khoẻ và và đạt được thành tích cao hơn trong tương lại nhé";
+        } elseif ($response_t4 < 2.2){
+            $tips = "😂 Bạn đạt được học lực trung bình trong học kì này. Bạn cần cố gắng nhiều hơn để đạt được thành tích tốt trong học kì tiếp theo nhé";
+        }
 
         $this->guiTinNhanText($uid, $diem);
+        $this->guiTinNhanText($uid, $tips);
     }
 
     //Helper
@@ -241,7 +284,7 @@ class ZaloAPI extends Controller
                 case "#tracuudiem":
                     $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
                     if($sinhvien != null){
-                        $this->traCuuDiem($zalo_uid, $sinhvien->masv, 1);
+                        $this->traCuuDiem($zalo_uid, $sinhvien->masv);
                     } else {
                         $this->guilienKetTaiKhoan($zalo_uid);
                     }
@@ -252,6 +295,9 @@ class ZaloAPI extends Controller
                 case "#tracuuhocphi":
                     $this->guiTinNhanText($zalo_uid, "Tính năng đang được phát triển!");
                     break;
+                case "#tracuulichthi":
+                    $this->guiTinNhanText($zalo_uid, "Tính năng đang được phát triển!");
+                    break;
                 case "#lienket":
                     $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
                     if($sinhvien != null){
@@ -260,17 +306,44 @@ class ZaloAPI extends Controller
                         $this->guilienKetTaiKhoan($zalo_uid);
                     }
                     break;
+                case "#huongdan":
+
+                    break;
             }
+        } else {
+            $request_result = ZaloAPI::aiSolve($message);
+            $output = null;
+            if($request_result){
+                if($request_result->command){
+                    $output = key((array) $request_result->response[0]);
+                    $data->message->text = $output;
+                    ZaloAPI::userSendText($data);
+                }
+            } else {
+                $output = "Đối thoại";
+                ZaloAPI::guiTinNhanText($zalo_uid, "Đối thoại");
+            }
+//            ZaloAPI::guiTinNhanText($zalo_uid, $output);
         }
     }
 
+
+    function  aiSolve($msg){
+        // Hiện hành
+        $output= null;
+
+        $client = new Client();
+        $client_url = "http://localhost:5000/chatbot?msg=" . $msg;
+        $response_raw = $client->get($client_url)->getBody()->getContents();
+        $predict_result = json_decode($response_raw);
+        return $predict_result;
+    }
 
     function hook(Request $request)
     {
         $data = json_decode($request->getContent());
         $event = $data->event_name;
 
-        $this->writeDebugHook(json_encode($data));
 
         switch ($event) {
             case "follow":
@@ -293,6 +366,6 @@ class ZaloAPI extends Controller
 //        return response(200);
     }
     function test(){
-        $this->traCuuDiem(null, "19IT195", 1);
+        $this->traCuuDiem(null, "19IT195");
     }
 }

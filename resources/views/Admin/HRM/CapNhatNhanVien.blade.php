@@ -1042,7 +1042,7 @@ We need to register the required plugins to do image manipulation and previewing
                         alert('Có lỗi xảy ra');
                     }
                 });
-            })
+            });
         });
     </script>
     <script>

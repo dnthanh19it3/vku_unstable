@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-12 demuc-wrapper bg-white p-3 mb-3">
             <div class="title">
-                <h5 class="p-0">quá trình công tác</h5>
+                <h5 class="p-0">Quan hệ gia đình</h5>
                 <hr/>
             </div>
             <div class="body">
@@ -11,10 +11,7 @@
                     <div class="col-md-12">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button class="btn btn-primary" onclick="addModal('#modal_themsua', '#form_themsua',
-                                    '{{route('ad.hrm.congtac.them.post', ['ma_gv' => $giangvien->ma_gv])}}')"><i class="fa fa-plus-circle mr-2"></i>Thêm</button>
-                            <button class="btn btn-primary" onclick="editModal('#modal_themsua', '#form_themsua',
-                                    '{{route('ad.hrm.congtacnuocngoai.sua.post', ['ma_gv' => $giangvien->ma_gv])}}',
-                                    '{{route('ad.hrm.congtacnuocngoai.getdata', ['ma_gv' => $giangvien->ma_gv])}}')"><i class="fa fa-pencil mr-2"></i>Sửa</button>
+                                    '{{route('ad.hrm.thannhanngoainuoc.them.post', ['ma_gv' => $giangvien->ma_gv])}}')"><i class="fa fa-plus-circle mr-2"></i>Thêm</button>
                             <button class="btn btn-danger" onclick="deleteModal('#modal_xoa', '{{route('ad.hrm.congtacnuocngoai.them.post', ['ma_gv' => $giangvien->ma_gv])}}')"><i class="fa fa-times-circle mr-2"></i>Xoá</button>
                         </div>
                         <!-- Modal them sua -->
@@ -23,61 +20,68 @@
                                 <form class="modal-content" id="form_themsua" method="post" action="">
                                     {{ csrf_field() }}
                                     <div class="modal-header">
-                                        <h4 class="modal-title"><span id="modalLabel_themsua"></span> quá trình công tác</h4>
+                                        <h4 class="modal-title"><span id="modalLabel_themsua"></span> quan hệ gia đình</h4>
                                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-content">
-                                            <input type="hidden" name="data[Quatrinhcongtac][ma_gv]" value="{{$giangvien->ma_gv}}" id="ma_gv">
+                                            <input type="hidden" name="data[Thannhanngoainuoc][ma_gv]" id="ma_gv" value="{{$giangvien->ma_gv}}">
                                             <div class="form-row form-group">
                                                 <label class="col-3 col-form-label">Tên nhân viên:</label>
                                                 <div class="col-9">
-                                                    <input type="email" id="ten_gv" class="form-control rounded" disabled="" value="{{$giangvien->hodem . " " . $giangvien->ten}}">
+                                                    <input type="email" class="form-control rounded" disabled="" value="{{$giangvien->hodem . " " . $giangvien->ten}}" id="ten_gv">
                                                 </div>
                                             </div>
                                             <div class="form-row form-group">
-                                                <label for="ngaybatdau" class="col-3 col-form-label">Từ ngày <span class="warning"> *</span>:</label>
+                                                <label for="QuanhegiadinhHoten" class="col-3 col-form-label">Họ tên <span class="warning"> *</span>:</label>
                                                 <div class="col-9">
-                                                    <input type="date" name="data[Quatrinhcongtac][tungay]" id="tungay" value="" class="tungay_qtct form-control rounded hasDatepicker valid">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-row form-group">
-                                                <label for="ngayketthuc" class="col-3 col-form-label">Đến ngày <span class="warning"> *</span>:</label>
-                                                <div class="col-9">
-                                                    <input type="date" name="data[Quatrinhcongtac][denngay]" id="denngay" value="" class="denngay_qtct form-control rounded hasDatepicker valid">
-                                                </div>
-                                            </div>
-                                            <div class="form-row form-group">
-                                                <label for="ngayketthuc" class="col-3 col-form-label">Ngày ký QĐ:</label>
-                                                <div class="col-9">
-                                                    <input type="date" name="data[Quatrinhcongtac][ngayki]" id="ngayki" value="" class="denngay_qtct form-control rounded hasDatepicker valid">
+                                                    <input name="data[Thannhanngoainuoc][hoten]" id="hoten" class="ht_qhgd form-control rounded" maxlength="255" type="text">
                                                 </div>
                                             </div>
 
                                             <div class="form-row form-group">
-                                                <label for="QuatrinhcongtacQuyetdinh" class="col-3 col-form-label">Theo quyết định số:</label>
+                                                <label for="QuanhegiadinhDmquanhegiadinhId" class="col-3 col-form-label">Quan hệ <span class="warning"> *</span>:</label>
                                                 <div class="col-9">
-                                                    <input name="data[Quatrinhcongtac][quyetdinh]" id="quyetdinh" class="quyetdinh_qtct form-control rounded" maxlength="255" type="text">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-row form-group">
-                                                <label for="QuatrinhcongtacKeodai" class="col-3 col-form-label">Kéo dài công tác:</label>
-                                                <!--                   <input type="checkbox" name="data[Quatrinhcongtac][keodaitgct]" class="actived_tgct" value="1" id="keodaitgct">-->
-                                                <div class="col-9">
-                                                    <select id="QuatrinhcongtacKeodai" class="form-control rounded" name="data[Quatrinhcongtac][keodaitgct]" id="keodaitgct">
-                                                        <option value="1">Có</option>
-                                                        <option value="0">Không</option>
+                                                    <select name="data[Thannhanngoainuoc][quanhegiadinh_id]" id="quanhegiadinh_id" class="qh_qhgd form-control rounded form-control rounded-sm">
+                                                        <option value="">Chọn</option>
+                                                        @foreach($quanhegiadinh as $item)<option value="{{$item->key}}"}>{{$item->quanhegiadinh}}</option>@endforeach<br/>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="form-row form-group">
-                                                <label for="QuatrinhcongtacNoidung" class="col-3 col-form-label">Nội dung <span class="warning"> *</span>:</label>
+                                                <label for="QuanhegiadinhNamsinh" class="col-3 col-form-label">Năm sinh <span class="warning"> *</span>:</label>
                                                 <div class="col-9">
-                                                    <textarea name="data[Quatrinhcongtac][noidung]" id="noidung" class="noidung_qtct form-control rounded" rows="3"></textarea>
+                                                    <input name="data[Thannhanngoainuoc][namsinh]" id="namsinh" class="ns_qhgd form-control rounded" maxlength="4" type="number">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group form-row">
+                                                <label for="ThannhannuocngoaiNghenghiep" class="col-form-label col-3">Nghề nghiệp:</label>
+                                                <div class="col-9">
+                                                    <input name="data[Thannhanngoainuoc][nghenghiep]" id="nghenghiep" class="nn_tnnn form-control rounded" maxlength="255" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group form-row">
+                                                <label for="ThannhannuocngoaiQuocgia" class="col-form-label col-3">Quốc gia định cư:</label>
+                                                <div class="col-9">
+                                                    <input name="data[Thannhanngoainuoc][quocgia]" id="quocgia" class="qg_tnnn form-control" rounded maxlength="255" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group form-row">
+                                                <label for="ThannhannuocngoaiNamdinhcu" class="col-form-label col-3">Năm định cư:</label>
+                                                <div class="col-9">
+                                                    <input name="data[Thannhanngoainuoc][namdinhcu]" id="namdinhcu" class="ndc_tnnn form-control rounded" maxlength="255" type="text">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group form-row">
+                                                <label for="ThannhannuocngoaiQuoctich" class="col-form-label col-3">Quốc tịch:</label>
+                                                <div class="col-9">
+                                                    <input name="data[Thannhanngoainuoc][quoctich]" id="quoctich" class="qt_tnnn form-control rounded" maxlength="255" type="text">
                                                 </div>
                                             </div>
                                         </div>
@@ -95,7 +99,7 @@
                                 <form class="modal-content" id="form_xoa" method="post" action="">
                                     {{ csrf_field() }}
                                     <div class="modal-header">
-                                        <h4 class="modal-title"><span id="modalLabel_xoa"></span> quá trình công tác</h4>
+                                        <h4 class="modal-title"><span id="modalLabel_xoa"></span> quan hệ gia đình</h4>
                                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                                         </button>
                                     </div>
@@ -118,12 +122,13 @@
                            <input type="checkbox" id="check-all" class="flat">
                         </th>
                         <th class="column-title">STT </th>
-                        <th class="column-title">Từ ngày </th>
-                        <th class="column-title">Đến ngày </th>
-                        <th class="column-title">Ngày kí quyết định </th>
-                        <th class="column-title">Quyết định số </th>
-                        <th class="column-title">Kéo dài công tác </th>
-                        <th class="column-title">Nội dung </th>
+                        <th class="column-title">Họ tên </th>
+                        <th class="column-title">Quan hệ </th>
+                        <th class="column-title">Năm sinh </th>
+                        <th class="column-title">Quốc gia định cư</th>
+                        <th class="column-title">Năm định cư</th>
+                        <th class="column-title">Quốc tịch</th>
+                        <th class="column-title">Nghề nghiệp</th>
                         <th class="column-title no-link last"><span class="nobr">Thao tác</span>
                         </th>
                         <th class="bulk-actions" colspan="7">
@@ -139,17 +144,18 @@
                                     <input type="checkbox" class="flat" name="table_records">
                                 </td>
                                 <td class=" ">{{$i++}}</td>
-                                <td class=" ">{{$item->tungay}}</td>
-                                <td class=" ">{{$item->denngay}}</td>
-                                <td class=" ">{{$item->ngayki}}</td>
-                                <td class=" ">{{$item->quyetdinh}}</td>
-                                <td class=" ">{{$item->keodaitgct ? "Có" : "Không"}}</td>
-                                <td class=" ">{{$item->noidung}}</td>
+                                <td class=" ">{{$item->hoten}}</td>
+                                <td class=" ">{{$item->quanhegiadinh}}</td>
+                                <td class=" ">{{$item->namsinh}}</td>
+                                <td class=" ">{{$item->quocgia}}</td>
+                                <td class=" ">{{$item->namdinhcu}}</td>
+                                <td class=" ">{{$item->quoctich}}</td>
+                                <td class=" ">{{$item->nghenghiep}}</td>
                                 <td class=" last">
                                     <button class="btn btn-outline-blue btn-sm btn-primary text-white" onclick="editModal('#modal_themsua', '#form_themsua',
-                                            '{{route('ad.hrm.congtac.sua.post', ['ma_gv' => $giangvien->ma_gv, 'id' => $item->id])}}',
-                                            '{{route('ad.hrm.congtac.getdata', ['ma_gv' => $giangvien->ma_gv, 'id' => $item->id])}}')"><i class="fa fa-pencil"></i></button>
-                                    <button class="btn btn-outline-blue btn-sm btn-danger text-white" onclick="deleteModal('#modal_xoa', '{{route('ad.hrm.congtac.xoa', ['ma_gv' => $giangvien->ma_gv, 'id' => $item->id])}}')"><i class="fa fa-times-circle"></i></button>
+                                            '{{route('ad.hrm.thannhanngoainuoc.sua.post', ['ma_gv' => $giangvien->ma_gv, 'id' => $item->id])}}',
+                                            '{{route('ad.hrm.thannhanngoainuoc.getdata', ['ma_gv' => $giangvien->ma_gv, 'id' => $item->id])}}')"><i class="fa fa-pencil"></i></button>
+                                    <button class="btn btn-outline-blue btn-sm btn-danger text-white" onclick="deleteModal('#modal_xoa', '{{route('ad.hrm.thannhanngoainuoc.xoa', ['ma_gv' => $giangvien->ma_gv, 'id' => $item->id])}}')"><i class="fa fa-times-circle"></i></button>
                                 </td>
                             </tr>
                         @empty
@@ -173,13 +179,14 @@
         }
         function deleteModal(modal, delete_url) {
             $(modal).modal();
-            $('#delete_confirm').attr('href', delete_url)
+            $('#delete_confirm').attr('href', delete_url);
             document.getElementById('modalLabel_xoa').innerHTML = "Xoá ";
         }
         function editModal(modal, form, post_url, getdata_url) {
             $(modal).modal();
             $(form).attr('action', post_url);
             document.getElementById('modalLabel_themsua').innerHTML = "Sửa ";
+            $('#myModalLabel').innerHTML = "Sửa " + $('#myModalLabel').innerHTML;
 
             $.ajax({
                 url: getdata_url,
@@ -196,20 +203,10 @@
         }
         function customizeForm(data){
             console.log(data);
-            console.log('Set data for edit')
-            $('#tungay').val(data.tungay);
-            $('#denngay').val(data.denngay);
-            $('#quyetdinh').val(data.quyetdinh);
-            $('#ngayki').val(data.ngayki);
-            $('#noidung').val(data.noidung);
-            $('#keodaitgct').val(data.keodaitgct);
-
-            if(data.hoanthanh){
-                $('#hoanthanh').prop("checked", true);
-
-            } else {
-                $('#hoanthanh').prop("checked", false);
-
+            console.log('Set data for edit');
+            let form_input = $('#form_themsua').find('textarea, input, select').not('#ma_gv, #ten_gv, _token, input[name="_token"]');
+            for(i = 0; i < form_input.length; i++){
+                $('#' + form_input[i].id).val(data[form_input[i].id]);
             }
             // $('#').val(data.);
         }
@@ -217,6 +214,9 @@
 @endsection
 @section('custom-css')
     <style>
+        .last {
+            width: 120px;
+        }
         /*
      * FilePond Custom Styles
      */

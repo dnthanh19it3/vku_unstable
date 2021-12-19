@@ -21,6 +21,7 @@
                     <div>
                         <input type="text" class="form-control " placeholder="Số điện thoại" required="" name="phone"/>
                     </div>
+                    <div><span style="color: red">*Sử dụng số điện thoại đã khai báo trên hệ thống nhà trường để liên kết với Zalo OA của VKU</span> </div>
                     <div>
                         <button type="submit" class="btn btn-success">Liên kết</button>
                     </div>
