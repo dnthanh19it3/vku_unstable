@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use mysql_xdevapi\Exception;
 use Zalo\Builder\MessageBuilder;
 use Zalo\Exceptions\ZaloOtherException;
+use Zalo\Exceptions\ZaloSDKException;
 use Zalo\Zalo;
 use Zalo\ZaloEndPoint;
 use GuzzleHttp\Client;
@@ -137,9 +138,9 @@ class ZaloAPI extends Controller
 
     function getThongTinNguoiDung($phone)
     {
-        $data = ['data' => json_encode(array(
-            'user_id' => $phone
-        ))];
+        $data = [
+            'data' => json_encode(array('user_id' => $phone))
+        ];
         $response = $this->zalo->get(ZaloEndpoint::API_OA_GET_USER_PROFILE, self::ZALO_ACCESS_TOKEN, $data);
         $user_info = $response->getDecodedBody();
 
@@ -205,54 +206,53 @@ class ZaloAPI extends Controller
             $this->guiTinNhanText($user_info['user_id'], "Bạn đã liên kết thành công với Cổng thông tin VKU! Từ bây giờ bạn có thể thực hiện được các chức năng như");
         }
     }
-
-    function  getHocKy(){
+    /**
+     *
+     */
+    function  getHocKy($hienhanh){
         // Hiện hành
         $output= null;
-
         $client = new Client();
         $hocky_url = "http://daotao.vku.udn.vn/api/get_namhochocky";
         $response_hocky = $client->get($hocky_url)->getBody()->getContents();
         $hocky_array = json_decode($response_hocky);
-        $output = array_multisort(array_column($hocky_array, 'nambatdau'),  SORT_ASC,
-            array_column($hocky_array, 'hocky'), SORT_ASC,
-            $hocky_array);
-        foreach ($hocky_array as $key => $item){
-            if($item->hienhanh == 1){
-                $tam = $hocky_array[$key - 1];
-                if($tam->hocky == 3){
-                    $output = $hocky_array[$key - 2];
-                    break;
-                } else {
-                    $output = $tam;
-                    break;
-                }
+
+        if($hocky_array){
+            if($hienhanh){
+                foreach ($hocky_array as $key => $item){
+                    if($item->hienhanh == 1){
+                        return [$item];
+                    }                }
+            } else {
+                return $hocky_array;
             }
         }
-        return $output;
+
+
+        return null;
     }
 
-    function traCuuDiem($uid, $masv)
+    function traCuuDiem($uid, $masv, $namhoc = null, $hocky = null)
     {
-        $hocky = ZaloAPI::getHocKy();
-        ZaloAPI::getHocKy();
         $tips = "";
         $hocluc = "";
         $client = new Client();
-        $diem_t4 = "http://daotao.vku.udn.vn/api/diem_sv?namhoc=$hocky->id&hocky=$hocky->hocky&masv=$masv";
-        $diem_t10 = "http://daotao.vku.udn.vn/api/diem_sv_t10?namhoc=$hocky->id&hocky=$hocky->hocky&masv=$masv";
+
+        $diem_t4 = "http://daotao.vku.udn.vn/api/diem_sv?namhoc=$namhoc&hocky=$hocky&masv=$masv";
+        $diem_t10 = "http://daotao.vku.udn.vn/api/diem_sv_t10?namhoc=$namhoc&hocky=$hocky&masv=$masv";
+
         $response_t4 = $client->get($diem_t4)->getBody()->getContents();
         $response_t10 = $client->get($diem_t10)->getBody()->getContents();
 
 
 
 
-        $diem = "🔔🔔🔔 Kết quả học tập của bạn trong học kỳ $hocky->hocky năm học $hocky->nambatdau - $hocky->namketthuc là:\n🔟 Thang 4: $response_t4\n4️⃣Thang 10: $response_t10";
+        $diem = "🔔🔔🔔 Kết quả học tập của bạn là:\n🔟 Thang 4: " . $response_t4 . "\n" . "4️⃣Thang 10: " . $response_t10;
 
         $response_t4 = (float) $response_t4;
         if($response_t4 > 3.19){
-            $tips = "😇 Bạn đạt học lực giỏi trong kì này. Chúc bạn luôn dồi dào sức khoẻ và luôn đạt được thành tích cao trong học tập và... suôn sẻ trong tình duyên nhé!";
-        } elseif ($response_t4 > 2.2 && $diem_t4 <3.2){
+            $tips = "😇 Bạn đạt học lực giỏi trong kì này. Chúc bạn luôn dồi dào sức khoẻ và luôn đạt được thành tích cao trong học tập";
+        } elseif ($response_t4 > 2.2 && $diem_t4 < 3.2){
             $tips = "😎 Bạn đạt học lực khá trong kì này. Chúc bạn luôn dồi dào sức khoẻ và và đạt được thành tích cao hơn trong tương lại nhé";
         } elseif ($response_t4 < 2.2){
             $tips = "😂 Bạn đạt được học lực trung bình trong học kì này. Bạn cần cố gắng nhiều hơn để đạt được thành tích tốt trong học kì tiếp theo nhé";
@@ -260,6 +260,28 @@ class ZaloAPI extends Controller
 
         $this->guiTinNhanText($uid, $diem);
         $this->guiTinNhanText($uid, $tips);
+    }
+    function traCuuDiemShowList($uid){
+        $hocky = $this->getListHocKy();
+        if($hocky != null){
+            foreach ($hocky as $key => $item){
+                // build data
+                $msgBuilder = new MessageBuilder('text');
+                $msgBuilder->withUserId($uid);
+
+                $msgBuilder->withText('Năm học ' . $item['namhoc']);
+
+                foreach ($item['hocky'] as $key2 => $item2){
+                    $msgBuilder->withButton("Học kỳ $item2->hocky", $msgBuilder->buildActionQueryHide("#tracuudiem|$item2->id|$item2->hocky"));
+                }
+
+
+                $msgText = $msgBuilder->build();
+                // send request
+                $response = $this->zalo->post(ZaloEndpoint::API_OA_SEND_MESSAGE, self::ZALO_ACCESS_TOKEN, $msgText);
+                $result = $response->getDecodedBody(); // result
+            }
+        }
     }
 
     //Helper
@@ -278,13 +300,23 @@ class ZaloAPI extends Controller
         $zalo_uid = $data->sender->id;
         $message = $data->message->text;
 
-
         if(str_starts_with($message, '#')){
             switch ($message){
-                case "#tracuudiem":
+                case str_starts_with($message, "#tracuudiem"):
                     $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
+                    $hocky = null;
                     if($sinhvien != null){
-                        $this->traCuuDiem($zalo_uid, $sinhvien->masv);
+                        $chitiet = explode("|", $message);
+                        if(count($chitiet) == 3){
+                            $this->traCuuDiem($zalo_uid, $sinhvien->masv, $chitiet[1], $chitiet[2]);
+                        } elseif (count($chitiet) == 2){
+                            $hocky = $this->getHocKy(1)[0];
+                            $this->traCuuDiem($zalo_uid, $sinhvien->masv, $hocky->id, $hocky->hocky);
+                        } elseif (count($chitiet) == 1){
+                            $this->guiTinNhanText($zalo_uid, "Mời bạn chọn học kì hiện tại");
+                            $this->traCuuDiemShowList($zalo_uid);
+                        }
+
                     } else {
                         $this->guilienKetTaiKhoan($zalo_uid);
                     }
@@ -296,7 +328,7 @@ class ZaloAPI extends Controller
                     $this->guiTinNhanText($zalo_uid, "Tính năng đang được phát triển!");
                     break;
                 case "#tracuulichthi":
-                    $this->guiTinNhanText($zalo_uid, "Tính năng đang được phát triển!");
+                    $this->guiTinNhanText($zalo_uid, "Tính năng tra cứu lịch thi đang được phát triển!");
                     break;
                 case "#lienket":
                     $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
@@ -312,60 +344,98 @@ class ZaloAPI extends Controller
             }
         } else {
             $request_result = ZaloAPI::aiSolve($message);
+            ZaloAPI::guiTinNhanText($zalo_uid, $request_result->response);
+
             $output = null;
             if($request_result){
-                if($request_result->command){
-                    $output = key((array) $request_result->response[0]);
-                    $data->message->text = $output;
+                if($request_result->type){
+                    $predict_result = $request_result->class[0][0];
+                    $data->message->text = $predict_result; //Ouput: Học phí
+                    ZaloAPI::guiTinNhanText($zalo_uid, $data->message->text);
                     ZaloAPI::userSendText($data);
                 }
             } else {
                 $output = "Đối thoại";
                 ZaloAPI::guiTinNhanText($zalo_uid, "Đối thoại");
             }
-//            ZaloAPI::guiTinNhanText($zalo_uid, $output);
         }
     }
 
-
+    // Get dự đoán từ API
     function  aiSolve($msg){
         // Hiện hành
         $output= null;
 
         $client = new Client();
-        $client_url = "http://localhost:5000/chatbot?msg=" . $msg;
+        $client_url = "http://localhost:5000/predict?msg=" . $msg;
         $response_raw = $client->get($client_url)->getBody()->getContents();
         $predict_result = json_decode($response_raw);
         return $predict_result;
     }
-
+    // Nhận data từ hook
     function hook(Request $request)
     {
         $data = json_decode($request->getContent());
         $event = $data->event_name;
 
 
-        switch ($event) {
-            case "follow":
-                $this->followEvent($data);
-                break;
-            case "user_submit_info":
-                $this->userSubmitInfoEvent($data);
-                break;
-            case "user_send_text":
-                $this->userSendText($data);
-                break;
+        try {
+            switch ($event) {
+                case "follow":
+                    $this->followEvent($data);
+                    break;
+                case "user_submit_info":
+                    $this->userSubmitInfoEvent($data);
+                    break;
+                case "user_send_text":
+                    $this->userSendText($data);
+                    break;
+            }
+        } catch (\Exception $e) {
+            $this->writeDebugHook($e);
+            return response(200);
         }
+        return response(200);
+    }
 
-//        try {
-//
-//        } catch (\Exception $e) {
-//            $this->writeDebugHook("Lỗi case Event");
-//            return response(200);
-//        }
-//        return response(200);
+    // Get học kỳ theo nhóm
+    function getListHocKy(){
+        $hocky_list = $this->getHocKy(0);
+        $list_namhoc = [];
+        foreach ($hocky_list as $hocky){
+            $temp = ['namhoc_id' => $hocky->id, "hocky" => [], "namhoc" => $hocky->nambatdau ."-".$hocky->namketthuc];
+            foreach ($hocky_list as $key_con => $hocky_con){
+                if($hocky_con->id == $temp["namhoc_id"]){
+                    array_push($temp["hocky"], $hocky_con);
+                    unset($hocky_list[$key_con]);
+                }
+            }
+            array_push($list_namhoc, $temp);
+        }
+        foreach ($list_namhoc as $key => $item){
+            if(count($item['hocky']) == 0){
+                unset($list_namhoc[$key]);
+            }
+        }
+        return $list_namhoc;
     }
-    function test(){
-        $this->traCuuDiem(null, "19IT195");
+    function test(Request $request){
+        dd($this->getListHocKy());
     }
+
 }
+
+/*
+ //http://daotao.vku.udn.vn/api/get_namhochocky
+
+//http://daotao.vku.udn.vn/api/diem_sv?namhoc=4&hocky=1&masv=17IT044
+
+//http://daotao.vku.udn.vn/api/diem_sv_t10?namhoc=4&hocky=1&masv=17IT044
+
+//http://daotao.vku.udn.vn/api/gvcn_list
+
+//http://daotao.vku.udn.vn/api/gvcn_list/1
+
+//daotao.vku.udn.vn/api/sv/phbinh.17it2@vku.udn.vn
+ *
+ * */

@@ -23,6 +23,17 @@
                </div>
            </div>
        </div>
+        <style>
+            .mb-3{
+                margin-bottom: 1rem;
+            }
+            .p-3{
+                padding: 1rem;
+            }
+            .ml-24{
+                margin-left: 24px;
+            }
+        </style>
         <div class="col-md-7">
             <div class="bg-white p-3">
                 <div id="noidungkhaosat">
@@ -32,7 +43,7 @@
                     <div class="form-group row poll-hover">
                         <div class="col-md-8">
                             <input id="tenmau" name="noidungcauhoi[]" placeholder="Nội dung câu hỏi" type="text" required="required"
-                                   class="form-control rounded">
+                                           class="form-control rounded custom-select">
                         </div>
                         <div class="col-md-3">
                             <select id="loai" name="loai[]" class="custom-select rounded">
@@ -55,6 +66,14 @@
 
             </div>
    </form>
+    <div style="display: none">
+        <div id="questionrow" class="row" style="margin-top: 1rem">
+            <div class="col-lg-8 ml-24">
+                <input id="tempdapan" name="traloitracnghiem[0][]" placeholder="Nội dung câu hỏi" type="text" required="required"
+                       class="form-control rounded mb-3">
+            </div>
+        </div>
+    </div>
 @endsection
 @section('custom-css')
     <link rel="stylesheet" href="{{asset('css/survey.css')}}">

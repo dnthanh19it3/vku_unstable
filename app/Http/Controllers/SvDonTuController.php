@@ -68,8 +68,9 @@ class SvDonTuController extends Controller
             case "number":
                 return 'required|numeric';
             case "datetime":
-                return   'required|date';
-            case "text_area":
+                return 'required|date';
+            case "textarea":
+                return "required";
             case "text":
                 return 'required';
             case "file":
@@ -97,15 +98,18 @@ class SvDonTuController extends Controller
             'hocky' => $namhoc_hocky->hocky,
             'created_at' => now()
         ];
+
         //Lấy format của field để validate
         $fieldWithFormat = $this->dinhDangTruong($request->except('_token'));
         //Xây dựng biểu thức logic validate
         $validate_logic = array();
+
         foreach ($request->except('_token') as $key => $item) {
             $validate_logic[$key] = $this->setValidateLogic($fieldWithFormat[$key]['input_type']);
         }
         //Validate dữ liệu theo logic
         $validated_data = $this->validate($request, $validate_logic);
+
         DB::beginTransaction();
 
         //Chèn thông tin cơ bản của đơn

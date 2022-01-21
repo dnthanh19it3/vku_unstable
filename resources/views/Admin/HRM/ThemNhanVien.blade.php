@@ -37,10 +37,13 @@
                             <div class="form-group row">
                                 <label for="staticEmail" class="col-lg-3 col-form-label">Đơn vị <span
                                             style="color:red">(*)</span>:</label>
-                                <input type="hidden" name="data[chitiet][madonvi]" id="donvi_id" value="">
                                 <div class="col-lg-9">
-                                        <input type="text" name="data[chitiet][donvi_id]" class="form-control rounded"
-                                               id="TenDonVi" value="">
+                                    <select name="data[giangvien][phongban_id]"
+                                            class="input_dutgd form-control custom-select rounded">
+                                        <option value="">Chọn</option>
+                                        @foreach($dm['donvi_phongban'] as $item)
+                                            <option value="{{$item->id}}">{{$item->tenphongkhoa}}</option>@endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -49,12 +52,12 @@
                                 <div class="col-lg-9">
                                     <div class="form-row">
                                         <div class="col">
-                                            <input type="text" name="data[chitiet][manv]" class="form-control rounded"
+                                            <input type="text" name="data[chitiet][manv_temp]" class="form-control rounded"
                                                    readonly="" placeholder="Mã đơn vị" id="manv" value="D2509000">
                                         </div>
                                         <span class="lb-manv">.</span>
                                         <div class="col">
-                                            <input name="data[chitiet][manv2]" class="form-control rounded" id="manv2"
+                                            <input name="data[chitiet][manv_temp]" class="form-control rounded" id="manv2"
                                                    data-inputmask="'mask': '999999'" required="required" type="text"
                                                    placeholder="">
                                         </div>
@@ -165,8 +168,16 @@
                                 <label for="staticEmail" class="col-lg-3 col-form-label">Họ tên: <span
                                             style="color:red">(*)</span>:</label>
                                 <div class="col-lg-9">
-                                    <input type="text" name="data[chitiet][tennv]" class="form-control rounded" id="tennv"
-                                           value="">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input type="text" name="data[giangvien][hodem]" class="form-control rounded" id="hodem"
+                                                   value="" placeholder="Họ đệm">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" name="data[giangvien][ten]" class="form-control rounded" id="ten"
+                                                   value="" placeholder="Tên">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

@@ -29,6 +29,7 @@ Route::post('admin/login', 'AdminAuthController@webLogin')->name('admin.login');
 Route::get('admin/logout', 'AdminAuthController@webLogout')->name('admin.logout');
 
 Route::get('sv/ly-lich/{masv}', 'SvLyLichController@getLyLich')->name('sv.getlylich');
+
 Route::prefix('sv')->middleware('sv')->group(function () {
     Route::prefix('khao-sat')->group(function () {
         Route::get('lam-khao-sat/{slug}', 'SvKhaoSatController@lamKhaoSat')->name('sv.khaosat.lamkhaosat');
@@ -179,6 +180,12 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
                 Route::post('them-hop-dong', 'AdHrmController@hopDongThemPost')->name('ad.hrm.hopdong.them.post');
                 Route::post('sua-hop-dong', 'AdHrmController@hopDongSuaPost')->name('ad.hrm.hopdong.sua.post');
                 Route::get('xoa-hop-dong', 'AdHrmController@hopDongXoa')->name('ad.hrm.hopdong.xoa');
+                //Hoc ham
+                Route::get('hoc-ham', 'AdHrmController@hocHamView')->name('ad.hrm.hocham.view');
+                Route::get('getdata-hocham', 'AdHrmController@hocHamGetData')->name('ad.hrm.hocham.getdata');
+                Route::post('them-hoc-ham', 'AdHrmController@hocHamThemPost')->name('ad.hrm.hocham.them.post');
+                Route::post('sua-hoc-ham', 'AdHrmController@hocHamSuaPost')->name('ad.hrm.hocham.sua.post');
+                Route::get('xoa-hoc-ham', 'AdHrmController@hocHamXoa')->name('ad.hrm.hocham.xoa');
             });
         });
     });

@@ -13,6 +13,21 @@ class SvKhaoSatController extends Controller
         $cauhoi = DB::table('khaosat_cauhoi')->where('mau_id', $mau->id)->where('trangthai', 1)->get();
         $phieutraloi = DB::table('khaosat_traloi')->where('mau_id', $mau->id)->where('masv', session('masv'))->first();
 
+        foreach ($cauhoi as $key => $value){
+
+            if ($value->loai == 4) {
+                $value->dapan = [];
+            } elseif ($value->loai == 2) {
+                $value->dapan = [];
+            } elseif ($value->loai == 8){
+                $dapan = DB::table("khaosat_mautraloi")->where("mau_id", $value->id)->get(['dapan', 'id']);
+                if($dapan != null){
+                    $value->dapan = $dapan;
+                } else {
+                    $dapan = [];
+                }
+            }
+        }
 
         if ($phieutraloi != null) {
             $tracnghiem = explode(',', $phieutraloi->traloi);
@@ -24,10 +39,11 @@ class SvKhaoSatController extends Controller
                     $value->traloi = array_shift($tracnghiem);
                 } elseif ($value->loai == 2) {
                     $value->traloi = array_shift($tuluan);
+                } elseif ($value->loai == 8){
+                    $value->traloi = array_shift($tracnghiem);
                 }
             }
         }
-
         return view('Sv.KhaoSat.MauKhaoSat')->with([
             'mau' => $mau,
             'cauhoi' => $cauhoi
@@ -36,7 +52,6 @@ class SvKhaoSatController extends Controller
 
     function lamKhaoSatPost(Request $request)
     {
-
         $flag = 1;
         $count_truong_tracnghiem = 0;
         $count_truong_tuluan = 0;
@@ -64,7 +79,10 @@ class SvKhaoSatController extends Controller
 
         // Validate giá trị ảo
         foreach ($temp_tracnghiem as $key => $item) {
-            if ($item > 5 || $item < 1 || !is_numeric($item)) {
+            if(!is_numeric($item)){
+                $temp_tracnghiem[$key] = 3;
+            }
+            if (DB::table("khaosat_mautraloi")->where('id', $temp_tracnghiem[$key])->first() == null) {
                 $temp_tracnghiem[$key] = 3;
             }
             if (is_array($item)) {

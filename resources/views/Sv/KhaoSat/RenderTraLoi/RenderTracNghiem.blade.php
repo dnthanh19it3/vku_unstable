@@ -30,10 +30,10 @@
     @break
     @case(2)
     <div class="row poll-hover">
-        <div class="col-md-12 d-flex align-items-center">
+        <div class="col-lg-12 col-xs-12 d-flex align-items-center">
             <h6 class="text-red-soft"><i>{{$item['cauhoi']}}</i></h6>
         </div>
-        <div class="col-md-12">
+        <div class="col-lg-12 col-xs-12">
             <textarea class="form-control rounded" name="tuluan[]" id="tuluan[]">@if(isset($item['traloi'])) {{$item['traloi']}} @endif</textarea>
         </div>
     </div>
@@ -88,6 +88,24 @@
     <div class="row">
         <div class="col-md-12 d-flex align-items-center">
             <h5 class="text-red-soft">{{$item['cauhoi']}}</h5>
+        </div>
+    </div>
+    @break
+    @case(8)
+    <div class="row poll-hover">
+        <div class="col-lg-7 col-xs-12 d-flex align-items-center">
+            <h6 class="text-red-soft"><i>{{$item['cauhoi']}}</i></h6>
+        </div>
+        <div class="col-lg-5 col-xs-12" style="padding-left: 8px">
+            @forelse($item['dapan'] as $key => $value)
+                <div class="row">
+                    <div class="col-lg-12 col-xs-12">
+                        <input type="radio" class="flat" name="traloi[{!! $item['id'] !!}]" value="{{$value->id}}" @if(isset($item['traloi'])) {{$item['traloi'] == $value->id ? "checked" : ""}}@endif>
+                        <span>{{$value->dapan}}</span>
+                    </div>
+                </div>
+            @empty
+            @endforelse
         </div>
     </div>
     @break

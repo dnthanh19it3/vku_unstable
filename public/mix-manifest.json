@@ -1,6 +1,3 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/admin_css.css": "/css/admin_css.css",
-    "/css/survey.css": "/css/survey.css",
-    "/css/cv_css.css": "/css/cv_css.css"
+    "/js/app.js": "/js/app.js"
 }

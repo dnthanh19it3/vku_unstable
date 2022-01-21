@@ -29,6 +29,7 @@ class AdKhaoSatController extends Controller
         ]);
     }
     function taoKhaoSatPost(Request $request){
+//        dd($request->all());
         $flag = 1;
         $noidungcauhoi = $request->noidungcauhoi;
         $loai = $request->loai;

@@ -1,7 +1,7 @@
 @extends('layout.sv_layout')
 @section('body')
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-lg-3 col-xs-12">
             <div class="profile-sidebar">
                 <!-- SIDEBAR USERPIC -->
                 <div class="profile-userpic">
@@ -38,434 +38,462 @@
 
                 <div class="profile-usermenu">
                     <div class="profile-usermenu">
-                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link active" id="canhan-tab" data-toggle="pill" href="#canhan" role="tab" aria-controls="canhan" aria-selected="true">
-                                <i class="fa fa-home text-center mr-1"></i>
-                                Cá nhân
-                            </a>
-                            <a class="nav-link" id="khenthuong-tab" data-toggle="pill" href="#khenthuong" role="tab" aria-controls="khenthuong" aria-selected="false">
-                                <i class="fas fa-star-half-alt"></i>
-                                Khen thưởng kỷ luât
-                            </a>
-                            <a class="nav-link" id="renluyen-tab" data-toggle="pill" href="#renluyen" role="tab" aria-controls="renluyen" aria-selected="false">
-                                <i class="fas fa-user-check mr-1"></i>
-                                Rèn luyện
-                            </a>
-                            <a class="nav-link" id="timeline-tab" data-toggle="pill" href="#timeline" role="tab" aria-controls="timeline" aria-selected="false">
-                                <i class="fas fa-stream mr-1"></i>
-                                Nhật ký hoạt động
-                            </a>
-                        </div>
+                        <ul class="nav nav-pills nav-stacked" id="leftmenu">
+                            <li class="active"><a href="#canhan" data-toggle="tab">Cá nhân</a></li>
+                            <li><a href="#khenthuongkyluat" data-toggle="tab">Khen thưởng kỷ luật</a></li>
+                            <li><a href="#renluyen" data-toggle="tab">Rèn luyện</a></li>
+                            <li><a href="#nhatkyhoatdong" data-toggle="tab">Nhật ký hoạt động</a></li>
+                        </ul>
                     </div>
                 </div>
                 <!-- END MENU -->
             </div>
         </div>
-
         <div class="col-md-9">
-            <div class="row">
-                <div class="col-md-12 ">
-                    <div class="tab-content" id="v-pills-tabContent">
-                        <div class="tab-pane fade active show" id="canhan" role="tabpanel" aria-labelledby="canhan-tab">
-                            <div>
-                                <div class="profile_main_block p-4 bg-white">
-                                    <h6><i class="fas fa-info-circle mr-2"></i>Thông tin cá nhân</h6>
-                                    <hr/>
-                                    <div class="row">
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Họ và tên</div>
-                                            <div class="value">{{getTruongTinh('hodem." ".$sinhvien->ten', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Giới tính</div>
-                                            <div class="value">@if($sinhvien->gioitinh == 1) Nam @else Nữ @endif</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Ngày sinh</div>
-                                            <div class="value">{{\Carbon\Carbon::parse($sinhvien->ngaysinh)->format("d-m-Y")}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Nơi sinh</div>
-                                            <div class="value">{{getTruongTinh('noisinh', $sinhvien)}}</div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Dân tộc</div>
-                                            <div class="value">{{getTruongTinh('dantoc', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">CMND/CCCD</div>
-                                            <div class="value">{{getTruongTinh('cmnd', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Ngày cấp</div>
-                                            <div class="value">{{getTruongTinh('ngaycap', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Nơi cấp</div>
-                                            <div class="value">{{getTruongTinh('noicap', $sinhvien)}}</div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Đoàn thể</div>
-                                            <div class="value">{{getTruongTinh('doanthe', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Ngày kết nạp</div>
-                                            <div class="value">{{getTruongTinh('ngayketnap', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Tôn giáo</div>
-                                            <div class="value">{{getTruongTinh('tongiao', $sinhvien)}}</div>
-                                        </div>
-                                    </div>
+            <div class="tab-content" style="height: 100%">
+                <div class="tab-pane active" id="canhan">
+                    <!-- Cá nhân -->
+                    <div>
+                        <div class="profile_main_block bg-white margin-bottom-3px">
+                            <h4><i class="fas fa-info-circle mr-2"></i>Thông tin cá nhân</h4>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Họ và tên</div>
+                                    <div class="col-md-6">{{getTruongTinh("hoten", $sinhvien)}}</div>
                                 </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-12">
-                                        <div class="profile_main_block p-4 bg-white">
-                                            <h6><i class="fas fa-users mr-2"></i>Thông tin gia đình</h6>
-                                            <hr/>
-                                            <div class="row">
-                                                <div class="col-md-6 ">
-                                                    <h6 style="border-left: 3px solid #0b7ec4; padding-left: 3px">Cha</h6>
-                                                    <div class="info_group">
-                                                        <div class="label">Họ tên</div>
-                                                        <div class="value">{{getTruongTinh('hotencha', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Ngày sinh</div>
-                                                        <div class="value">{{getTruongTinh('namsinhcha', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Dân tộc</div>
-                                                        <div class="value">{{getTruongTinh('dantoc_cha', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">CMND/CCCD</div>
-                                                        <div class="value">{{getTruongTinh('cmnd_cha', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Nghề nghiệp</div>
-                                                        <div class="value">{{getTruongTinh('nghenghiep_cha', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Nơi ở</div>
-                                                        <div class="value">{{getTruongTinh('diachi_cha', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Email</div>
-                                                        <div class="value">{{getTruongTinh('email_cha', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">SĐT</div>
-                                                        <div class="value">{{getTruongTinh('sdt_cha', $sinhvien)}}</div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 ">
-                                                    <h6 style="border-left: 3px solid #00a180; padding-left: 3px">Mẹ</h6>
-                                                    <div class="info_group">
-                                                        <div class="label">Họ tên</div>
-                                                        <div class="value">{{getTruongTinh('hotenme', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Ngày sinh</div>
-                                                        <div class="value">{{getTruongTinh('namsinhme', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Dân tộc</div>
-                                                        <div class="value">{{getTruongTinh('dantoc_me', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">CMND/CCCD</div>
-                                                        <div class="value">{{getTruongTinh('cmnd_me', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Nghề nghiệp</div>
-                                                        <div class="value">{{getTruongTinh('nghenghiep_me', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Nơi ở</div>
-                                                        <div class="value">{{getTruongTinh('diachi_me', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">Email</div>
-                                                        <div class="value">{{getTruongTinh('email_me', $sinhvien)}}</div>
-                                                    </div>
-                                                    <div class="info_group">
-                                                        <div class="label">SĐT</div>
-                                                        <div class="value">{{getTruongTinh('sdt_me', $sinhvien)}}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12 mt-3">
-                                                    <h6 style="border-left: 3px solid #00a180; padding-left: 3px">Anh chị ruột</h6>
-                                                    @if($sinhvien->thanhphangiadinh != null)
-                                                        @foreach($sinhvien->thanhphangiadinh as $value)
-                                                            <div class="info_group">
-                                                                {{$value}}
-                                                            </div>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Giới tính</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('gioitinh', $sinhvien)}}</div>
                                 </div>
-                                <div class="profile_main_block p-4 bg-white mt-3">
-                                    <h6><i class="fas fa-map-marker-alt mr-2"></i>Thường trú và địa chỉ</h6>
-                                    <hr/>
-                                    <i>Hộ khẩu thường trú</i>
-                                    <div class="row">
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Thôn tổ</div>
-                                            <div class="value">{{getTruongTinh('thon_to', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Xã phường</div>
-                                            <div class="value">{{getTruongTinh('xa_phuong', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Quận huyện</div>
-                                            <div class="value">{{getTruongTinh('quan_huyen', $sinhvien)}}</div>
-                                        </div>
-                                        <div class="col-md-4 info_group">
-                                            <div class="label">Tỉnh/ Thành phố</div>
-                                            <div class="value">{{getTruongTinh('tinh_thanh', $sinhvien)}}</div>
-                                        </div>
-                                    </div>
-                                    <i>Địa chỉ liên lạc</i>
-                                    <div class="row">
-                                        <div class="col-md-12 info_group">
-                                            <div class="label">Địa chỉ</div>
-                                            <div class="value">{{getTruongTinh('dia_chi_lien_lac', $sinhvien)}}</div>
-                                        </div>
-                                    </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Ngày sinh</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{\Carbon\Carbon::parse($sinhvien->ngaysinh)->format("d-m-Y")}}</div>
                                 </div>
-                                <div>
-                                    <div class="profile_main_block p-4 bg-white mt-3">
-                                        <h6><i class="fas fa-address-card mr-2"></i>Thông tin liên hệ</h6>
-                                        <hr/>
-                                        <div class="row">
-                                            <div class="col-md-4 info_group">
-                                                <div class="label">Email khác</div>
-                                                <div class="value">{{getTruongTinh('email_khac', $sinhvien)}}</div>
-                                            </div>
-                                            <div class="col-md-4 info_group">
-                                                <div class="label">Điện thoại</div>
-                                                <div class="value">{{getTruongTinh('dienthoai', $sinhvien)}}</div>
-                                            </div>
-                                            <div class="col-md-4 info_group">
-                                                <div class="label">Zalo</div>
-                                                <div class="value">{{getTruongTinh('zalo', $sinhvien)}}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 info_group">
-                                                <div class="label">Điện thoại gia đình</div>
-                                                <div class="value">{{getTruongTinh('dienthoaigiadinh', $sinhvien)}}</div>
-                                            </div>
-                                            <div class="col-md-4 info_group">
-                                                <div class="label">Facebook</div>
-                                                <div class="value">{{getTruongTinh('facebook', $sinhvien)}}</div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Nơi sinh</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('noisinh', $sinhvien)}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Dân tộc</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('dantoc', $sinhvien)}}</div>
+                                </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">CMND/CCCD</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('cmnd', $sinhvien)}}</div>
+                                </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Ngày cấp</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('ngaycap', $sinhvien)}}</div>
+                                </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Nơi cấp</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('noicap', $sinhvien)}}</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Đoàn thể</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('doanthe', $sinhvien)}}</div>
+                                </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Ngày kết nạp</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('ngayketnap', $sinhvien)}}</div>
+                                </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Tôn giáo</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('tongiao', $sinhvien)}}</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="khenthuong" role="tabpanel" aria-labelledby="khenthuong-tab">
-                            <div class="table-responsive mb-3">
-                                <div class="table-wrapper">
-                                    <div class="table-title">
-                                        <div class="row">
-                                            <div class="col-sm-5">
-                                                <h5>Thông tin khen thưởng</h5>
-                                            </div>
-                                            <div class="col-sm-7">
-
-                                            </div>
-                                        </div>
+                        <div class="profile_main_block p-4 bg-white">
+                            <h4><i class="fas fa-users mr-2"></i>Thông tin gia đình</h4>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <h4 style="border-left: 3px solid #0b7ec4; padding-left: 3px">Cha</h4>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Họ tên</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('hotencha', $sinhvien)}}</div>
                                     </div>
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nội dung khen thưởng</th>
-                                            <th>Số quyết định</th>
-                                            <th>Cấp quyết định</th>
-                                            <th>Thời gian</th>
-                                            <th>Năm học</th>
-                                            <th>Học kỳ</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @forelse ($khenthuong as $key => $item)
-
-
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">{{ $key += 1 }}</td>
-                                                <td>{{ $item->noidung }}</td>
-                                                <td>{{ $item->soquyetdinh }}</td>
-                                                <td>{{ $item->capkhenthuong }}</td>
-                                                <td>{{ \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') }}</td>
-                                                <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
-                                                <td>{{ $item->hocky }}</td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="8">
-                                                    <center>Sinh viên này không có thông tin khen thưởng!</center>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                        </tbody>
-                                    </table>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Ngày sinh</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('namsinhcha', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Dân tộc</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('dantoc_cha', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">CMND/CCCD</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('cmnd_cha', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Nghề nghiệp</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('nghenghiep_cha', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Nơi ở</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('diachi_cha', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Email</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('email_cha', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">SĐT</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('sdt_cha', $sinhvien)}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <h4 style="border-left: 3px solid #00a180; padding-left: 3px">Mẹ</h4>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Họ tên</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('hotenme', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Ngày sinh</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('namsinhme', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Dân tộc</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('dantoc_me', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">CMND/CCCD</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('cmnd_me', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Nghề nghiệp</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('nghenghiep_me', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Nơi ở</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('diachi_me', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">Email</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('email_me', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="info_group">
+                                        <div class="col-lg-4 col-xs-6 title-text">SĐT</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('sdt_me', $sinhvien)}}</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <div class="table-wrapper">
-                                    <div class="table-title">
-                                        <div class="row">
-                                            <div class="col-sm-5">
-                                                <h5>Thông tin kỷ luật</h5>
+                            <div class="row">
+                                <div class="col-md-12 mt-3">
+                                    <h4 style="border-left: 3px solid #00a180; padding-left: 3px">Anh chị ruột</h4>
+                                    @if($sinhvien->thanhphangiadinh != null)
+                                        @foreach($sinhvien->thanhphangiadinh as $value)
+                                            <div class="info_group">
+                                                {{$value}}
                                             </div>
-                                            <div class="col-sm-7">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nội dung khiển trách</th>
-                                            <th>Số quyết định</th>
-                                            <th>Cấp quyết định</th>
-                                            <th>Hình thức</th>
-                                            <th>Thời gian</th>
-                                            <th>Năm học</th>
-                                            <th>Học kỳ</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @forelse ($kyluat as $key => $item)
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">{{ $key += 1 }}</td>
-                                                <td>{{ $item->capquyetdinh }}</td>
-                                                <td>{{ $item->soquyetdinh }}</td>
-                                                <td>{{ $item->noidung }}</td>
-                                                <td>{{ $item->hinhthuckyluat }}</td>
-                                                <td>{{ \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') }}</td>
-                                                <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
-                                                <td>{{ $item->hocky }}</td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="8">
-                                                    <center>Sinh viên này không có thông tin kỷ luật!</center>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                        </tbody>
-                                    </table>
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="kyluat" role="tabpanel" aria-labelledby="kyluat-tab">
-                            <div>
-
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="renluyen" role="tabpanel" aria-labelledby="renluyen-tab">
-                            <div>
-                                <div class="table-wrapper">
-                                    <div class="table-title">
-                                        <div class="row">
-                                            <div class="col-sm-5">
-                                                <h6>Kết quả rèn luyện</h6>
-                                            </div>
-                                            <div class="col-sm-7">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                        <th class="column-title">#</th>
-                                        <th class="column-title">Năm học</th>
-                                        <th class="column-title">Học kì</th>
-                                        <th class="column-title">Điểm</th>
-                                        <th class="column-title">Xếp loại</th>
-                                        </thead>
-                                        <tbody>
-                                        @php
-                                            $i = 0
-                                        @endphp
-
-                                        @forelse($renluyen as $item)
-                                            <tr role="row" class="odd">
-                                                <td class="sorting_1">{{ $i += 1 }}</td>
-                                                <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
-                                                <td>{{ $item->hocky }}</td>
-                                                <td>{{ $item->diem }}</td>
-                                                <td>{{ $item->xeploai }}</td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="7">
-                                                    <div class="alert alert-danger">
-                                                        Chưa có đánh giá rèn luyện
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                        </tbody>
-                                    </table>
+                        <div class="profile_main_block p-4 bg-white mt-3">
+                            <h4><i class="fas fa-map-marker-alt mr-2"></i>Thường trú và địa chỉ</h4>
+                            <hr/>
+                            <i>Hộ khẩu thường trú</i>
+                            <div class="row">
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Thôn tổ</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('thon_to', $sinhvien)}}</div>
+                                </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Xã phường</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('xa_phuong', $sinhvien)}}</div>
+                                </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Quận huyện</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('quan_huyen', $sinhvien)}}</div>
+                                </div>
+                                <div class="col-md-4 col-xs-12 info_group row">
+                                    <div class="col-lg-4 col-xs-6 title-text">Tỉnh/ Thành phố</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('tinh_thanh', $sinhvien)}}</div>
                                 </div>
                             </div>
-                            <div class="mb-3 bg-white p-3" style="width: 100%; height: 30vh; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-                                <canvas id="line-chart"></canvas>
+                            <i>Địa chỉ liên lạc</i>
+                            <div class="row">
+                                <div class="col-md-12 info_group">
+                                    <div class="col-lg-4 col-xs-6 title-text">Địa chỉ</div>
+                                    <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('dia_chi_lien_lac', $sinhvien)}}</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="timeline" role="tabpanel" aria-labelledby="timeline-tab">
-                            <div class="bg-white p-3">
-                                <h6>Nhật kí hoạt động</h6>
+                        <div>
+                            <div class="profile_main_block p-4 bg-white mt-3">
+                                <h4><i class="fas fa-address-card mr-2"></i>Thông tin liên hệ</h4>
                                 <hr/>
-                                <ul class="list-unstyled timeline">
-                                    @forelse($log_sinhvien as $item)
-                                        <li>
-                                            <div class="block">
-                                                <div class="tags">
-                                                    <a href="" class="tag">
-                                                        <span>{{$item->module}}</span>
-                                                    </a>
-                                                </div>
-                                                <div class="block_content">
-                                                    <h2 class="title">
-                                                        <a>{{$item->action}}</a>
-                                                    </h2>
-                                                    <div class="byline">
-                                                        <span>{{\Carbon\Carbon::create($item->created_at)->format('d-m-Y')}}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @empty
-                                        <li>Chưa có hoạt động được ghi nhận!</li>
-                                    @endforelse
-                                </ul>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-12 info_group row">
+                                        <div class="col-lg-4 col-xs-6 title-text">Email khác</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('email_khac', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12 info_group row">
+                                        <div class="col-lg-4 col-xs-6 title-text">Điện thoại</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('dienthoai', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12 info_group row">
+                                        <div class="col-lg-4 col-xs-6 title-text">Zalo</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('zalo', $sinhvien)}}</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-12 info_group row">
+                                        <div class="col-lg-4 col-xs-6 title-text">Điện thoại gia đình</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('dienthoaigiadinh', $sinhvien)}}</div>
+                                    </div>
+                                    <div class="col-md-4 col-xs-12 info_group row">
+                                        <div class="col-lg-4 col-xs-6 title-text">Facebook</div>
+                                        <div class="col-lg-8 col-xs-6 content-text">{{getTruongTinh('facebook', $sinhvien)}}</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="khenthuongkyluat">
+                    <div class="profile_main_block p-4 bg-white mt-3">
+                        <h4>Khen thưởng và kỷ luật</h4>
+                        <hr/>
+                        <div class="table-responsive mb-3">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <h4>Thông tin khen thưởng</h4>
+                                        </div>
+                                        <div class="col-sm-7">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nội dung khen thưởng</th>
+                                        <th>Số quyết định</th>
+                                        <th>Cấp quyết định</th>
+                                        <th>Thời gian</th>
+                                        <th>Năm học</th>
+                                        <th>Học kỳ</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse ($khenthuong as $key => $item)
+
+
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1">{{ $key += 1 }}</td>
+                                            <td>{{ $item->noidung }}</td>
+                                            <td>{{ $item->soquyetdinh }}</td>
+                                            <td>{{ $item->capkhenthuong }}</td>
+                                            <td>{{ \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') }}</td>
+                                            <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
+                                            <td>{{ $item->hocky }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="8">
+                                                <center>Sinh viên này không có thông tin khen thưởng!</center>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <h4>Thông tin kỷ luật</h4>
+                                        </div>
+                                        <div class="col-sm-7">
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nội dung khiển trách</th>
+                                        <th>Số quyết định</th>
+                                        <th>Cấp quyết định</th>
+                                        <th>Hình thức</th>
+                                        <th>Thời gian</th>
+                                        <th>Năm học</th>
+                                        <th>Học kỳ</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @forelse ($kyluat as $key => $item)
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1">{{ $key += 1 }}</td>
+                                            <td>{{ $item->capquyetdinh }}</td>
+                                            <td>{{ $item->soquyetdinh }}</td>
+                                            <td>{{ $item->noidung }}</td>
+                                            <td>{{ $item->hinhthuckyluat }}</td>
+                                            <td>{{ \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') }}</td>
+                                            <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
+                                            <td>{{ $item->hocky }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="8">
+                                                <center>Sinh viên này không có thông tin kỷ luật!</center>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="renluyen">
+                    <div class="profile_main_block p-4 bg-white mt-3">
+                        <h4>Kết quả rèn luyện</h4>
+                        <hr/>
+                        <div class="table-wrapper">
+                            <div class="table-title">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <h4>Kết quả rèn luyện</h4>
+                                    </div>
+                                    <div class="col-sm-7">
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                <th class="column-title">#</th>
+                                <th class="column-title">Năm học</th>
+                                <th class="column-title">Học kì</th>
+                                <th class="column-title">Điểm</th>
+                                <th class="column-title">Xếp loại</th>
+                                </thead>
+                                <tbody>
+                                @php
+                                    $i = 0
+                                @endphp
+
+                                @forelse($renluyen as $item)
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1">{{ $i += 1 }}</td>
+                                        <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
+                                        <td>{{ $item->hocky }}</td>
+                                        <td>{{ $item->diem }}</td>
+                                        <td>{{ $item->xeploai }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7">
+                                            <div class="alert alert-danger">
+                                                Chưa có đánh giá rèn luyện
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4 style="margin-top: 1rem">Biểu đồ điểm rèn luyện</h4>
+                        <hr/>
+                        <div class="mb-3 bg-white p-3" style="width: 100%; height: 30vh; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                            <canvas id="line-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="nhatkyhoatdong">
+                    <div class="profile_main_block p-4 bg-white mt-3">
+                        <h4>Nhật ký hoạt động</h4>
+                        <hr/>
+                        <ul class="list-unstyled timeline">
+                            @forelse($log_sinhvien as $item)
+                                <li>
+                                    <div class="block">
+                                        <div class="tags">
+                                            <a href="" class="tag">
+                                                <span>{{$item->module}}</span>
+                                            </a>
+                                        </div>
+                                        <div class="block_content">
+                                            <h2 class="title">
+                                                <a>{{$item->action}}</a>
+                                            </h2>
+                                            <div class="byline">
+                                                <span>{{\Carbon\Carbon::create($item->created_at)->format('d-m-Y')}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            @empty
+                                <li>Chưa có hoạt động được ghi nhận!</li>
+                            @endforelse
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <style>
+        #leftmenu > li.active > a {
+            border-left: 2px solid #5b9bd1;
+            border-radius: unset;
+            background: #f6f9fb !important;
+            color: #5b9bd1 !important;
+        }
+        .equal {
+            display: flex;
+            display: -webkit-flex;
+            flex-wrap: wrap;
+        }
+        @media (min-width: 768px) {
+            .row.equal {
+                display: flex;
+                flex-wrap: wrap;
+            }
+        }
+        .margin-bottom-3px {
+            margin-bottom: 3px;
+        }
+        .profile_main_block {
+            background: #fff;
+            padding: 2rem;
+            margin-bottom: 1rem;
+        }
+        .title-text {
+            font-weight: 500;
+        }
+
+    </style>
+@endsection
+@section('custom-css')
+    <style>
+        .nav-link {display: block !important;}
+    </style>
 @endsection
 @section('custom-script')
     <script src="{{asset('vendors/Chart.js/dist/Chart.min.js')}}"></script>
         <script>
+            $(document).ready(function(){
+                let lmenu = $("#v-pills-tab");
+                let child = lmenu.children();
+
+                for(let i = 0; i < child.length; i++){
+                    console.log(child[i]);
+                }
+                console.log(child)
+            });
             resizeAvatar();
             $(window).resize(()=>{
                 resizeAvatar()
