@@ -170,14 +170,62 @@ class AdKhaoSatController extends Controller
      * THỐNG KÊ
      */
 
+    function baoCao(Request $request, $id){
+        $khaosat = DB::table('khaosat_mau')->where('id', $id)->first();
+        $cauhoi = (array) DB::table('khaosat_cauhoi')->where('mau_id', $id)->get();
+
+
+
+        $listtracnghiem = [];
+        $listtuluan = [];
+        $cauhoi = array_pop($cauhoi);
+        foreach ($cauhoi as $key => $item){
+            if($item->loai == 8){
+                $temp = array_shift( $cauhoi);
+                array_push($listtracnghiem, $temp);
+            } elseif($item->loai == 2) {
+                $temp = array_shift( $cauhoi);
+                array_push($listtuluan, $temp);
+            }
+        }
+
+        foreach ($listtracnghiem as $key => $item){
+            $item->dapan = DB::table('khaosat_mautraloi')->where('mau_id', $item->id)->get();
+        }
+
+
+        $sinhvien_khaosat = DB::table('table_sinhvien')
+            ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=','table_sinhvien_chitiet.masv')
+            ->join('khaosat_traloi', 'khaosat_traloi.masv', '=', 'table_sinhvien.masv')
+            ->where('trangthai', 0)
+            ->where('mau_id', $id)
+            ->select(['table_sinhvien.hodem', 'table_sinhvien.ten', 'table_sinhvien.masv', 'khaosat_traloi.traloi', 'khaosat_traloi.tuluan'])
+            ->get();
+
+
+        foreach ($sinhvien_khaosat as $key_khaosat => $item_khaosat){
+            $item_khaosat->tracnghiem = explode(',', $item_khaosat->traloi);
+            foreach ($item_khaosat->tracnghiem as $key_iktn => $value_iktn){
+                foreach ($listtracnghiem[$key_iktn]->dapan as $key_kstn => $item_kstn){
+                    if($value_iktn == $item_kstn->id){
+                        $item_khaosat->tracnghiem[$key_iktn] = ['dapan_id' => $value_iktn, 'dapan_text' => $item_kstn->dapan];
+                    }
+                }
+            }
+        }
+        dd($sinhvien_khaosat[count($sinhvien_khaosat)-1], $khaosat, $cauhoi, $listtracnghiem, $listtuluan);
+    }
+
+
     function getbaoCao(Request $request, $id){
-        $sinhvien = DB::table('table_sinhvien')->where('trangthai', 0)->count();
+        $sinhvien = DB::table('table_sinhvien')->join('table_sinhvien_chitiet', 'table_sinhvien', '=','table_sinhvien_chitiet')->where('trangthai', 0)->count();
         $mau = DB::table('khaosat_mau')->where('id', $id)->first();
         $cauhoi = DB::table('khaosat_cauhoi')->where('mau_id', $id)->where('trangthai', '=', 1)->get();
         $cauhoi_thongke = DB::table('khaosat_cauhoi')->where('mau_id', $id)->where('trangthai', '=', 1)->get();
 
 
         $phieutraloi = DB::table('khaosat_traloi')->where('mau_id', $id)->get();
+
 
 
         // Tao cau truc dap an
@@ -190,12 +238,20 @@ class AdKhaoSatController extends Controller
                     '4' => 0,
                     '5' => 0,
                 ];
-            } elseif($value->loai == 2) {
+            }
+            // Bổ sung elseif
+            elseif($value->loai == 8){
+                $dapan_raw = DB::table("khaosat_mautraloi")->where('mau_id', $value->id)->get();
+                foreach ($dapan_raw as $key_dapan => $value_dapan){
+                    $value->traloi[$value_dapan->id] = 0;
+                }
+            }elseif($value->loai == 2) {
                 $value->traloi = [];
             } else {
 //                unset($cauhoi_thongke[$key]);
             }
         }
+
 
 
         foreach ($phieutraloi as $key => $phieu){
@@ -207,7 +263,11 @@ class AdKhaoSatController extends Controller
             foreach ($cauhoi_canhan as $key => $value){
                 if($value->loai == 4){
                     $value->traloi = array_shift($tracnghiem);
-                } elseif($value->loai == 2) {
+                } // Bổ sung elseif
+                elseif($value->loai == 8){
+                    $value->traloi = array_shift($tracnghiem);
+                }
+                elseif($value->loai == 2) {
                     $value->traloi = array_shift($tuluan);
                 } else {
                     unset($cauhoi_canhan[$key]);
@@ -219,7 +279,11 @@ class AdKhaoSatController extends Controller
                     if(is_numeric($key)){
                         if($value->loai == 4){
                             $cauhoi_thongke[$key]->traloi[$value->traloi] = $cauhoi_thongke[$key]->traloi[$value->traloi] + 1;
-                        } elseif($value->loai == 2) {
+                        } // Bổ sung elseif
+                        elseif($value->loai == 8){
+                            $cauhoi_thongke[$key]->traloi[$value->traloi] = $cauhoi_thongke[$key]->traloi[$value->traloi] + 1;
+                        }
+                        elseif($value->loai == 2) {
                             array_push($cauhoi_thongke[$key]->traloi, $value->traloi);
                         }
                     }
@@ -228,7 +292,6 @@ class AdKhaoSatController extends Controller
                 }
             }
         }
-
         //Section lv1
         $section_1_sum = 0;
         $section_1_count = 0;
@@ -272,6 +335,35 @@ class AdKhaoSatController extends Controller
                     '5' => ceil(@((int) $value->traloi['5'] / $total * 100))
                 ];
             }
+            // Bổ sung if
+            if($value->loai == 8){
+                $dapan_raw = DB::table("khaosat_mautraloi")->where('mau_id', $value->id)->get();
+                $value->label = [];
+                foreach ($dapan_raw as $key_dapan => $value_dapan){
+                    $value->label[$value_dapan->id] = $value_dapan->dapan;
+                }
+                $total = array_sum($value->traloi);
+
+                $value->data = array_values($value->traloi);
+                //Get AVG
+                $sum = 0;
+                foreach ($value->traloi as $key2 => $value2){
+                    $sum += (int) $key2 * $value2;
+                }
+
+                $avg = round(@($sum / array_sum($value->traloi)), 2);
+                //Section_avg
+                $section_2_sum += $avg;
+                $value->avg = $avg;
+                $section_2_count += 1;
+                $cauhoi_thongke[$remember_2_key]->avg = round(@($section_2_sum / $section_2_count), 2);
+                //Get Percent
+
+                foreach ($value->traloi as $key3 => $value3){
+                    $value->traloi_percent[$key3] = ceil(@((int) $value->traloi[$key3] / $total * 100));
+                }
+
+            }
         }
 
         $tb_khaosat = 0;
@@ -285,7 +377,7 @@ class AdKhaoSatController extends Controller
             }
         }
 
-
+//        dd($cauhoi_thongke);
         if($request->xem == "chart"){
             return view('Admin.KhaoSat.Report_chart')->with([
                 'cauhoi' => $cauhoi_thongke,

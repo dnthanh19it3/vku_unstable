@@ -1,27 +1,27 @@
 @extends('layout.sv_layout')
 @section('body')
-    <div class="row">
+
         <div class="col-lg-3 col-xs-12">
             <div class="profile-sidebar">
                 <!-- SIDEBAR USERPIC -->
                 <div class="profile-userpic">
-                    <img id="avatar_round" src="{{asset($sinhvien->avatar)}}" class="img-responsive" alt="">
+                    <img id="avatar_round" src="{{asset($sinhvien->anhthe)}}" class="img-responsive" alt="">
                 </div>
                 <!-- END SIDEBAR USERPIC -->
                 <!-- SIDEBAR USER TITLE -->
                 <div class="profile-usertitle">
                     <div class="profile-usertitle-name">
-                        {{getTruongTinh('hoten',  $sinhvien)}}
+                        {{$sinhvien->hodem . " " . $sinhvien->ten}}
                     </div>
                     <div class="profile-usertitle-job">
-                         <i class="fas fa-id-card-alt mr-2"></i> MSV {{getTruongTinh('masv', $sinhvien)}} LỚP {{getTruongTinh('tenlop', $sinhvien)}}
+                         <i class="fas fa-id-card-alt mr-2"></i> MSV {{$sinhvien->masv}} LỚP {{$sinhvien->tenlop}}
                     </div>
                     <div class="profile-usertitle-job">
-                        <i class="fas fa-briefcase mr-2"></i>NGÀNH {{getTruongTinh('tennganh', $sinhvien)}}
+                        <i class="fas fa-briefcase mr-2"></i>NGÀNH {{$sinhvien->tenNganh}}
                     </div>
                     @if(getTruongTinh('tenchuyennganh', $sinhvien))
                         <div class="profile-usertitle-job">
-                            <i class="fas fa-briefcase mr-2"></i>{{getTruongTinh('tenchuyennganh', $sinhvien)}}
+                            <i class="fas fa-briefcase mr-2"></i>{{$sinhvien->tenKhoa}}
                         </div>
                     @endif
                 </div>
@@ -186,13 +186,13 @@
                             <div class="row">
                                 <div class="col-md-12 mt-3">
                                     <h4 style="border-left: 3px solid #00a180; padding-left: 3px">Anh chị ruột</h4>
-                                    @if($sinhvien->thanhphangiadinh != null)
-                                        @foreach($sinhvien->thanhphangiadinh as $value)
-                                            <div class="info_group">
-                                                {{$value}}
-                                            </div>
-                                        @endforeach
-                                    @endif
+{{--                                    @if($sinhvien->thanhphangiadinh != null)--}}
+{{--                                        @foreach($sinhvien->thanhphangiadinh as $value)--}}
+{{--                                            <div class="info_group">--}}
+{{--                                                {{$value}}--}}
+{{--                                            </div>--}}
+{{--                                        @endforeach--}}
+{{--                                    @endif--}}
                                 </div>
                             </div>
                         </div>

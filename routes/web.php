@@ -91,6 +91,23 @@ Route::prefix('sv')->middleware('sv')->group(function () {
 
 
 Route::prefix('admin')->middleware('chuyenvien')->group(function(){
+    Route::prefix('zalo-chatbot')->group(function (){
+        Route::get('intent', 'AdAiController@trainAiIndex')->name('ad.zalo.trainai');
+
+        Route::get('intent-add', 'AdAiController@addIntentView')->name('ad.zalo.addintent');
+        Route::post('intent-add', 'AdAiController@addIntentPost')->name('ad.zalo.addintent.post');
+
+        Route::get('intent-edit/{intent_id}', 'AdAiController@editIntentView')->name('ad.zalo.editintent');
+        Route::post('intent-edit/{intent_id}', 'AdAiController@editIntentPost')->name('ad.zalo.editintent.post');
+
+
+        Route::post('response-edit/{intent_id}', 'AdAiController@editResponsePost')->name('ad.zalo.editresponse.post');
+        Route::post('response-add/{intent_id}', 'AdAiController@addResponsePost')->name('ad.zalo.addresponse.post');
+
+        Route::post('pattern-add/{intent_id}', 'AdAiController@addPatternPost')->name('ad.zalo.addpattern.post');
+        Route::post('pattern-edit/{intent_id}', 'AdAiController@editPatternPost')->name('ad.zalo.editpattern.post');
+
+    });
     Route::prefix('hrm')->group(function (){
         Route::prefix('get-danh-muc')->group(function (){
             Route::get('bac-luong/{ngach}/{bac}', 'AdHrmController@getBacLuong')->name('ad.hrm.dm.bluong');
@@ -196,7 +213,7 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
         Route::get('sua-mau/{id}', 'AdKhaoSatController@suaKhaoSat')->name('admin.khaosat.suakhaosat');
         Route::post('sua-mau/{id}', 'AdKhaoSatController@suaKhaoSatPost')->name('admin.khaosat.suakhaosat.post');
         Route::get('xoa-mau/{id}', 'AdKhaoSatController@getXoaKhaoSat')->name('admin.khaosat.xoakhaosat');
-        Route::get('bao-cao/{id}', 'AdKhaoSatController@getBaoCao')->name('admin.khaosat.baocao');
+        Route::get('bao-cao/{id}', 'AdKhaoSatController@baoCao')->name('admin.khaosat.baocao');
     });
     Route::prefix('danhgiarenluyen')->group(function (){
         Route::get('/', 'AdDanhGiaRenLuyen@danhGiaRenLuyenView')->name('admin.danhgiarenluyen.index');
@@ -330,3 +347,5 @@ Route::get('email', 'AdQuanLySv@getEmail');
 Route::get('get_regex', 'AdGiangVienChitietController@getInfo');
 Route::get('test_ui', 'AdGiangVienChitietController@testui');
 Route::get('test_zalo', 'ZaloAPI@test');
+
+Route::get('get-intent', 'AdAiController@exportIntent')->name('ai.getintent');

@@ -104,7 +104,7 @@
 @endsection
 @section('custom-script')
        <script src="{{asset('vendors/Chart.js/dist/Chart.min.js')}}"></script>
-
+       <?php // Bổ sung (thay cả đoạn foreach mới) ?>
     @foreach($cauhoi as $item)
         @if($item->loai == 4)
             <script>
@@ -113,6 +113,49 @@
                     type: 'pie',
                     data: {
                         labels: ['Hoàn toàn không đồng ý', 'Không đồng ý', 'Phân vân', 'Đồng ý', 'Hoàn toàn không đồng ý'],
+                        datasets: [{
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                            ],
+                            data: cData,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                fontColor: "black",
+                                boxWidth: 20,
+                                padding: 20
+                            }
+                        }
+                    }
+                };
+
+                $(document).ready(()=>{
+                    var ctx{{$item->id}} = document.getElementById('chart{{$item->id}}').getContext('2d');
+                    window.myPie{{$item->id}} = new Chart(ctx{{$item->id}}, config{{$item->id}});
+                })
+            </script>
+        @elseif($item->loai == 8)
+            <script>
+                var cData = [{{implode(',', $item->traloi)}}];
+                var config{{$item->id}} = {
+                    type: 'pie',
+                    data: {
+                        labels: @json(array_values($item->label)),
                         datasets: [{
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',

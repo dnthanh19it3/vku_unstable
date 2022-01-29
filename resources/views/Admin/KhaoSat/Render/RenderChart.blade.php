@@ -52,6 +52,27 @@
             <h5 class="text-red-soft">{{$item['cauhoi']}}</h5>
         </div>
     </div>
+    <?php // Bổ sung case mới ?>
+    @case(8)
+    <div class="row poll-hover">
+        <div class="col-md-7 d-flex align-items-center">
+            <h6 class="text-red-soft"><i>{{$item['cauhoi']}}</i></h6>
+        </div>
+        <div class="col-md-5 hailong_wrapper">
+            <div class="hailong_item" style="flex-direction: row; alignment-baseline: center">
+                <canvas id="chart{{$item['id']}}" style="max-width: 360px"></canvas>
+                <div style="display: flex; flex-direction: row; alignment-baseline: center; ">
+                    <ul style="text-align: left; display: flex; flex-direction: column; align-items: flex-start;
+                     justify-content: center; alignment-baseline: center; vertical-align: center; list-style: none; padding: 0; margin: 0">
+                        @forelse($item['label'] as $key_label => $value_label)
+                            <li><i class="fa fa-circle mr-2" style="color: rgba(255, 99, 132, 0.8)"></i><div style="width: 52px; display: inline-block">{{$item['traloi'][$key_label]}}<b>({{$item['traloi_percent'][$key_label]}}%)</b></div>{{$value_label}}</li>
+                        @empty
+                        @endforelse
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
     @break
 @endswitch
 <hr/>

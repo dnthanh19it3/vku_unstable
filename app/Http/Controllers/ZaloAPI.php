@@ -104,7 +104,7 @@ class ZaloAPI extends Controller
         // send request
         $response = $this->zalo->post(ZaloEndpoint::API_OA_SEND_MESSAGE, self::ZALO_ACCESS_TOKEN, $msgText);
         $result = $response->getDecodedBody(); // result
-        return $result;
+        return response("OK", 200);
     }
 
     public function chamSocPhuHuynh($user_id)
@@ -261,6 +261,110 @@ class ZaloAPI extends Controller
         $this->guiTinNhanText($uid, $diem);
         $this->guiTinNhanText($uid, $tips);
     }
+
+    function traCuuLichHocNgay($uid, $masv)
+    {
+
+        $ketqua = json_decode(file_get_contents("json_test/tkb_ngay.json"));
+//        dump($ketqua);
+        $text = "📅 Lịch học ngày hôm nay của bạn như sau\n";
+        if($ketqua){
+            foreach ($ketqua as $key => $value){
+                $text = $text . "Tiết " . $value->tiet . ": " . $value->mon . " [" . $value->phong . "]\n";
+            }
+        } else {
+            $text = "Bạn không có lịch học hôm nay";
+        }
+
+//        dump($text);
+
+        $this->guiTinNhanText($uid, $text);
+
+    }
+    function traCuuLichHocTuan($uid, $masv)
+    {
+        $ketqua = json_decode(file_get_contents("json_test/tkb_tuan.json"));
+        $text = "📅 Lịch học tuần này của bạn\n_________________\n";
+        if($ketqua){
+            foreach ($ketqua as $key => $value){
+                $text = $text . " " .$this->returnDayIcon($value->thu) . " Thứ ". $value->thu . " \n";
+                foreach ($value->lich as $key2 => $value2){
+                    $text = $text . "Tiết " . $value2->tiet . ": " . $value2->mon . " [" . $value2->phong . "]\n";
+                }
+
+            }
+        } else {
+            $text = "Bạn không có lịch học hôm nay";
+        }
+        $this->guiTinNhanText($uid, $text);
+    }
+
+    function traCuuHocVu($uid, $masv)
+    {
+        $ketqua = json_decode(file_get_contents("json_test/hocvu.json"));
+        $text = "📅 Kết quả xét học vụ của bạn\n_________________\n";
+        if($ketqua){
+            foreach ($ketqua as $key => $value){
+                $text .= $this->returnDayIcon($value->hocky) . " Học kỳ " . $value->hocky . " Năm học " . $value->namhoc. ": " . $value->thang4 . " - " . $value->thang10. " - " . $value->xeploai ."\n";
+            }
+        } else {
+            $text = "Không có kết quả xét học vụ";
+        }
+//        dd($text);
+        $this->guiTinNhanText($uid, $text);
+    }
+
+    function traCuuRenLuyen($uid, $masv)
+    {
+        $ketqua = json_decode(file_get_contents("json_test/renluyen.json"));
+        $text = "📅 Kết quả xét rèn luyện của bạn\n_________________\n";
+        if($ketqua){
+            foreach ($ketqua as $key => $value){
+                $text .= $this->returnDayIcon($value->hocky) . " Học kỳ " . $value->hocky . " Năm học " . $value->namhoc. ": " . $value->diem . " - " . $value->xeploai ."\n";
+            }
+        } else {
+            $text = "Không có kết quả xét rèn luyện";
+        }
+//        dd($text);
+        $this->guiTinNhanText($uid, $text);
+    }
+
+    function traCuuHocPhi($uid, $masv)
+    {
+        $ketqua = json_decode(file_get_contents("json_test/hocphi.json"));
+        $text = "📝 Thông tin học phí của bạn như sau:\n_________________\n";
+        if($ketqua){
+           $text .= "Tổng số tín chỉ đăng kí " . $ketqua->sotinchi . "\n" . "Tổng thu: " . $ketqua->hocphi . "VNĐ\n" .
+               "Trạng thái: " .$ketqua->trangthai;
+           if($ketqua->ngaynop){
+               $text .= "\n Ngày nộp:" . $ketqua->ngaynop;
+           }
+        } else {
+            $text = "Không có thông tin học phí";
+        }
+        $this->guiTinNhanText($uid, $text);
+    }
+
+
+    function returnDayIcon($day){
+        switch ($day){
+            case "2":
+                return "2️⃣";
+            case "3":
+                return "3️⃣";
+            case "4":
+                return "4️⃣";
+            case "5":
+                return "5️⃣";
+            case "6":
+                return "6️⃣";
+            case "7":
+                return "7️⃣";
+            default:
+                return "";
+        }
+    }
+
     function traCuuDiemShowList($uid){
         $hocky = $this->getListHocKy();
         if($hocky != null){
@@ -313,7 +417,7 @@ class ZaloAPI extends Controller
                             $hocky = $this->getHocKy(1)[0];
                             $this->traCuuDiem($zalo_uid, $sinhvien->masv, $hocky->id, $hocky->hocky);
                         } elseif (count($chitiet) == 1){
-                            $this->guiTinNhanText($zalo_uid, "Mời bạn chọn học kì hiện tại");
+                            $this->guiTinNhanText($zalo_uid, "Mời bạn chọn học kì muốn tra cứu");
                             $this->traCuuDiemShowList($zalo_uid);
                         }
 
@@ -321,14 +425,38 @@ class ZaloAPI extends Controller
                         $this->guilienKetTaiKhoan($zalo_uid);
                     }
                     break;
-                case "#tracuulichhoc":
-                    $this->guiTinNhanText($zalo_uid, "Tính năng đang được phát triển!");
+                case "#lichhochomnay":
+                    $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
+                    if($sinhvien != null){
+                        $this->traCuuLichHocNgay($zalo_uid, $sinhvien->masv);
+                    }
                     break;
-                case "#tracuuhocphi":
-                    $this->guiTinNhanText($zalo_uid, "Tính năng đang được phát triển!");
+                case "#lichhoctuan":
+                    $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
+                    if($sinhvien != null){
+                        $this->traCuuLichHocTuan($zalo_uid, $sinhvien->masv);
+                    }
+                    break;
+                case "#hocphi":
+                    $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
+                    if($sinhvien != null){
+                        $this->traCuuHocPhi($zalo_uid, $sinhvien->masv);
+                    }
                     break;
                 case "#tracuulichthi":
                     $this->guiTinNhanText($zalo_uid, "Tính năng tra cứu lịch thi đang được phát triển!");
+                    break;
+                case "#ketquahocvu":
+                    $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
+                    if($sinhvien != null){
+                        $this->traCuuHocVu($zalo_uid, $sinhvien->masv);
+                    }
+                    break;
+                case "#ketquarenluyen":
+                    $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
+                    if($sinhvien != null){
+                        $this->traCuuRenLuyen($zalo_uid, $sinhvien->masv);
+                    }
                     break;
                 case "#lienket":
                     $sinhvien = DB::table('table_zalo_connect')->where('zalo_id_sinhvien', $zalo_uid)->first();
@@ -420,7 +548,8 @@ class ZaloAPI extends Controller
         return $list_namhoc;
     }
     function test(Request $request){
-        dd($this->getListHocKy());
+//
+        $this->traCuuHocVu('ABC', "123");
     }
 
 }

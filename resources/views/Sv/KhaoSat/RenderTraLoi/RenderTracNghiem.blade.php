@@ -91,6 +91,7 @@
         </div>
     </div>
     @break
+    <?php // Bổ sung ?>
     @case(8)
     <div class="row poll-hover">
         <div class="col-lg-7 col-xs-12 d-flex align-items-center">

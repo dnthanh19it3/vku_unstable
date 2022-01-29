@@ -1,0 +1,30 @@
+[
+  {
+    "hocky": 1,
+    "namhoc": "2019-2020" ,
+    "thang4":  3.12,
+    "thang10": 8.05,
+    "xeploai": "Khá"
+  },
+  {
+    "hocky": 2,
+    "namhoc": "2019-2020" ,
+    "thang4":  3.35,
+    "thang10": 8.23,
+    "xeploai": "Giỏi"
+  },
+  {
+    "hocky": 1,
+    "namhoc": "2020-2021" ,
+    "thang4":  3.26,
+    "thang10": 8.17,
+    "xeploai": "Giỏi"
+  },
+  {
+    "hocky": 2,
+    "namhoc": "2020-2021" ,
+    "thang4":  3.47,
+    "thang10": 8.71,
+    "xeploai": "Giỏi"
+  }
+]

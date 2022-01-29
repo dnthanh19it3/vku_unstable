@@ -14,11 +14,11 @@ class SvKhaoSatController extends Controller
         $phieutraloi = DB::table('khaosat_traloi')->where('mau_id', $mau->id)->where('masv', session('masv'))->first();
 
         foreach ($cauhoi as $key => $value){
-
+            // Bổ sung ở đoạn elseif loại = 8
             if ($value->loai == 4) {
-                $value->dapan = [];
+                $value->dapan = []; // Bổ sung
             } elseif ($value->loai == 2) {
-                $value->dapan = [];
+                $value->dapan = []; // Bổ sung
             } elseif ($value->loai == 8){
                 $dapan = DB::table("khaosat_mautraloi")->where("mau_id", $value->id)->get(['dapan', 'id']);
                 if($dapan != null){
@@ -33,7 +33,7 @@ class SvKhaoSatController extends Controller
             $tracnghiem = explode(',', $phieutraloi->traloi);
             $tuluan = explode('][', $phieutraloi->tuluan);
 
-
+            // Bổ sung đoạn value->loai == 8
             foreach ($cauhoi as $key => $value) {
                 if ($value->loai == 4) {
                     $value->traloi = array_shift($tracnghiem);
@@ -58,7 +58,7 @@ class SvKhaoSatController extends Controller
         //Check thong tin mau
         $cauhoi = DB::table('khaosat_cauhoi')->where('mau_id', $request->mau_id)->where('trangthai', 1)->get();
         foreach ($cauhoi as $key => $value) {
-            if ($value->loai == 4) {
+            if ($value->loai == 4 || $value->loai == 8) { // Bổ sung dòng này
                 $count_truong_tracnghiem += 1;
             } elseif ($value->loai == 2) {
                 $count_truong_tuluan += 1;
@@ -77,13 +77,16 @@ class SvKhaoSatController extends Controller
         $hocky_hienhanh = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first();
 
 
+        //Bổ sung
+
         // Validate giá trị ảo
         foreach ($temp_tracnghiem as $key => $item) {
             if(!is_numeric($item)){
-                $temp_tracnghiem[$key] = 3;
+                $temp_tracnghiem[$key] = 0;
             }
+            // Bổ sung if này
             if (DB::table("khaosat_mautraloi")->where('id', $temp_tracnghiem[$key])->first() == null) {
-                $temp_tracnghiem[$key] = 3;
+                $temp_tracnghiem[$key] = 0;
             }
             if (is_array($item)) {
                 $temp_tracnghiem[$key] = implode('|', $item);

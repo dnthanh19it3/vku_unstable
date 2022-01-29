@@ -76,21 +76,36 @@ class SvHosoController extends Controller
      *  View hồ sơ
      */
     public function hosoIndex(Request $request){
-        $sinhvien = getSinhVienData(session('masv'));
+        $masv = '19IT195';
+        $sinhvien = null;
 
-        $sinhvien->thanhphangiadinh = $sinhvien->thanhphangiadinh ? explode('|', $sinhvien->thanhphangiadinh) : null;
+
+        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
+        foreach ($sinhvien_all as $key => $item){
+            if($item->masv == $masv){
+                $sinhvien = $item;
+                break;
+            }
+        }
+
+//        dd($sinhvien);
+
+//        $sinhvie->thanhphangiadinh = $sinhvien->thanhphangiadinh ? explode('|', $sinhvien->thanhphangiadinh) : null;
         $sinhhvienTamtru = DB::table('table_sinhvien_tamtru')->where('masv', "=", session('masv'))->get();
+
         if(isset($sinhvien->avatar)){
             $sinhvien->avatar = asset($sinhvien->avatar);
         } else {
             $sinhvien->avatar = "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png";
         }
+
         $khenthuong = DB::table('table_sinhvien_khenthuong')
             ->join("table_namhoc_hocky", function ($join){
                 $join->on("table_sinhvien_khenthuong.namhoc", "=", "table_namhoc_hocky.id");
                 $join->on("table_sinhvien_khenthuong.hocky", "=", "table_namhoc_hocky.hocky");
             })->where('masv', session('masv'))
             ->get();
+
         $kyluat = DB::table('table_sinhvien_kyluat')
             ->join("table_namhoc_hocky", function ($join){
                 $join->on("table_sinhvien_kyluat.namhoc", "=", "table_namhoc_hocky.id");
@@ -136,4 +151,48 @@ class SvHosoController extends Controller
 }
 
 
-
+    function getTruongTinh($key, $data){
+        $data = (object) $data;
+        switch ($key) {
+            case 'hoten':
+                return $data->hodem." ".$data->ten;
+            case 'ngaysinh':
+                return vnDate($data->ngaysinh);
+            case 'gioitinh':
+                return $data->gioitinh ? 'Nữ' : 'Nam';
+            case 'tongiao':
+                if($data->tongiao == 0){
+                    return "Không";
+                }
+                return $data->tongiao;
+            case 'doanthe':
+                switch ($data->doanthe) {
+                    case 0:
+                        return "Không";
+                    case 1:
+                        return "Đoàn viên";
+                    case 2:
+                        return "Đảng viên";
+                }
+            case 'ngayketnap':
+                return $data->ngayketnap ? vnDate($data->ngayketnap) : "";
+            case 'khoa':
+                return "Chưa có dữ liệu";
+            case 'khoaK':
+                return $data->khoaK;
+            case 'tennganh':
+                if($data->tennganh && $data->tenchuyennganh){
+                    return $data->tennganh;
+                } else {
+                    return $data->tenchuyennganh;
+                }
+            case 'tenchuyennganh':
+                if($data->tenchuyennganh != null && $data->tennganh != null){
+                    return $data->tenchuyennganh;
+                } else {
+                    return null;
+                }
+            case 'hokhauthuongtru':
+                return $data->xa_phuong . ', ' . $data->quan_huyen . ', ' . $data->tinh_thanh;
+        }
+    }
