@@ -307,9 +307,7 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
                 //Sua thong tin ca nhan
                 Route::get('canhan', 'AdQuanLySv@caNhanView')->name('ad.suasinhvien.canhan');
                 Route::post('canhan', 'AdQuanLySv@caNhanStore')->name('ad.suasinhvien.canhan.store');
-                //Anh va duyet anh
-                Route::get('anh', 'AdQuanLySv@anhView')->name('ad.suasinhvien.anh');
-                Route::get('duyetanh', 'AdQuanLySv@duyetAnh')->name('ad.duyetanh');
+
                 //Khen thuong
                 Route::get('khenthuong', 'AdQuanLySv@khenThuong')->name('ad.suasinhvien.khenthuong');
                 Route::get('themkhenthuong', 'AdQuanLySv@themKhenThuongView')->name('ad.suasinhvien.khenthuong.themview'); //View them khen thuong

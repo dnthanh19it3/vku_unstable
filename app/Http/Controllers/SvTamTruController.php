@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -88,15 +89,16 @@ class SvTamTruController extends Controller
         $tamtrucu = DB::table('table_sinhvien_tamtru')->where('masv', session('masv'))->where('trangthai', 1)->first();    //Tạm trú cũ
 
         $data = $request->validate([
-            'sonha' => ['required', 'regex:/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/'],
-            'thonto' => 'required',
+            'sonha' => 'nullable',
+            'thonto' => 'nullable',
             'xaphuong_id' => 'required|numeric',
             'quanhuyen_id' => 'required|numeric',
             'tinhthanh_id' => 'required|numeric',
-            'tenchuho' => ['required', 'regex:/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/'],
-            'sdtchuho' => ['required', 'regex:/(84|0[3|5|7|8|9])+([0-9]{8})/'],
-            'thoigianbatdau' => 'required|before:' . now(),
+            'tenchuho' => 'nullable',
+            'sdtchuho' => 'nullable',
+            'thoigianbatdau' => 'required|before:' . Carbon::now(),
         ]);
+
         $data['trangthai'] = 1;
         $data['created_at'] = now();
         $data['masv'] = session('masv');
