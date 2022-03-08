@@ -14,13 +14,18 @@ class SvHosoController extends Controller
     public function suahosoStore(Request $request){
         $masv = "19IT216";
         $flag = 1;
-        $data = $this->validate($request,
-            [
-                "email_khac" => "nullable|email",
-                "dienthoai" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
-                "zalo" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
-                "facebook" => ["nullable", "regex:/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/"],
-            ]);
+//        $data = $this->validate($request,
+//            [
+//                "email_khac" => "nullable|email",
+//                "dienthoai" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
+//                "zalo" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
+//                "facebook" => ["nullable", "regex:/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/"],
+//            ]);
+
+        $data = $request->all();
+        unset($data['_token']);
+
+
         $update = DB::table('table_sinhvien_chitiet')->where('masv', $masv)->update($data);
         if (!$update) {
             $flag = 0;
