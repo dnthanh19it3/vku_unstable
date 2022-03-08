@@ -88,6 +88,7 @@ class SvTamTruController extends Controller
         $hocky_info = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first(); // Thông tin học kì
         $tamtrucu = DB::table('table_sinhvien_tamtru')->where('masv', session('masv'))->where('trangthai', 1)->first();    //Tạm trú cũ
 
+        //Cập nhật validate
         $data = $request->validate([
             'sonha' => 'nullable',
             'thonto' => 'nullable',
@@ -95,7 +96,7 @@ class SvTamTruController extends Controller
             'quanhuyen_id' => 'required|numeric',
             'tinhthanh_id' => 'required|numeric',
             'tenchuho' => 'nullable',
-            'sdtchuho' => 'nullable',
+            'sdtchuho' => ['nullable', 'regex:/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/'],
             'thoigianbatdau' => 'required|before:' . Carbon::now(),
         ]);
 
@@ -126,13 +127,13 @@ class SvTamTruController extends Controller
                 'created_at' => now()
             ]);
         }
-        // Return back
+        // Cập nhật lại route quay về bảng chi tiết, thêm thông báo thành công!
         if($flag){
-            return back()->with(['flash_level'=>'success','flash_message'=>'Thành công!']);
-            return back();
+            $request->session()->flash('success', "Cập nhật thành công!");
+            return redirect(route('sv.tamtru.index'));
         } else {
-            return back()->with(['flash_level'=>'danger','flash_message'=>'Thất bại!']);
-            return back();
+            $request->session()->flash('error', "Cập nhật thất bại!");
+            return redirect(route('sv.tamtru.index'));
         }
 
     }
