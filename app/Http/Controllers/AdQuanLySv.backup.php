@@ -50,67 +50,11 @@ class AdQuanLySv extends Controller
     }
 
     function chiTietSinhVienView(Request $request, $masv)
-    {
-        $sinhvien = null;
-        $sinhvien_chitiet = DB::table('table_sinhvien_chitiet')->where('masv', $masv)->first();
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
-        foreach ($sinhvien_all as $key => $item){
-            if($item->masv == $masv){
-                $sinhvien = $item;
-                break;
-            }
-        }
-
-//        dd($sinhvien);
-
-        $sinhvien_chitiet->thanhphangiadinh = $sinhvien_chitiet->thanhphangiadinh ? explode('|', $sinhvien_chitiet->thanhphangiadinh) : null;
-        $sinhhvienTamtru = DB::table('table_sinhvien_tamtru')->where('masv', "=", $masv)->get();
-
-
-        switch ($sinhvien_chitiet->doanthe) {
-            case 0:
-                $sinhvien_chitiet->doanthe = "Không";
-                break;
-            case 1:
-                $sinhvien_chitiet->doanthe = "Đoàn viên";
-                break;
-            case 2:
-                $sinhvien_chitiet->doanthe = "Đảng viên";
-                break;
-        }
-
-        $khenthuong = DB::table('table_sinhvien_khenthuong')
-            ->join("table_namhoc_hocky", function ($join){
-                $join->on("table_sinhvien_khenthuong.namhoc", "=", "table_namhoc_hocky.id");
-                $join->on("table_sinhvien_khenthuong.hocky", "=", "table_namhoc_hocky.hocky");
-            })->where('masv', $masv)
-            ->get();
-
-        $kyluat = DB::table('table_sinhvien_kyluat')
-            ->join("table_namhoc_hocky", function ($join){
-                $join->on("table_sinhvien_kyluat.namhoc", "=", "table_namhoc_hocky.id");
-                $join->on("table_sinhvien_kyluat.hocky", "=", "table_namhoc_hocky.hocky");
-            })
-            ->where('masv', $masv)->get();
-        $log_sinhvien = DB::table('table_log_sinhvien')->join('table_log_loai', 'table_log_sinhvien.id_log_loai', '=', 'table_log_loai.id')->where('masv', $masv)->orderBy('created_at', 'DESC')->get();
-        $renluyen = DB::table('table_danhgiarenluyen')
-            ->join("table_namhoc_hocky", function ($join){
-                $join->on("table_danhgiarenluyen.namhoc", "=", "table_namhoc_hocky.id");
-                $join->on("table_danhgiarenluyen.hocky", "=", "table_namhoc_hocky.hocky");
-            })
-            ->where('table_danhgiarenluyen.masv', $masv)
-            ->get();
-        //Get Chart data
-        $renluyen_chart = [
-            'value' => [],
-            'label' => []
-        ];
-        foreach ($renluyen as $key => $item){
-            array_push($renluyen_chart['value'], $item->diem);
-            array_push($renluyen_chart['label'], 'HK '.$item->hocky .' '.$item->nambatdau."-".$item->namketthuc);
-        }
-
-        //
+    {   //Thong tin sinh vien
+        $sinhvien = getSinhVienData($masv);
+        //Thanh phan gia dinh
+        $sinhvien->thanhphangiadinh = $sinhvien->thanhphangiadinh ? explode('|', $sinhvien->thanhphangiadinh) : null;
+        //Thong tin tam tru
         $tamtru = DB::table('table_sinhvien_tamtru')
             ->join("table_namhoc_hocky", function ($join){
                 $join->on("table_sinhvien_tamtru.namhoc", "=", "table_namhoc_hocky.id");
@@ -139,19 +83,55 @@ class AdQuanLySv extends Controller
                 'table_namhoc_hocky.nambatdau',
                 'table_namhoc_hocky.namketthuc'
             ]);
-
-
-
-        return view('Admin.SinhVien.Chitiet')
-            ->with('sinhvien', $sinhvien)
-            ->with('sinhvien_chitiet', $sinhvien_chitiet)
-            ->with('sinhvienTamtru', $sinhhvienTamtru)
-            ->with('kyluat', $kyluat)
-            ->with('khenthuong', $khenthuong)
+        //Khen thuong
+        $khenthuong = DB::table("table_sinhvien_khenthuong")
+            ->join("table_namhoc_hocky", function ($join){
+                $join->on("table_sinhvien_khenthuong.namhoc", "=", "table_namhoc_hocky.id");
+                $join->on("table_sinhvien_khenthuong.hocky", "=", "table_namhoc_hocky.hocky");
+            })
+            ->where("table_sinhvien_khenthuong.masv", $masv)
+            ->get();
+        //KyLuat
+        $kyluat = DB::table("table_sinhvien_kyluat")
+            ->join("table_namhoc_hocky", function ($join){
+                $join->on("table_sinhvien_kyluat.namhoc", "=", "table_namhoc_hocky.id");
+                $join->on("table_sinhvien_kyluat.hocky", "=", "table_namhoc_hocky.hocky");
+            })
+            ->where("table_sinhvien_kyluat.masv", $masv)
+            ->get();
+        //Timeline
+        $log_sinhvien = DB::table('table_log_sinhvien')->join('table_log_loai', 'table_log_sinhvien.id_log_loai', '=', 'table_log_loai.id')->where('masv', $masv)->orderBy('created_at', 'DESC')->get();
+        //Ren luyen
+        $renluyen = DB::table("table_danhgiarenluyen")
+            ->where("table_danhgiarenluyen.masv", $masv)
+            ->join("table_namhoc_hocky", function ($join){
+                $join->on("table_danhgiarenluyen.namhoc", "=", "table_namhoc_hocky.id");
+                $join->on("table_danhgiarenluyen.hocky", "=", "table_namhoc_hocky.hocky");
+            })
+            ->get();
+        //Get Chart data
+        $renluyen_chart = [
+            'value' => [],
+            'label' => []
+        ];
+        foreach ($renluyen as $key => $item){
+            array_push($renluyen_chart['value'], $item->diem);
+            array_push($renluyen_chart['label'], 'HK '.$item->hocky .' '.$item->nambatdau."-".$item->namketthuc);
+        }
+        //Avatar
+        if (isset($sinhvien->avatar)) {
+            $sinhvien->avatar = asset($sinhvien->avatar);
+        } else {
+            $sinhvien->avatar = "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png";
+        }
+        return view("Admin.SinhVien.Chitiet")
+            ->with("sinhvien", $sinhvien)
+            ->with("tamtru", $tamtru)
+            ->with("kyluat", $kyluat)
+            ->with("khenthuong", $khenthuong)
+            ->with("renluyen", $renluyen)
             ->with('log_sinhvien', $log_sinhvien)
-            ->with('renluyen', $renluyen)
-            ->with('renluyen_chart', $renluyen_chart)
-            ->with("tamtru", $tamtru);
+            ->with('renluyen_chart', $renluyen_chart);;
     }
     /*
      Sua ho so
@@ -160,28 +140,19 @@ class AdQuanLySv extends Controller
     //Ca nhan get
     public function caNhanView(Request $request, $masv)
     {
-
-        $sinhvien_static = null;
-
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
-        foreach ($sinhvien_all as $key => $item){
-            if($item->masv == $masv){
-                $sinhvien_static = $item;
-                break;
-            }
-        }
-
         $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
             ->join("table_nganh", "table_sinhvien.nganh_id", "=", "table_nganh.id")
             ->first();
         $sinhvien->thanhphangiadinh = $sinhvien->thanhphangiadinh ? explode('|', $sinhvien->thanhphangiadinh) : null;
-
-
+        if(isset($sinhvien->avatar)){
+            $sinhvien->avatar = asset($sinhvien->avatar);
+        } else {
+            $sinhvien->avatar = "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png";
+        }
         return view("Admin.SinhVien.Sua.CaNhan")->with([
             "sinhvien" => $sinhvien,
-            "sinhvien_static" => $sinhvien_static
         ]);
     }
 
@@ -193,61 +164,124 @@ class AdQuanLySv extends Controller
      * */
     public function caNhanStore(Request $request, $masv)
     {
-        $flag = 1;
-        $data = $request->data;
-        $chitiet = $data['chitiet'];
-
-        $sinhvien_data = $data['sinhvien'];
-        $chitiet_data = null;
-
-        $canhan = $chitiet['canhan'];
-        $giadinh = $chitiet['giadinh'];
-        $lienlac = $chitiet['lienlac'];
-        $diachi = $chitiet['diachi'];
-
-        if($giadinh['thanhphangiadinh'] != null){
-            if(count($giadinh['thanhphangiadinh']) > 0){
-                $giadinh['thanhphangiadinh'] = implode('|', $giadinh['thanhphangiadinh']);
+        $sinhvien_chitiet = [
+            "cmnd" => $request->cmnd,
+            "ngaycap" => $request->ngaycap,
+            "noicap" => $request->noicap,
+            "ma_bhyt" => $request->ma_bhyt,
+            "doanthe" => $request->doanthe,
+            "ngayketnap" => $request->ngayketnap,
+            "tongiao" => $request->tongiao,
+            //Thong tin cha
+            "hotencha" => $request->hotencha,
+            "namsinhcha" => $request->namsinhcha,
+            "dantoc_cha" => $request->dantoc_cha,
+            "cmnd_cha" => $request->cmnd_cha,
+            "nghenghiep_cha" => $request->nghenghiep_cha,
+            "sdt_cha" => $request->sdt_cha,
+            "email_cha" => $request->email_cha,
+            "diachi_cha" => $request->diachi_cha,
+            //Thong tin me
+            "hotenme" => $request->hotenme,
+            "namsinhme" => $request->namsinhme,
+            "dantoc_me" => $request->dantoc_me,
+            "cmnd_me" => $request->cmnd_me,
+            "nghenghiep_me" => $request->nghenghiep_me,
+            "sdt_me" => $request->sdt_me,
+            "email_me" => $request->email_me,
+            "diachi_me" => $request->diachi_me,
+            // Thanh phan gia
+            "thanhphangiadinh" => $request->thanhphangiadinh,
+            "tinh_thanh" => $request->tinh_thanh,
+            "quan_huyen" => $request->quan_huyen,
+            "xa_phuong" => $request->xa_phuong,
+            "thon_to" => $request->thon_to,
+            //Thong tin lien he
+            "dia_chi_lien_lac" => $request->dia_chi_lien_lac,
+            "email_khac" => $request->email_khac,
+            "facebook" => $request->facebook,
+            "dienthoai" => $request->dienthoai,
+            "dienthoaigiadinh" => $request->dienthoaigiadinh,
+            "zalo" => $request->zalo
+        ];
+        // Xử lý thành phần gia đình
+        $str_thanhphangiadinh = "";
+        if(isset($sinhvien_chitiet['thanhphangiadinh'])){
+            foreach ($sinhvien_chitiet['thanhphangiadinh'] as $value){
+                $str_thanhphangiadinh = $str_thanhphangiadinh . $value . "|";
             }
         }
-
-        $chitiet_data = array_merge($canhan, $giadinh, $lienlac, $diachi);
-
-        $sinhvien_data['updated_at'] = \Illuminate\Support\Carbon::now();
-        $chitiet_data['updated_at'] = \Illuminate\Support\Carbon::now();
-
-        $update_sinhvien = DB::table('table_sinhvien')->where('masv', $masv)->update($sinhvien_data);
-        $update_chitiet = DB::table('table_sinhvien_chitiet')->where('masv', $masv)->update($chitiet_data);
-
-        if($update_chitiet || $update_sinhvien){
-            $flag == 0;
+        $str_thanhphangiadinh = rtrim($str_thanhphangiadinh, "|");
+        $sinhvien_chitiet['thanhphangiadinh'] = $str_thanhphangiadinh;
+        $update_sinhvien_chitiet = DB::table("table_sinhvien_chitiet")->where("masv", $masv)->update($sinhvien_chitiet);
+        if(!$update_sinhvien_chitiet){
+            $flag = 0;
         }
-
         //Log
-        if($flag){
-            $log = DB::table('table_log_sinhvien')->insert([
-                'masv' => $masv,
-                'id_log_loai' => 3,
-                'created_at' => now()
-            ]);
+        $log = DB::table('table_log_sinhvien')->insert([
+            'masv' => $masv,
+            'id_log_loai' => 3,
+            'created_at' => now()
+        ]);
+        // Return back
+
+
+        if ($update_sinhvien_chitiet) {
+            pushNotify(1);
+            return back();
         } else {
-            // Throw lỗi
+            pushNotify(0);
             return back();
         }
-        return back();
     }
+    // Anh
+    function anhView(Request $request, $masv){
+        $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
+            ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
+            ->first();
+        if(isset($sinhvien->avatar)){
+        $sinhvien->avatar = asset($sinhvien->avatar);
+        } else {
+            $sinhvien->avatar = "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png";
+        }
+        $anhdatailen = DB::table("table_sinhvien_anhcu")->where("masv", "=", $masv)->get();
 
+        return view("Admin.SinhVien.Sua.Anh")->with([
+            "sinhvien" => $sinhvien,
+            "anhdatailen" => $anhdatailen
+        ]);
+    }
+    function duyetAnh(Request $request, $masv)
+    {
+
+        $sinhvien = DB::table("table_sinhvien_chitiet")->where("masv", "=", $masv)->first();
+        $old_path = "AnhHoSoCu/" . $masv . "_" . time() . ".png";
+
+        if(isset($sinhvien->avatar)){
+            $backup_cu = File::copy(public_path($sinhvien->avatar), public_path($old_path));
+            DB::table("table_sinhvien_anhcu")->insert([
+                "masv" => $masv,
+                "duongdan" => $old_path,
+                "created_at" => Carbon::now()
+            ]);
+        }
+
+        $copy = File::copy(public_path($sinhvien->avatar_temp), public_path("AnhHoSo/" . $masv . ".png"));
+        $change = null; //Flag
+
+        if ($copy) {
+            $change = DB::table("table_sinhvien_chitiet")->where("masv", "=", $masv)->update(["avatar" => "AnhHoSo/" . $masv . ".png", "avatar_temp" => null]);
+        } else {
+            pushNotify(0);
+            return redirect()->back();
+        }
+        if ($change) {
+            pushNotify(1);
+            return redirect()->back();
+        }
+    }
     //Khenthuong
     function khenThuong(Request $request, $masv){
-        $sinhvien_static = null;
-
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
-        foreach ($sinhvien_all as $key => $item){
-            if($item->masv == $masv){
-                $sinhvien_static = $item;
-                break;
-            }
-        }
         $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
@@ -255,7 +289,7 @@ class AdQuanLySv extends Controller
         $khenthuong = DB::table("table_sinhvien_khenthuong")->join("table_namhoc_hocky", function ($join){
             $join->on("table_sinhvien_khenthuong.namhoc", "=", "table_namhoc_hocky.id");
             $join->on("table_sinhvien_khenthuong.hocky", "=", "table_namhoc_hocky.hocky");
-        })->where("table_sinhvien_khenthuong.masv", $masv)->where('table_sinhvien_khenthuong.trangthai', 1)->get([
+        })->where("masv", $masv)->get([
             'table_sinhvien_khenthuong.id',
             'table_sinhvien_khenthuong.masv',
             'table_sinhvien_khenthuong.noidung',
@@ -272,10 +306,7 @@ class AdQuanLySv extends Controller
         $kyluat = DB::table("table_sinhvien_kyluat")->join("table_namhoc_hocky", function ($join){
             $join->on("table_sinhvien_kyluat.namhoc", "=", "table_namhoc_hocky.id");
             $join->on("table_sinhvien_kyluat.hocky", "=", "table_namhoc_hocky.hocky");
-        })
-            ->where("table_sinhvien_kyluat.masv", $masv)
-            ->where('table_sinhvien_kyluat.trangthai', 1)
-            ->get(['table_sinhvien_kyluat.id',
+        })->where("masv", $masv)->get(['table_sinhvien_kyluat.id',
             'table_sinhvien_kyluat.masv',
             'table_sinhvien_kyluat.noidung',
             'table_sinhvien_kyluat.capquyetdinh',
@@ -291,20 +322,10 @@ class AdQuanLySv extends Controller
         return view("Admin.SinhVien.Sua.KhenThuong")->with([
             "khenthuong" => $khenthuong,
             "kyluat" => $kyluat,
-            "sinhvien" => $sinhvien,
-            'sinhvien_static' => $sinhvien_static
+            "sinhvien" => $sinhvien
         ]);
     }
     function themKhenThuongView(Request $request, $masv){
-        $sinhvien_static = null;
-
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
-        foreach ($sinhvien_all as $key => $item){
-            if($item->masv == $masv){
-                $sinhvien_static = $item;
-                break;
-            }
-        }
         $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
@@ -312,8 +333,7 @@ class AdQuanLySv extends Controller
         $namhoc_hocky = DB::table('table_namhoc_hocky')->addSelect(['id', 'nambatdau', 'namketthuc'])->distinct()->get('id');
         return view('Admin.SinhVien.Sua.ThemKhenThuong')->with([
             'sinhvien' => $sinhvien,
-            'namhoc_hocky' => $namhoc_hocky,
-            'sinhvien_static' => $sinhvien_static
+            'namhoc_hocky' => $namhoc_hocky
         ]);
     }
     function khenThuongStore(Request $request, $masv)
@@ -339,18 +359,9 @@ class AdQuanLySv extends Controller
         }
 
         pushNotify($response);
-        return redirect(route('ad.suasinhvien.khenthuong', ['masv' => $masv]));
+        return redirect()->back();
     }
     function suaKhenThuong(Request $request, $masv, $id){
-        $sinhvien_static = null;
-
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
-        foreach ($sinhvien_all as $key => $item){
-            if($item->masv == $masv){
-                $sinhvien_static = $item;
-                break;
-            }
-        }
         $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->first();
@@ -359,8 +370,7 @@ class AdQuanLySv extends Controller
         return view("Admin.SinhVien.Sua.SuaKhenThuong")->with([
             "khenthuong" => $khenthuong,
             "sinhvien" => $sinhvien,
-            'namhoc_hocky' => $namhoc_hocky,
-            'sinhvien_static' => $sinhvien_static
+            'namhoc_hocky' => $namhoc_hocky
         ]);
     }
     function suaKhenThuongStore(Request $request, $masv, $id)
@@ -383,27 +393,17 @@ class AdQuanLySv extends Controller
                 'created_at' => now()
             ]);
         }
-        return redirect(route('ad.suasinhvien.khenthuong', ['masv' => $masv]));
+
+        pushNotify($response);
+        return redirect()->back();
     }
-    function xoaKhenThuong(Request $request, $masv, $id){
-        $xoa = DB::table("table_sinhvien_khenthuong")->where("id", $id)
-            ->update([
-                'updated_at' => \Illuminate\Support\Carbon::now(),
-                'trangthai' => 0
-            ]);
+    function xoaKhenThuong(Request $request, $id){
+        $xoa = DB::table("table_sinhvien_khenthuong")->where("id", $id)->delete();
+        pushNotify($xoa);
         return redirect()->back();
     }
 
     function themKyLuatView(Request $request, $masv){
-        $sinhvien_static = null;
-
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
-        foreach ($sinhvien_all as $key => $item){
-            if($item->masv == $masv){
-                $sinhvien_static = $item;
-                break;
-            }
-        }
         $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->join("table_lopsh", "table_sinhvien.lopsh_id", "=", "table_lopsh.id")
@@ -411,8 +411,7 @@ class AdQuanLySv extends Controller
         $namhoc_hocky = DB::table('table_namhoc_hocky')->addSelect(['id', 'nambatdau', 'namketthuc'])->distinct()->get('id');
         return view('Admin.SinhVien.Sua.ThemKyLuat')->with([
             'sinhvien' => $sinhvien,
-            "namhoc_hocky" => $namhoc_hocky,
-            "sinhvien_static" => $sinhvien_static
+            "namhoc_hocky" => $namhoc_hocky
         ]);
     }
     function kyLuatStore(Request $request, $masv)
@@ -437,18 +436,10 @@ class AdQuanLySv extends Controller
                 'created_at' => now()
             ]);
         }
-        return redirect(route('ad.suasinhvien.khenthuong', ['masv' => $masv]));
+        pushNotify($response);
+        return redirect()->back();
     }
     function suaKyLuat(Request $request, $masv, $id){
-        $sinhvien_static = null;
-
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
-        foreach ($sinhvien_all as $key => $item){
-            if($item->masv == $masv){
-                $sinhvien_static = $item;
-                break;
-            }
-        }
         $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)
             ->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")
             ->first();
@@ -457,8 +448,7 @@ class AdQuanLySv extends Controller
         return view("Admin.SinhVien.Sua.SuaKyLuat")->with([
             "kyluat" => $kyluat,
             "sinhvien" => $sinhvien,
-            'namhoc_hocky' => $namhoc_hocky,
-            "sinhvien_static" => $sinhvien_static
+            'namhoc_hocky' => $namhoc_hocky
         ]);
     }
     function suaKyLuatStore(Request $request, $masv, $id)
@@ -482,14 +472,12 @@ class AdQuanLySv extends Controller
                 'created_at' => now()
             ]);
         }
-        return redirect(route('ad.suasinhvien.khenthuong', ['masv' => $masv]));
+        pushNotify($response);
+        return redirect()->back();
     }
-    function xoaKyLuat(Request $request, $masv, $id){
-        $xoa = DB::table("table_sinhvien_kyluat")->where("id", $id)
-            ->update([
-                'updated_at' => \Illuminate\Support\Carbon::now(),
-                'trangthai' => 0
-            ]);
+    function xoaKyLuat(Request $request, $id){
+        $xoa = DB::table("table_sinhvien_kyluat")->where("id", $id)->delete();
+        pushNotify($xoa);
         return redirect()->back();
     }
 
@@ -503,4 +491,27 @@ class AdQuanLySv extends Controller
         return $email;
     }
 }
-
+//public function caNhanView(Request $request, $masv){
+//    $sinhvien = DB::table("table_sinhvien")->where("table_sinhvien.masv", $masv)->join("table_sinhvien_chitiet", "table_sinhvien.masv", "=", "table_sinhvien_chitiet.masv")->first();
+//    $tamtru = DB::table("table_sinhvien_tamtru")->where("id", "=", $sinhvien->tamtru)->first();
+//    $hocky_info = DB::table("table_namhoc_hocky")->where("hienhanh", "=", 1)->first();
+//    $kyluat = DB::table("table_sinhvien_kyluat")->where("masv", "=", $masv)->get();
+//    $tamtrucount = DB::table("table_sinhvien_tamtru")
+//        ->where("masv", "=", session("masv"))
+//        ->where("namhoc_hocky", "=", $hocky_info->namhoc_key)
+//        ->count("id");
+//    $anhdatailen = DB::table("table_sinhvien_anh")->where("masv", "=", $masv)->get();
+//    if(isset($sinhvien->avatar)){
+//        $sinhvien->avatar = asset($sinhvien->avatar);
+//    } else {
+//        $sinhvien->avatar = "https://iptc.org/wp-content/uploads/2018/05/avatar-anonymous-300x300.png";
+//    }
+//    return view("Admin.SinhVien.Sua.CaNhan")->with([
+//        "sinhvien"=> $sinhvien,
+//        "tamtru" => $tamtru,
+//        "hocky" => $hocky_info,
+//        "tamtrucount" => $tamtrucount,
+//        "anhdatailen" => $anhdatailen,
+//        "kyluat" => $kyluat
+//    ]);
+//}

@@ -78,7 +78,6 @@ class SvDonTuController extends Controller
         }
     }
 
-
     // Lưu đơn
     function nopdonStore(Request $request, $maudon_id)
     {
@@ -160,15 +159,12 @@ class SvDonTuController extends Controller
             DB::commit();
             return back()->with(['flash_level'=>'success','flash_message'=>'Thành công!']);
         }
-
-
-
     }
 
     // Chi tiet mau
     function chiTietThuTuc(Request $request, $maudon_id){
         $don = DB::table('table_maudon')->where('maudon_id', $maudon_id)->first();
-        $sinhvien = getSinhVienData(session('masv'));
+        $sinhvien = $this->getSinhVienData(session('masv'));
 
         $listtruong = explode(',', $don->truong);
         $mangTruong = array();
@@ -185,7 +181,7 @@ class SvDonTuController extends Controller
             'maudon_id' => $request->maudon_id,
             'tendon' => $don->tenmaudon,
             'don' => $don,
-            'sinhvien' => get_object_vars($sinhvien)
+            'sinhvien' => $sinhvien
         ]);
     }
 
@@ -209,7 +205,7 @@ class SvDonTuController extends Controller
             ->join('table_donvi_phongban', 'table_don.phongban_xuly', '=', 'table_donvi_phongban.id')
             ->where('table_don.don_id', $don_id)
             ->first()->tenphongkhoa;
-        $sinhvien = getSinhVienData($don->masv);
+        $sinhvien = $this->getSinhVienData($don->masv);
         $timeline = DB::table('table_don_logs')->where('don_id', $don_id)->where('an', '<>', '1')->orderBy('thoigian', 'DESC')->get();
         $filedList = explode(',', $don->truong);
         foreach ($filedList as $key => $item) {
@@ -217,6 +213,7 @@ class SvDonTuController extends Controller
                 unset($filedList[$key]);
             }
         }
+
         $mangTruong = array();
         foreach ($filedList as $key => $item) {
             $rs = DB::table('table_maudon_chitiet')
@@ -230,11 +227,11 @@ class SvDonTuController extends Controller
                 $rs_emp = DB::table('table_maudon_chitiet')
                     ->where('table_maudon_chitiet.id', $item)
                     ->first();
-
                 $mangTruong[$rs_emp->id] = (object) [
                     'tentruong' => $rs_emp->tentruong,
                     'lienket' => $rs_emp->lienket,
                     'loai_id' => $rs_emp->loai_id,
+                    'noidung' => $this->getTruongTinh($rs_emp->lienket, $sinhvien)
                 ];
             }
         }
@@ -305,8 +302,57 @@ class SvDonTuController extends Controller
         return redirect()->back();
     }
 
-    /*
-        API Controller
-    */
-
+    function getSinhVienData($masv){
+        $sinhvien_static = null;
+        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
+        foreach ($sinhvien_all as $key => $item){
+            if($item->masv == $masv){
+                $sinhvien_static = $item;
+                break;
+            }
+        }
+        $sinhvien_chitiet = DB::table('table_sinhvien_chitiet')
+            ->where('table_sinhvien_chitiet.masv', $masv)
+            ->first();
+        $sinhvien = array_merge((array) $sinhvien_chitiet, (array) $sinhvien_static);
+        $sinhvien['email'] = DB::table('table_sinhvien')->where('masv', $masv)->first('email')->email;
+//        dd($sinhvien);
+        return $sinhvien;
+    }
+    function getTruongTinh($key, $data){
+        $data = (object) $data;
+        switch ($key) {
+            case 'hoten':
+                return $data->hodem." ".$data->ten;
+            case 'ngaysinh':
+                return vnDate($data->ngaysinh);
+            case 'gioitinh':
+                return $data->gioitinh ? 'Nữ' : 'Nam';
+            case 'tongiao':
+                if($data->tongiao == 0){
+                    return "Không";
+                }
+                return $data->tongiao;
+            case 'doanthe':
+                switch ($data->doanthe) {
+                    case 0:
+                        return "Không";
+                    case 1:
+                        return "Đoàn viên";
+                    case 2:
+                        return "Đảng viên";
+                }
+            case 'ngayketnap':
+                return \Illuminate\Support\Carbon::make($data->ngayketnap)->format('d/m/Y');
+            case 'hokhauthuongtru':
+                return $data->xa_phuong . ', ' . $data->quan_huyen . ', ' . $data->tinh_thanh;
+            default:
+                if(property_exists($data, $key)){
+                    return ((array) $data)[$key];
+                }
+                return "N/A";
+        }
+    }
 }
+
+

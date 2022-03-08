@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use mysql_xdevapi\Exception;
 use Zalo\Builder\MessageBuilder;
+use Zalo\Exceptions\ZaloAuthenticationException;
+use Zalo\Exceptions\ZaloClientException;
+use Zalo\Exceptions\ZaloOAException;
 use Zalo\Exceptions\ZaloOtherException;
 use Zalo\Exceptions\ZaloSDKException;
 use Zalo\Zalo;
@@ -14,13 +17,16 @@ use GuzzleHttp\Client;
 
 class ZaloAPI extends Controller
 {
+
+
+
     const BASE_URL = 'https://openapi.zalo.me';
     const ZALO_ACCESS_TOKEN = 'c0zYIWSCA5-H3sH220uhKPSER5fiJI1BfYzk8rnmScctEKeZHr5PGQKxT5PcNZW2Z04H46jcBcMe83eoD2KCSjz-C3iI87zH-dzIDJyPM4NHHq1KC4PDDVioGcXbS0HWd118FLnGK6x3KaCF1JGBO-WnCG0KTIjcmGCP0JnqKqBQQLKtM2bZ8yugPp8sV4DFsXLR1Jji47hT42qQBLbaQB4TS7XHOLGCqsXYMp5lA3hGA61p2YWgPvOl671WTYmFcpGMJmHcBJFU939r66Gc9_y5O4muT6slC7ub114fLm';
     const SINHVIEN = 1;
     const PHUHUYNH = 0;
-
-
     public $zalo;
+
+
 
 
     function __construct()
@@ -96,14 +102,19 @@ class ZaloAPI extends Controller
 
     public function guiTinNhanText($user_id, $content)
     {
-        $msgBuilder = new MessageBuilder('text');
-        $msgBuilder->withUserId($user_id);
-        $msgBuilder->withText($content);
+//        $msgBuilder = new MessageBuilder('text');
+//        $msgBuilder->withUserId($user_id);
+//        $msgBuilder->withText($content);
+//
+//        $msgText = $msgBuilder->build();
+//        // send request
+//        $response = $this->zalo->post(ZaloEndpoint::API_OA_SEND_MESSAGE, self::ZALO_ACCESS_TOKEN, $msgText);
+//        $result = $response->getDecodedBody(); // result
 
-        $msgText = $msgBuilder->build();
-        // send request
-        $response = $this->zalo->post(ZaloEndpoint::API_OA_SEND_MESSAGE, self::ZALO_ACCESS_TOKEN, $msgText);
-        $result = $response->getDecodedBody(); // result
+
+
+
+
         return response("OK", 200);
     }
 
@@ -505,8 +516,6 @@ class ZaloAPI extends Controller
     {
         $data = json_decode($request->getContent());
         $event = $data->event_name;
-
-
         try {
             switch ($event) {
                 case "follow":
@@ -520,6 +529,18 @@ class ZaloAPI extends Controller
                     break;
             }
         } catch (\Exception $e) {
+            $this->writeDebugHook($e);
+            return response(200);
+        } catch (ZaloAuthenticationException $e) {
+            $this->writeDebugHook($e);
+            return response(200);
+        } catch (ZaloSDKException $e) {
+            $this->writeDebugHook($e);
+            return response(200);
+        } catch (ZaloClientException $e) {
+            $this->writeDebugHook($e);
+            return response(200);
+        } catch (Zalo\ZaloOAException $e) {
             $this->writeDebugHook($e);
             return response(200);
         }

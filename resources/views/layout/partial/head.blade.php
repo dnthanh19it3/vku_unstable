@@ -13,7 +13,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <!-- Font Awesome -->
-    <link href="{{asset('vendors/font-awesome-pro/css/all.min.css')}}" rel="stylesheet">
+    <link href="{{asset('vendors/font-awesome/css/font-awesome.css')}}" rel="stylesheet">
     <!-- Marterial Icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- iCheck CSS -->

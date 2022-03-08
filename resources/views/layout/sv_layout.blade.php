@@ -354,7 +354,7 @@
 <script src="{{asset('vendors/jquery/dist/jquery.min.js')}}"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <!-- Bootstrap -->
-<script src="{{asset('vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+{{--<script src="{{asset('vendors/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>--}}
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <!-- FastClick -->
 <script src="{{asset('vendors/fastclick/lib/fastclick.js')}}"></script>

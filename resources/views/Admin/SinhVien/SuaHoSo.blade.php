@@ -1,4 +1,4 @@
-    @extends('layout.admin_layout')
+@extends('layout.admin_layout')
 @section('title', 'Sửa hồ sơ')
 @section('header')
 @endsection
@@ -16,20 +16,17 @@
                 </ul>
             </div>
             <div class="col-md-9 profile-mainpanel">
-                <h5>Thông tin abc</h5>
+                <h5>Thông tin</h5>
                 <form action="{{route('suahosoStore')}}" method="POST">
                     <h6>Thông tin cá nhân</h6>
                     <hr>
-                    <!-- Form Row-->
                     <div class="form-row">
-                        <!-- Form Group (first name)-->
                         <div class="form-group col-md-6">
                             <label class=" mb-1" for="inputFirstName">Họ</label>
                             <input type="text" class="form-control"
                                    value="{{$sinhvien->hodem}}">
                             <input type="text" name="avatar" id="avatar" hidden>
                         </div>
-                        <!-- Form Group (last name)-->
                         <div class="form-group col-md-6">
                             <label class=" mb-1" for="inputLastName">Tên</label>
                             <input type="text" class="form-control"
@@ -37,9 +34,7 @@
                             <input type="text" name="avatar" id="avatar" hidden>
                         </div>
                     </div>
-                    <!-- Form Row        -->
                     <div class="form-row">
-                        <!-- Form Group (organization name)-->
                         <div class="form-group col-md-4">
                             <label class=" mb-1" for="inputOrgName">Giói tính</label>
                             <select id="gioitinh" name="gioitinh" class="custom-select">

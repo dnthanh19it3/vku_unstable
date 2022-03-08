@@ -3,24 +3,29 @@
 @section('header')
 @endsection
 @section('body')
+    <style>
+        .mr-2{margin-right: 8px}
+        .ml-1{margin-left: 1px}
+        .mr-1{margin-right: 1px}
+    </style>
     <div class="row">
         <div class="col-lg-3 col-xs-12" style="margin-bottom: 1rem">
             <div class="profile-sidebar">
                 <!-- SIDEBAR USERPIC -->
                 <div class="profile-userpic">
-                    <img id="avatar_round" src="{{$sinhvien->avatar}}" class="img-responsive" alt="">
+                    <img id="avatar_round" src="{{$sinhvien_static->anhthe}}" class="img-responsive" alt="">
                 </div>
                 <!-- END SIDEBAR USERPIC -->
                 <!-- SIDEBAR USER TITLE -->
                 <div class="profile-usertitle">
                     <div class="profile-usertitle-name">
-                        {{$sinhvien->hodem." ".$sinhvien->ten}}
+                        {{$sinhvien_static->hodem." ".$sinhvien_static->ten}}
                     </div>
                     <div class="profile-usertitle-job">
-                        NGÀNH {{$sinhvien->tennganh}}
+                        NGÀNH {{$sinhvien_static->tenNganh}}
                     </div>
                     <div class="profile-usertitle-job">
-                        LỚP {{$sinhvien->tenlop}} MSV {{$sinhvien->masv}}
+                        LỚP {{$sinhvien_static->tenlop}} MSV {{$sinhvien_static->masv}}
                     </div>
                 </div>
                 <!-- END SIDEBAR USER TITLE -->
@@ -30,10 +35,10 @@
                 <div class="profile-usermenu">
                     <div class="profile-usermenu">
                         <ul class="nav nav-pills nav-stacked" id="leftmenu">
-                            <li class="active"><a href="#canhan" data-toggle="tab">Thông tin cá nhân</a></li>
-                            <li><a href="#giadinh" data-toggle="tab">Thông tin gia đình</a></li>
-                            <li><a href="#diachi" data-toggle="tab">Địa chỉ và thường trú</a></li>
-                            <li><a href="#lienhe" data-toggle="tab">Thông tin liên hệ</a></li>
+                            <li class="active"><a href="#canhan" data-toggle="tab"><span class="glyphicon glyphicon-user"></span> Thông tin cá nhân</a></li>
+                            <li><a href="#giadinh" data-toggle="tab"><span class="glyphicon glyphicon-home"> </span> Thông tin gia đình</a></li>
+                            <li><a href="#diachi" data-toggle="tab"><span class="glyphicon glyphicon-map-marker"></span> Địa chỉ và thường trú</a></li>
+                            <li><a href="#lienhe" data-toggle="tab"><span class="glyphicon glyphicon-phone"></span> Thông tin liên hệ</a></li>
                         </ul>
                     </div>
                 </div>
@@ -42,7 +47,7 @@
         </div>
         <form class="col-lg-9 col-xs-12" method="post" action="{{route('suahosoStore')}}">
             {{@csrf_field()}}
-            @if ($errors->any())
+            @if($errors->any())
                 <div class="row">
                     <div class="col-md-12">
                         <div class="alert alert-danger">
@@ -56,11 +61,10 @@
                     </div>
                 </div>
             @endif
-                {{@csrf_field()}}
                 <div class="tab-content" style="height: 100%">
                     <div class="tab-pane active" id="canhan">
                         <div class="profile_main_block p-4 bg-white">
-                            <h4><i class="fas fa-info-circle mr-2"></i>Thông tin cá nhân</h4>
+                            <h4><i class="fa fa-info-circle mr-2"></i>Thông tin cá nhân</h4>
                             <hr/>
                             <div class="row">
                                 <div class="col-lg-4 col-xs-12 form-group">
@@ -121,7 +125,7 @@
                     </div>
                     <div class="tab-pane" id="giadinh">
                         <div class="profile_main_block p-4 bg-white">
-                            <h4><i class="fas fa-users mr-2"></i>Thông tin gia đình</h4>
+                            <h4><i class="fa fa-users mr-2"></i>Thông tin gia đình</h4>
                             <hr/>
                             <div class="row">
                                 <div class="col-lg-6 col-xs-12">
@@ -208,7 +212,7 @@
                     </div>
                     <div class="tab-pane" id="diachi">
                         <div class="profile_main_block">
-                            <h4><i class="fas fa-map-marker-alt mr-2"></i>Thường trú và địa chỉ</h4>
+                            <h4><i class="fa fa-map-marker mr-2"></i>Thường trú và địa chỉ</h4>
                             <hr/>
                             <i>Hộ khẩu thường trú</i>
                             <div class="row">
@@ -240,7 +244,7 @@
                     </div>
                     <div class="tab-pane" id="lienhe">
                         <div class="profile_main_block p-4 bg-white">
-                            <h4><i class="fas fa-address-card mr-2"></i>Thông tin liên hệ</h4>
+                            <h4><i class="fa fa-phone mr-2"></i>Thông tin liên hệ</h4>
                             <hr/>
                             <i>Hộ khẩu thường trú</i>
                             <div class="row">
@@ -271,7 +275,7 @@
                     </div>
                 </div>
             <div class="alert alert-info" style="color: #337ab7 !important;">
-                Sinh viên liên hệ <a href="https://www.facebook.com/ctsv.vku.udn.vn"><i class="fab fa-facebook ml-1 mr-1"></i>Phòng công tác sinh viên</a> hoặc <a href="tel:0236 3667 129"><i class="fas fa-phone mr-1"></i>0236 3667 129</a> nếu có thay đổi chi tiết thông tin cá nhân (Áp dụng với các trường thông tin bị làm mờ)
+                Sinh viên liên hệ <a href="https://www.facebook.com/ctsv.vku.udn.vn"><i class="fa fa-facebook ml-1 mr-1"></i>Phòng công tác sinh viên</a> hoặc <a href="tel:0236 3667 129"><i class="fa fa-phone mr-1"></i>0236 3667 129</a> nếu có thay đổi chi tiết thông tin cá nhân (Áp dụng với các trường thông tin bị làm mờ)
             </div>
             <button type="submit" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>&nbsp;Lưu</button>
                 <style>

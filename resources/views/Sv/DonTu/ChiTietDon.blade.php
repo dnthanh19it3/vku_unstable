@@ -1,16 +1,36 @@
 @extends('layout.sv_layout')
 @section('title', 'Chi tiết hồ sơ')
 @section('body')
+    <style>
+        .color-white{
+            color: white;
+        }
+        h4 {
+            font-size: 28px;
+        }
+        h5 {
+            font-size: 18px;
+        }
+        .pb-2 {
+            padding-bottom: 8px;
+        }
+        .mr-2 {
+            margin-right: 8px;
+        }
+        .mb-2 {
+            margin-bottom: 8px;
+        }
+    </style>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-lg-8 col-xs-12 mb-2">
             <div class="applicant-cover">
                 <div class="row">
-                    <div class="col-md-8 d-flex text-white align-middle">
+                    <div class="col-lg-8 col-xs-12 d-flex text-white align-middle">
                         <img class="img-paper" src="{{asset('images/paper.svg')}}"/>
                         <div class="thongtindon">
-                            <h4>{{$don->tenmaudon}}</h4>
-                            <h6><i class="fas fa-users-class"></i>&nbsp;Đơn vị xử lý: {{$don->tenphongkhoa}}</h6>
-                            <h6><i class="fas fa-file-alt"></i>&nbsp;ID: {{$don->id}}</h6>
+                            <h4 class="color-white">{{$don->tenmaudon}}</h4>
+                            <h6 class="color-white"><i class="fa fa-users"></i>&nbsp;Đơn vị xử lý: {{$don->tenphongkhoa}}</h6>
+                            <h6 class="color-white"><i class="fa fa-file"></i>&nbsp;ID đơn: {{$don->id}}</h6>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -24,20 +44,20 @@
             <div class="applicant-content">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="border-bottom pb-2"><i class="fas fa-info-circle mr-2"></i>THÔNG TIN CHUNG</h5>
+                        <h5 class="border-bottom pb-2"><i class="fa fa-info-circle mr-2"></i>THÔNG TIN CHUNG</h5>
                         <div class="row m-3">
                             @foreach ($mangTruong as $item)
                                 @if($item->loai_id != 4)
                                     <div class="col-md-6 p-3 vien-net-dut">
-                                        <div class="col-md-6 control-label" style="font-size: 16px;"><h6>{{ $item->tentruong }}</h6></div>
+                                        <div class="col-md-6 control-label" style="font-size: 16px;"><h6 style="font-size: 16px">{{ $item->tentruong }}</h6></div>
                                         <div class="col-md-6" style="font-size: 16px">
-                                            {{ $item->lienket != null ? getTruongTinh($item->lienket, $sinhvien) : $item->noidung }}
+                                            {{ $item->noidung != null ? $item->noidung : ""}}
                                         </div>
                                     </div>
                                 @endif
                             @endforeach
                         </div>
-                        <h5 class="border-bottom pb-2"><i class="fas fa-paperclip mr-2"></i>TẬP TIN ĐÍNH KÈM</h5>
+                        <h5 class="border-bottom pb-2"><i class="fa fa-paperclip mr-2"></i>TẬP TIN ĐÍNH KÈM</h5>
                         <div class="row m-3">
                             @php
                                 $fileflag = 0
@@ -75,14 +95,14 @@
             </div>
         </div>
         <!-- start project-detail sidebar -->
-        <div class="col-md-4 col-sm-3  ">
+        <div class="col-xs-12 col-lg-4 col-sm-3">
             <div class="row">
-                <div class="col-md-12 col-lg-12">
+                <div class="col-xs-12 col-lg-12">
                     <div id="tracking-pre"></div>
                     <div id="tracking">
                         <div class="text-center tracking-status-intransit">
                             <p class="tracking-status text-tight"><span
-                                        class="value">TRẠNG THÁI: {{ $don->hoanthanh ? "Hoàn thành" : "Chưa hoàn thành" }} </span>
+                                        class="value" style="font-size: 16px; font-weight: 500">TRẠNG THÁI: {{ $don->hoanthanh ? "Hoàn thành" : "Chưa hoàn thành" }} </span>
                             </p>
                         </div>
                         <div class="tracking-list bg-white">
@@ -97,12 +117,12 @@
                                                 <path fill="currentColor"
                                                       d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
                                             </svg>
-                                            <!-- <i class="fas fa-circle"></i> -->
+                                            <i class="fa fa-circle"></i>
                                         </div>
-                                        <div class="tracking-date">{{\Carbon\Carbon::create($item->thoigian)->format("d-m-Y")}}
+                                        <div class="tracking-date" style="font-size: 16px">{{\Carbon\Carbon::create($item->thoigian)->format("d-m-Y")}}
                                             <span>{{\Carbon\Carbon::create($item->thoigian)->format("h:m ")}}</span>
                                         </div>
-                                        <div class="tracking-content">{{$item->noidung}}</span></div>
+                                        <div class="tracking-content" style="font-size: 16px">{{$item->noidung}}</span></div>
                                     </div>
                                     {{--                                            <li @if($item->buoc == $timeline[0]->buoc) style="font-weight: 500" @endif>[{{\Carbon\Carbon::create($item->thoigian)->format("d-m-Y h:m ")}}] {{$item->noidung}}</li>--}}
                                 @endforeach
