@@ -54,7 +54,7 @@
                 <div class="form-group col-md-3">
                     <label class=" mb-1" for="inputLocation">Quận huyện</label>
                     <div class="detail-content">
-                        <input type="hidden" name="quanhuyen_id" id="quanhuyen_id" value="{{$tamtru != null ? $tamtru->quanhuyen_id : ""}}">
+                        <input type="hidden" name="quanhuyen_id" id="quanhuyen_id" value="{{$tamtru != null ? $tamtru->quanhuyen_id : ""}}" required>
                         <select type="text" class="form-control rounded" name="quanhuyen" id="quanhuyen" required>
                             <option value="">Quận huyện</option>
                         </select>
@@ -64,7 +64,7 @@
                     <label class=" mb-1" for="inputLocation">xã phường</label>
                     <div class="detail-content">
                         <input type="hidden" name="xaphuong_id" id="xaphuong_id" value="{{isset($tamtru) ? $tamtru->xaphuong_id   : ""}}">
-                        <select type="text" class="form-control rounded" name="xaphuong" id="xaphuong">
+                        <select type="text" class="form-control rounded" name="xaphuong" id="xaphuong" required>
                             <option value="">Xã phường</option>
                         </select>
                     </div>

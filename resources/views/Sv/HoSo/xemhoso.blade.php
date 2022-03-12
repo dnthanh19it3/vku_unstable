@@ -292,7 +292,7 @@
                                         <td>{{ $item->noidung }}</td>
                                         <td>{{ $item->soquyetdinh }}</td>
                                         <td>{{ $item->capkhenthuong }}</td>
-                                        <td>{{ \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') }}</td>
+                                        <td>{{ $item->thoigian ? \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') : "N/A" }}</td>
                                         <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
                                         <td>{{ $item->hocky }}</td>
                                     </tr>
@@ -339,7 +339,7 @@
                                         <td>{{ $item->soquyetdinh }}</td>
                                         <td>{{ $item->noidung }}</td>
                                         <td>{{ $item->hinhthuckyluat }}</td>
-                                        <td>{{ \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') }}</td>
+                                        <td>{{ $item->thoigian ? \Carbon\Carbon::make($item->thoigian)->format('d-m-Y') : "N/A"}}</td>
                                         <td>{{ $item->nambatdau . "-" . $item->namketthuc }}</td>
                                         <td>{{ $item->hocky }}</td>
                                     </tr>
@@ -466,9 +466,9 @@
                                 <td>{{$item->hocky}}</td>
                                 <td>{{$item->tenchuho}}</td>
                                 <td>{{$item->sdtchuho}}</td>
-                                <td>{{\Carbon\Carbon::make($item->thoigianbatdau )->format('d-m-Y')}}</td>
+                                <td>{{$item->thoigianbatdau ? \Carbon\Carbon::make($item->thoigianbatdau )->format('d-m-Y') : "N/A"}}</td>
                                 <td>@if($item->trangthai)<span class="status text-success">&bull;</span> Hiện tại @else <span class="status text-danger">&bull;</span> Chỗ ở cũ @endif</td>
-                                <td>{{\Carbon\Carbon::make($item->created_at)->format('d-m-Y')}}</td>
+                                <td>{{$item->created_at ? \Carbon\Carbon::make($item->created_at)->format('d-m-Y'):"N/A"}}</td>
                             </tr>
                         @empty
                         @endforelse
@@ -541,8 +541,8 @@
         }
     </script>
     <script>
-        let label = @json($renluyen_chart['label']);
-        let data = @json($renluyen_chart['value']);
+        let label = {!! json_encode($renluyen_chart['label']) !!};
+        let data = {!! json_encode($renluyen_chart['value']) !!};
         if(label.length == 1){
             label.push("");
             label.unshift("");

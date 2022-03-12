@@ -14,13 +14,18 @@ class SvHosoController extends Controller
     public function suahosoStore(Request $request){
         $masv = "19IT216";
         $flag = 1;
-//        $data = $this->validate($request,
-//            [
-//                "email_khac" => "nullable|email",
-//                "dienthoai" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
-//                "zalo" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
-//                "facebook" => ["nullable", "regex:/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/"],
-//            ]);
+
+
+
+        $data = $this->validate($request,
+            [
+                "email_khac" => "nullable|email",
+                "dienthoai" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
+                "zalo" => ["nullable", "regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/"],
+                "facebook" => ["nullable", "regex:/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/"],
+            ]);
+
+
 
         $data = $request->all();
         unset($data['_token']);
@@ -47,7 +52,7 @@ class SvHosoController extends Controller
     public function suahosoIndex()
     {
 
-        $masv = '19IT216';
+        $masv = '17IT027';
         $sinhvien_static = null;
 
         $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
@@ -64,6 +69,7 @@ class SvHosoController extends Controller
             ->join('table_nganh', 'table_sinhvien.nganh_id', '=', 'table_nganh.id')
             ->where('table_sinhvien.masv', '=', $masv)
             ->first();
+
         $hocky_info = DB::table('table_namhoc_hocky')->where('hienhanh', '=', 1)->first();
 
         return view('Sv.HoSo.SuaHoSo')->with([
@@ -77,7 +83,8 @@ class SvHosoController extends Controller
      *  View hồ sơ
      */
     public function hosoIndex(Request $request){
-        $masv = '19IT216';
+        $masv = '17IT021';
+
         $sinhvien = null;
         $sinhvien_chitiet = DB::table('table_sinhvien_chitiet')->where('masv', $masv)->first();
         $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
@@ -89,11 +96,8 @@ class SvHosoController extends Controller
             }
         }
 
-
-
-        $sinhvien_chitiet->thanhphangiadinh = $sinhvien_chitiet->thanhphangiadinh ? explode('|', $sinhvien_chitiet->thanhphangiadinh) : null;
+        $sinhvien_chitiet->thanhphangiadinh = ($sinhvien_chitiet->thanhphangiadinh != null) ? explode('|', $sinhvien_chitiet->thanhphangiadinh) : null;
         $sinhhvienTamtru = DB::table('table_sinhvien_tamtru')->where('masv', "=", $masv)->get();
-
 
         switch ($sinhvien_chitiet->doanthe) {
             case 0:

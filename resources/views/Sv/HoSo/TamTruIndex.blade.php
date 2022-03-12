@@ -25,8 +25,19 @@
                     @endif
                     <!-- Thêm thông báo lỗi dưới if..... -->
                     @if (session('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session('error') }}
+                        <div class="alert alert-danger" role="alert" style="color: red !important;">
+                            <b>Có lỗi xảy ra</b>
+                            <ul style="margin-left: 8px">
+                                @if(is_array(session('error')))
+                                    @forelse(session('error') as $key => $value)
+                                        <li>{{ $value }}</li>
+                                    @empty
+                                        Lỗi không xác định!
+                                    @endforelse
+                                @else
+                                    {{session('error')}}
+                                @endif
+                            </div>
                         </div>
                     @endif
 

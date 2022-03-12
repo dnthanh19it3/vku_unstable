@@ -113,7 +113,7 @@
                         <div class="row">
                             <div class="col-lg-4 col-xs-12 form-group">
                                 <div class="title-text">Đoàn thể</div>
-                                <input type="text" class="form-control rounded" name="data[chitiet][canhan][doanthe]" value="{{getTruongTinh('doanthe', $sinhvien)}}"/>
+                                <input type="text" class="form-control rounded" name="data[chitiet][canhan][doanthe]" value="{{$sinhvien->doanthe}}"/>
                             </div>
                             <div class="col-lg-4 col-xs-12 form-group">
                                 <div class="title-text">Ngày kết nạp</div>

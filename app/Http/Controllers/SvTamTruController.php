@@ -85,24 +85,71 @@ class SvTamTruController extends Controller
      */
     public function taoTamTruStore(Request $request){
         $flag = 1;
+        $masv = session('masv');
         $hocky_info = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first(); // Thông tin học kì
         $tamtrucu = DB::table('table_sinhvien_tamtru')->where('masv', session('masv'))->where('trangthai', 1)->first();    //Tạm trú cũ
 
-        //Cập nhật validate
-        $data = $request->validate([
-            'sonha' => 'nullable',
-            'thonto' => 'nullable',
-            'xaphuong_id' => 'required|numeric',
-            'quanhuyen_id' => 'required|numeric',
-            'tinhthanh_id' => 'required|numeric',
-            'tenchuho' => 'nullable',
-            'sdtchuho' => ['nullable', 'regex:/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/'],
-            'thoigianbatdau' => 'required|before:' . Carbon::now(),
-        ]);
+        $msg = [];
+        $error = 0;
 
+        //Cập nhật validate
+//        $data = $this->validate($request, [
+//            'sonha' => 'nullable',
+//            'thonto' => 'nullable',
+//            'xaphuong_id' => 'required|numeric',
+//            'quanhuyen_id' => 'required|numeric',
+//            'tinhthanh_id' => 'required|numeric',
+//            'tenchuho' => 'nullable',
+//            'sdtchuho' => ['nullable', 'regex:/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/'],
+//            'thoigianbatdau' => 'required|before:' . Carbon::now(),
+//        ]);
+
+
+        $email_regex = '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+        $phone_regex = '/(84|0[3|5|7|8|9])+([0-9]{8})\b/';
+
+        $data = [];
+
+        $validate_sdt = preg_match($phone_regex, $request->sdtchuho);
+        // Validate số điện thoại
+        if($validate_sdt){
+            $data['sdtchuho'] = $request->sdtchuho;
+        } else {
+            array_push($msg, "SĐT chủ hộ không hợp lệ");
+            $error = 1;
+        }
+        if($request->xaphuong_id && $request->quanhuyen_id && $request->tinhthanh_id && $request->sonha && $request->thonto){
+            $data['xaphuong_id'] = $request->xaphuong_id;
+            $data['quanhuyen_id'] = $request->quanhuyen_id;
+            $data['tinhthanh_id'] = $request->tinhthanh_id;
+            $data['sonha'] = $request->sonha;
+            $data['thonto'] = $request->thonto;
+        } else {
+            array_push($msg, "Địa chỉ không hợp lệ");
+            $error = 1;
+        }
+        if($request->tenchuho){
+            $data['tenchuho'] = $request->tenchuho;
+        } else {
+            array_push($msg, "Tên chủ hộ không hợp lệ");
+            $error = 1;
+        }
+        if($request->thoigianbatdau){
+            $data['thoigianbatdau'] = $request->thoigianbatdau;
+        } else {
+            array_push($msg, "Thời gian bắt đầu không được bỏ trống");
+            $error = 1;
+        }
+
+        // Loi input, tra ve thong bao loi
+        if($error){
+            $request->session()->flash('error', $msg);
+            return redirect(route('sv.tamtru.index'));
+        }
+        // Tiep tuc cap nhat
         $data['trangthai'] = 1;
         $data['created_at'] = now();
-        $data['masv'] = session('masv');
+        $data['masv'] = $masv;
         $data['namhoc'] = $hocky_info->id;
         $data['hocky'] = $hocky_info->hocky;
 
