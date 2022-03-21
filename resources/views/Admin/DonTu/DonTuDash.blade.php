@@ -3,6 +3,14 @@
     @php
         \Carbon\Carbon::setLocale('vi');
     @endphp
+    <style>
+        .mb-3 {
+            margin-bottom: 8px;
+        }
+        .p-3 {
+            padding: 12px;
+        }
+    </style>
     <div class="row mb-3">
         <div class="col-md-6">
             <div class="x_panel" style="height: 100%">
@@ -83,11 +91,11 @@
                     @foreach($chotiepnhan as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
                             @php $count++; @endphp
-                            <a class="itemdon itemdon-normal" href="{{route('xem_hs', ['don_id' => $value2->don_id])}}">
+                            <a class="itemdon itemdon-normal" href="{{route('xem_hs', ['don_id' => $value2->id])}}">
                                 <div class="dinhdanh">
                                     <div class="tennguoinop"><i class="fas fa-user-alt mr-1" style="font-size: 10px"></i>{{$value2->hodem. " " . $value2->ten . " - " . $value2->masv}}</div>
                                     <div class="tendon">{{$value2->tenmaudon . ($value2->chuyentiep ? " (Đơn chuyển tiếp)" : "")}}</div>
-                                    <div class="tendon">Mã đơn: </i>{{$value2->don_id}}</div>
+                                    <div class="tendon">Mã đơn: </i>{{$value2->id}}</div>
                                 </div>
                                 <div class="thongtin">
                                     <i class="fas fa-hourglass-half"></i><span class="ml-1">{{\Carbon\Carbon::make($value2->thoigianhethan)->diffForHumans()}}</span>
@@ -113,11 +121,11 @@
                     @foreach($dangxuly as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
                             @php $count++; @endphp
-                            <a class="itemdon itemdon-normal" href="{{route('xem_hs', ['don_id' => $value2->don_id])}}">
+                            <a class="itemdon itemdon-normal" href="{{route('xem_hs', ['don_id' => $value2->id])}}">
                                 <div class="dinhdanh">
                                     <div class="tennguoinop"><i class="fas fa-user-alt mr-1" style="font-size: 10px"></i>{{$value2->hodem. " " . $value2->ten . " - " . $value2->masv}}</div>
                                     <div class="tendon">{{$value2->tenmaudon . ($value2->chuyentiep ? " (Đơn chuyển tiếp)" : "")}}</div>
-                                    <div class="tendon">Mã đơn: </i>{{$value2->don_id}}</div>
+                                    <div class="tendon">Mã đơn: </i>{{$value2->id}}</div>
                                 </div>
                                 <div class="thongtin">
                                     <i class="fas fa-hourglass-half"></i><span class="ml-1">{{\Carbon\Carbon::make($value2->thoigianhethan)->diffForHumans()}}</span>
@@ -141,11 +149,11 @@
                     @foreach($hethanhomnay as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
                             @php $count++; @endphp
-                            <a class="itemdon itemdon-warm" href="{{route('xem_hs', ['don_id' => $value2->don_id])}}">
+                            <a class="itemdon itemdon-warm" href="{{route('xem_hs', ['don_id' => $value2->id])}}">
                                 <div class="dinhdanh">
                                     <div class="tennguoinop"><i class="fas fa-user-alt mr-1" style="font-size: 10px"></i>{{$value2->hodem. " " . $value2->ten . " - " . $value2->masv}}</div>
                                     <div class="tendon">{{$value2->tenmaudon . ($value2->chuyentiep ? " (Đơn chuyển tiếp)" : "")}}</div>
-                                    <div class="tendon">Mã đơn: </i>{{$value2->don_id}}</div>
+                                    <div class="tendon">Mã đơn: </i>{{$value2->id}}</div>
                                 </div>
                                 <div class="thongtin">
                                     <i class="fas fa-hourglass-half"></i><span class="ml-1">{{\Carbon\Carbon::make($value2->thoigianhethan)->diffForHumans()}}</span>
@@ -169,11 +177,11 @@
                     @foreach($dahethan as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
                             @php $count++; @endphp
-                            <a class="itemdon itemdon-danger" href="{{route('xem_hs', ['don_id' => $value2->don_id])}}">
+                            <a class="itemdon itemdon-danger" href="{{route('xem_hs', ['don_id' => $value2->id])}}">
                                 <div class="dinhdanh">
                                     <div class="tennguoinop"><i class="fas fa-user-alt mr-1" style="font-size: 10px"></i>{{$value2->hodem. " " . $value2->ten . " - " . $value2->masv}}</div>
                                     <div class="tendon">{{$value2->tenmaudon . ($value2->chuyentiep ? " (Đơn chuyển tiếp)" : "")}}</div>
-                                    <div class="tendon">Mã đơn: </i>{{$value2->don_id}}</div>
+                                    <div class="tendon">Mã đơn: </i>{{$value2->id}}</div>
                                 </div>
                                 <div class="thongtin">
                                     <i class="fas fa-hourglass-half"></i><span class="ml-1">{{\Carbon\Carbon::make($value2->thoigianhethan)->diffForHumans()}}</span>
@@ -197,11 +205,11 @@
                     @foreach($hethantuannay as $key2 => $value2)
                         @if($value2->phongban_xuly == $value1->id)
                             @php $count++; @endphp
-                            <a class="itemdon itemdon-normal" href="{{route('xem_hs', ['don_id' => $value2->don_id])}}">
+                            <a class="itemdon itemdon-normal" href="{{route('xem_hs', ['don_id' => $value2->id])}}">
                                 <div class="dinhdanh">
                                     <div class="tennguoinop"><i class="fas fa-user-alt mr-1" style="font-size: 10px"></i>{{$value2->hodem. " " . $value2->ten . " - " . $value2->masv}}</div>
                                     <div class="tendon">{{$value2->tenmaudon . ($value2->chuyentiep ? " (Đơn chuyển tiếp)" : "")}}</div>
-                                    <div class="tendon">Mã đơn: </i>{{$value2->don_id}}</div>
+                                    <div class="tendon">Mã đơn: </i>{{$value2->id}}</div>
                                 </div>
                                 <div class="thongtin">
                                     <i class="fas fa-hourglass-half"></i><span class="ml-1">{{\Carbon\Carbon::make($value2->thoigianhethan)->diffForHumans()}}</span>

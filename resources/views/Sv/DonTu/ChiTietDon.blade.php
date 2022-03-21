@@ -1,173 +1,275 @@
 @extends('layout.sv_layout')
-@section('title', 'Chi tiết hồ sơ')
 @section('body')
     <style>
-        .color-white{
-            color: white;
+        .text-red {
+            color: red !important;
         }
-        h4 {
-            font-size: 28px;
+
+        .form-control {
+            border-radius: 5px;
         }
-        h5 {
-            font-size: 18px;
-        }
-        .pb-2 {
-            padding-bottom: 8px;
-        }
-        .mr-2 {
+        .mr-1 {
             margin-right: 8px;
         }
-        .mb-2 {
-            margin-bottom: 8px;
+        .filepond--credits {
+            display: none !important;
         }
     </style>
-    <div class="row">
-        <div class="col-lg-8 col-xs-12 mb-2">
-            <div class="applicant-cover">
-                <div class="row">
-                    <div class="col-lg-8 col-xs-12 d-flex text-white align-middle">
-                        <img class="img-paper" src="{{asset('images/paper.svg')}}"/>
-                        <div class="thongtindon">
-                            <h4 class="color-white">{{$don->tenmaudon}}</h4>
-                            <h6 class="color-white"><i class="fa fa-users"></i>&nbsp;Đơn vị xử lý: {{$don->tenphongkhoa}}</h6>
-                            <h6 class="color-white"><i class="fa fa-file"></i>&nbsp;ID đơn: {{$don->id}}</h6>
+    <div class="col-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h4 style="float: left"> <i class="fa fa-file"></i> Thủ tục {{$mau->tenmaudon}}</h4>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="alert alert-success" style="color: rgb(38 185 154); font-size: 14px">
+                    <div class="ml-3">
+                        <div>
+                            <div style="margin-bottom: 0"><i class="fa fa-clock-o mr-1"></i>Thời gian xử
+                                lý:&nbsp;{{$mau->thoigianxuly}}&nbsp;ngày
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="thongtindon-phai">
-                            <span>Thời gian nộp: {{$don->thoigiantao}}</span>
-                            <span>Thời gian hết hạn: {{$don->thoigianhethan}}</span>
+                        <div>
+                            <div style="margin-bottom: 0"><i class="fa fa-calendar mr-1"></i>Dự kiến thời gian:&nbsp;{{\Illuminate\Support\Carbon::now()->format('d-m-Y')." đến " . \Illuminate\Support\Carbon::now()->addDays($mau->thoigianxuly)->format('d-m-Y')}}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="applicant-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h5 class="border-bottom pb-2"><i class="fa fa-info-circle mr-2"></i>THÔNG TIN CHUNG</h5>
-                        <div class="row m-3">
-                            @foreach ($mangTruong as $item)
-                                @if($item->loai_id != 4)
-                                    <div class="col-md-6 p-3 vien-net-dut">
-                                        <div class="col-md-6 control-label" style="font-size: 16px;"><h6 style="font-size: 16px">{{ $item->tentruong }}</h6></div>
-                                        <div class="col-md-6" style="font-size: 16px">
-                                            {{ $item->noidung != null ? $item->noidung : ""}}
+                @if (session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                <hr/>
+
+                <form method="post" action="{{route('capnhatdonStore', ['don_id' => $don->id])}}" enctype="multipart/form-data" class="form-horizontal"
+                      id="formSave" method="post" role="form">
+                    {{csrf_field()}}
+                    <div class="center-block vku-div-fieldset">
+                        <fieldset class="vku-fieldset">
+                            <legend>I. Thông tin đăng ký</legend>
+
+                            @foreach($cauhoi as $key => $item)
+                                @if($item['static'] == 1)
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 col-md-2 col-lg-2"
+                                               for="OldRoom">{{$item['cauhoi']}}@if($item['require'])<span
+                                                    class="text-red" data-toggle="tooltip" data-placement="right" title="Bắt buộc">&nbsp;&nbsp;(*)</span> @endif</label>
+                                        <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                            <input type="text" autocomplete="off" class="form-control" id="OldRoom"
+                                                   name="traloi[{{ $key }}]" placeholder="{{$item['placeholder']}}" value="{{$sinhvien[$item['templete']]}}" readonly>
+                                        </div>
+                                    </div>
+                                @elseif($item['loai'] == 1)
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 col-md-2 col-lg-2"
+                                               for="OldRoom">{{$item['cauhoi']}}@if($item['require'])<span
+                                                    class="text-red" data-toggle="tooltip" data-placement="right" title="Bắt buộc">&nbsp;&nbsp;(*)</span> @endif</label>
+                                        <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                            <input type="text" autocomplete="off" class="form-control" id="OldRoom"
+                                                   name="traloi[{{ $key }}]" placeholder="{{$item['placeholder']}}" @if($item['require']) required @endif value="{{$traloi_cauhoi[$key]}}">
+                                        </div>
+                                    </div>
+                                @elseif($item['loai'] == 2)
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 col-md-2 col-lg-2"
+                                               for="OldRoom">{{$item['cauhoi']}}@if($item['require'])<span
+                                                    class="text-red" data-toggle="tooltip" data-placement="right" title="Bắt buộc">&nbsp;(*)</span> @endif</label>
+                                        <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                            @foreach($item['dapan'] as $key2 => $value)
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input id="radio_0" name="traloi[{{$key}}]" type="radio"
+                                                           class="custom-control-input" value="{{$key2}}" @if($item['require']) required @endif
+                                                    @if($traloi_cauhoi[$key] == $key2) checked @endif>
+                                                    <label for="radio_0" class="custom-control-label">{{$value}}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @elseif($item['loai'] == 3)
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 col-md-2 col-lg-2"
+                                               for="OldRoom">{{$item['cauhoi']}}@if($item['require'])<span
+                                                    class="text-red" data-toggle="tooltip" data-placement="right" title="Bắt buộc" data-toggle="tooltip" data-placement="right" title="Bắt buộc">&nbsp;(*)</span> @endif</label>
+                                        <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                            @foreach($item['dapan'] as $key2 => $value)
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input id="checkbox_2" name="traloi[{{$key}}][]" type="checkbox"
+                                                           class="custom-control-input" value="{{$key2}}"
+
+                                                            @if(count($traloi_cauhoi[$key]) > 0)
+                                                                @foreach($traloi_cauhoi[$key] as $key3 => $value3)
+                                                                    @if($value3 == $key2) checked @endif
+                                                                @endforeach
+                                                            @endif
+
+                                                    >
+                                                    <label for="checkbox_2"
+                                                           class="custom-control-label">{{$value}}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @elseif($item['loai'] == 4)
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 col-md-2 col-lg-2"
+                                               for="OldRoom">{{$item['cauhoi']}}@if($item['require'])<span
+                                                    class="text-red" data-toggle="tooltip" data-placement="right" title="Bắt buộc">&nbsp;(*)</span> @endif</label>
+                                        <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                            <select id="select" name="traloi[{{$key}}]" class="select form-control" @if($item['require']) required @endif>
+                                                <option value="null">{{$item['placeholder']}}</option>
+                                                @foreach($item['dapan'] as $key2 => $value)
+                                                    <option value="{{$key2}}" @if($traloi_cauhoi[$key] == $key2) selected  @endif>{{$value}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                @elseif($item['loai'] == 5)
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 col-md-2 col-lg-2"
+                                               for="OldRoom">{{$item['cauhoi']}}@if($item['require'])<span
+                                                    class="text-red" data-toggle="tooltip" data-placement="right" title="Bắt buộc">&nbsp;(*)</span> @endif</label>
+                                        <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                            <textarea rows="5" class="form-control" id="RoomMate"
+                                                      name="traloi[{{$key}}]"
+                                                      placeholder="{{$item['placeholder']}}" @if($item['require']) required @endif>{{$traloi_cauhoi[$key]}}</textarea>
                                         </div>
                                     </div>
                                 @endif
                             @endforeach
-                        </div>
-                        <h5 class="border-bottom pb-2"><i class="fa fa-paperclip mr-2"></i>TẬP TIN ĐÍNH KÈM</h5>
-                        <div class="row m-3">
-                            @php
-                                $fileflag = 0
-                            @endphp
-                            @foreach ($mangTruong as $item)
-                                @if($item->loai_id == 4)
-                                    <div class="col-md-4 file-block">
-                                        <h6 style="display: inline">&nbsp;{{ $item->tentruong }}&nbsp;</h6>
-                                        <div class="description">
-                                            <div class="icon"><i class="fas fa-file-word"></i></div>
-                                            <div class="name">
-                                                {{$item->noidung }}
-                                            </div>
-                                        </div>
-                                        <div class="action">
-                                            <a href="javascript:void(0)" class="ml-1 action-child" onclick="openPreview('{{ $item->noidung}}')">
-                                                <i class="fas fa-eye ml-1"></i>
-                                                <span>Xem trước</span>
-                                            </a>
-                                            <a href="{{ $item->noidung }}"  class="action-child" target="_blank">
-                                                <i class="fas fa-download ml-1"></i>
-                                                <span>Tải xuống</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    @php $fileflag = 1 @endphp
-                                @endif
-                            @endforeach
-                        </div>
-                        @if(!$fileflag)
-                            <span>Không có tập tin đính kèm cho đơn này!</span>
-                        @endif
+                            <div class="form-group">
+                                <label class="control-label col-xs-12 col-sm-3 col-md-2 col-lg-2"></label>
+                                <div class="col-xs-12 col-sm-9 col-md-6 col-lg-6">
+                                    <p class="text-red">&nbsp;(*) Nội dung bắt buộc</p>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
-                </div>
-            </div>
-        </div>
-        <!-- start project-detail sidebar -->
-        <div class="col-xs-12 col-lg-4 col-sm-3">
-            <div class="row">
-                <div class="col-xs-12 col-lg-12">
-                    <div id="tracking-pre"></div>
-                    <div id="tracking">
-                        <div class="text-center tracking-status-intransit">
-                            <p class="tracking-status text-tight"><span
-                                        class="value" style="font-size: 16px; font-weight: 500">TRẠNG THÁI: {{ $don->hoanthanh ? "Hoàn thành" : "Chưa hoàn thành" }} </span>
-                            </p>
+                    <fieldset class="vku-fieldset">
+                        <legend>II. Hồ sơ giấy tờ minh chứng</legend>
+                        <div class="form-group">
+                            <div class="table-responsive col-md-8">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center" style="width:5%">STT</th>
+                                        <th class="text-center">Loại giấy tờ</th>
+                                        <th class="text-center">Thao tác</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($taptin as $key => $item)
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td class="text-justify">
+                                                <b>{{$item['cauhoi']}}</b>@if($item['require'])<span
+                                                        class="text-red" data-toggle="tooltip" data-placement="right" title="Bắt buộc">&nbsp;&nbsp;(*)</span> @endif<br/>
+                                                {{$item['mota']}}
+                                            </td>
+                                            <td class="text-center" style="min-width: 320px">
+                                                <div>
+                                                    @if($traloi_taptin[$key]) <a href="{{$traloi_taptin[$key]}}" class="btn btn-sm btn-primary" style="color: #fff" data-toggle="tooltip" data-placement="right" title="Tải xuống"><span class="glyphicon glyphicon-cloud-download"></span></a> @endif
+                                                    <a href="#" class="btn btn-sm btn-primary" style="color: #fff" data-toggle="tooltip" data-placement="right" title="Cập nhật tập tin"><span class="glyphicon glyphicon-cloud-upload"></span></a>
+                                                    @if($traloi_taptin[$key]) <a href="#" class="btn btn-sm btn-primary" style="color: #fff" data-toggle="tooltip" data-placement="right" title="Xem nhanh"><span class="glyphicon glyphicon-eye-open"></span></a> @endif
+                                                    <br/><a href="#" data-toggle="tooltip" data-placement="right" title="Không cập nhật tập tin nữa">Huỷ cập nhật</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="tracking-list bg-white">
-                            <ul style="list-style: none; padding-left: 0; font-size: 16px">
-                                @foreach($timeline as $item)
-                                    <div class="tracking-item">
-                                        <div class="tracking-icon status-intransit">
-                                            <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true"
-                                                 data-prefix="fas" data-icon="circle" role="img"
-                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                                 data-fa-i2svg="">
-                                                <path fill="currentColor"
-                                                      d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
-                                            </svg>
-                                            <i class="fa fa-circle"></i>
-                                        </div>
-                                        <div class="tracking-date" style="font-size: 16px">{{\Carbon\Carbon::create($item->thoigian)->format("d-m-Y")}}
-                                            <span>{{\Carbon\Carbon::create($item->thoigian)->format("h:m ")}}</span>
-                                        </div>
-                                        <div class="tracking-content" style="font-size: 16px">{{$item->noidung}}</span></div>
-                                    </div>
-                                    {{--                                            <li @if($item->buoc == $timeline[0]->buoc) style="font-weight: 500" @endif>[{{\Carbon\Carbon::create($item->thoigian)->format("d-m-Y h:m ")}}] {{$item->noidung}}</li>--}}
-                                @endforeach
-                            </ul>
+                    </fieldset>
+                    <fieldset class="vku-fieldset">
+                        <legend>III. Phụ lục</legend>
+                        <div class="form-group">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                {!! $mau->mota !!}
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </fieldset>
+                    <fieldset class="vku-fieldset">
+                        <legend>IV. Xác nhận cập nhật đơn</legend>
+                        <style>
+                            .col-centered{
+                                float: none;
+                                margin: 0 auto;
+                            }
+                        </style>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-xs-12 col-centered">
+                                <p><input type="checkbox" id="camket" style="margin-right: 8px"/>Tôi cam kết những thông tin khai báo ở trên là đúng. Tôi xin chịu mọi trách nhiệm nếu khai báo thông tin không chính xác</p>
+                                <button type="submit" id="submit" class="btn btn-primary" disabled="disabled">
+                                    <i class="glyphicon glyphicon-refresh"></i>
+                                    Cập nhật
+                                </button>
+                                <button type="reset"  class="btn btn-default">Huỷ chỉnh sủa</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
 
-        </div>
-        <!-- Preview Modal -->
-        <div class="modal bd-example-modal-lg fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Xem trước tài liệu</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <iframe id="iframe_preview" src=''  width='100%' height='600px'></iframe>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">&times; Đóng</button>
-                    </div>
-                </div>
+                            <div class="col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-xs-10 col-sm-8 col-md-8 col-lg-8">
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
         </div>
-        @endsection
-        @section('custom-css')
-            <style>
-
-            </style>
-        @endsection
-        @section('custom-script')
-            <script>
-                function openPreview(url) {
-                    if (url.endsWith("docx") || url.endsWith("doc") || url.endsWith("xlss") || url.endsWith("xls") || url.endsWith("pdf")) {
-                        $('#iframe_preview').attr('src', "https://view.officeapps.live.com/op/embed.aspx?src=" + url);
-                        console.log("https://view.officeapps.live.com/op/embed.aspx?src=" + url);
-                    } else {
-                        $('#iframe_preview').attr('src', url);
-                    }
-                    $('#previewModal').modal();
+    </div>
+@endsection
+@section('custom-css')
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet"/>
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+          rel="stylesheet"/>
+@endsection
+@section('custom-script')
+    {{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>--}}
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
+    <script>
+        // Register the plugin
+        $.fn.filepond.registerPlugin(FilePondPluginFileValidateSize);
+        $.fn.filepond.registerPlugin(FilePondPluginFileValidateType);
+        $.fn.filepond.registerPlugin(FilePondPluginImagePreview);
+        // Turn input element into a pond
+        $('.filepond').filepond();
+        $.fn.filepond.setDefaults({
+            maxFileSize: '10MB',
+            acceptedFileTypes: [
+                'image/png',
+                'image/jpg',
+                'image/jpeg',
+                "application/pdf",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ],
+            storeAsFile: true,
+            allowImagePreview: true
+        });
+    </script>
+    <script>
+        $("#submit").prop('disabled', true);
+        $(document).ready(function (){
+            $("#camket").click(function (){
+                var flag = $("#camket").prop("checked")
+                console.log(flag)
+                if(flag){
+                    $("#submit").removeAttr('disabled');
+                } else {
+                    $("#submit").prop('disabled', true)
                 }
-            </script>
+            })
+        })
+    </script>
 @endsection

@@ -68,16 +68,16 @@ Route::prefix('sv')->middleware('sv')->group(function () {
         });
 
     });
-    Route::prefix('thutucmotcua')->group(function () {
+    Route::prefix('thu-tuc-mot-cua')->group(function () {
         // Tao don
-        Route::get('danhsach', 'SvDonTuController@taoDonIndex')->name('sv.danhsachthutuc');
-        Route::get('chitiet/{maudon_id}', 'SvDonTuController@chiTietThuTuc')->name('sv.chitietthutuc');
-        Route::post('nopdon/{donid}', 'SvDonTuController@nopdonStore')->name('nopdon.Store');
-        Route::get('theodoidon', 'SvDonTuController@donDaNop')->name('sv.theodoidon');
-        Route::get('theodoidon/{don_id}', 'SvDonTuController@donChiTiet')->name('sv.theodoidon.chitiet');
-        Route::get('capnhatdon/{don_id}', 'SvDonTuController@capNhatDon')->name('capnhatdon');
-        Route::get('capnhatdon/{don_id}', 'SvDonTuController@capNhatDon')->name('capnhatdon');
-        Route::post('capnhatdon/{don_id}', 'SvDonTuController@capnhatdonStore')->name('capnhatdonStore');
+        Route::get('danh-sach', 'SvDonTuController@taoDonIndex')->name('sv.danhsachthutuc');
+        Route::get('lam-thu-tuc/{maudon_id}', 'SvDonTuController@chiTietThuTuc')->name('sv.chitietthutuc');
+        Route::post('nop-don/{donid}', 'SvDonTuController@nopdonStore')->name('nopdon.Store');
+        Route::get('theo-doi-ho-so', 'SvDonTuController@donDaNop')->name('sv.theodoidon');
+        Route::get('theo-doi-ho-so/{don_id}', 'SvDonTuController@donChiTiet')->name('sv.theodoidon.chitiet');
+        Route::get('cap-nhat-don/{don_id}', 'SvDonTuController@capNhatDon')->name('capnhatdon');
+        Route::get('cap-nhat-don/{don_id}', 'SvDonTuController@capNhatDon')->name('capnhatdon');
+        Route::post('cap-nhat-don/{don_id}', 'SvDonTuController@capnhatdonStore')->name('capnhatdonStore');
     });
     //Cv
     Route::prefix('cv')->group(function () {
@@ -277,6 +277,8 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
             Route::get('danhsachhoso', 'AdDonTuController@danhSachHoSoIndex')->name('ds_hs');
             Route::get('ajaxdanhsachhs', 'AdDonTuController@ajaxDsHoSo')->name('ajax_ds_hs');
             Route::get('chitiet/{don_id}', 'AdDonTuController@xemHoSo')->name('xem_hs');
+            // Phan hoi
+            Route::post('phan-hoi/{don_id}', 'AdDonTuController@phanHoiPost')->name('admin.thutuc.phanhoi');
             // Ajax solve
             Route::get('tiepnhan/{don_id}', 'AdDonTuController@tiepNhanHoSo')->name('admin.thutuc.tiepnhan');
             Route::post('chuyentiep/{don_id}', 'AdDonTuController@chuyenTiep')->name('admin.thutuc.chuyentiep');

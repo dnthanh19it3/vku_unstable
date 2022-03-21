@@ -1,51 +1,64 @@
 @extends('layout.admin_layout')
 @section('title', 'Danh sách hồ sơ')
 @section('body')
+    <style>
+        .mb-3 {
+            margin-bottom: 8px;
+        }
+        .bg-white {
+            background-color: white;
+        }
+        .p-3 {
+            padding: 16px;
+        }
+    </style>
     <div class="row">
-        <div class="col-md-12 bg-white">
-            <div class="bg-white">
-                <form class="row p-3" id="form-filters">
-                    <div class="col-12"><h6>Bộ lọc</h6></div>
-                    <div class="col-md-3">
-                        <span>Loại</span>
-                        <div class="form-group">
-                            <select class="form-control" id="loai">
-                                <option value>Tất cả</option>
-                                <option value="0">Đơn</option>
-                                <option value="1">Yêu cầu</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <span>Trạng thái</span>
-                        <div class="form-group">
-                            <select class="form-control" id="trangthai">
-                                <option value="">Tất cả</option>
-                                @foreach ($trangthai as $item)
-                                    <option value="{{$item->id}}">{{ $item->tentrangthai }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <span>Tên mẫu</span>
-                            <select class="form-control" id="maudon_id">
-                                <option value="">Tất cả</option>
-                                @foreach ($maudon as $item)
-                                    <option value="{{$item->maudon_id}}">{{ $item->tenmaudon }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <span>Mã sinh viên</span>
-                        <input type="text" id="masv" class="form-control" placeholder="Tìm theo mã sinh viên" />
-                    </div>
-                </form>
+        <div class="col-xs-12 col-md-4 col-xl-4 col-lg-4">
+            <form method="get" class="bg-white p-3 mb-3">
+                <h4>Bộ lọc</h4>
+                <hr/>
+                <div class="form-group">
+                    <span>Loại</span>
+                    <select class="form-control" name="loai" id="loai">
+                        <option value>Tất cả</option>
+                        <option value="0">Đơn</option>
+                        <option value="1">Yêu cầu</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span>Trạng thái</span>
+                    <select class="form-control" name="trangthai" id="trangthai">
+                        <option value="">Tất cả</option>
+                        @foreach ($trangthai as $item)
+                            <option value="{{$item->id}}">{{ $item->tentrangthai }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span>Tên mẫu</span>
+                    <select class="form-control" id="maudon_id" name="maudon_id">
+                        <option value="">Tất cả</option>
+                        @foreach ($maudon as $item)
+                            <option value="{{$item->id}}">{{ $item->tenmaudon }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <span>Mã sinh viên</span>
+                    <input type="text" id="masv" class="form-control" name="masv" placeholder="Tìm theo mã sinh viên" />
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" style="width: 100%">Lọc</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-xs-12 col-md-8 col-xl-8 col-lg-8">
+            <div class="bg-white p-3">
                 <div class="row">
-                    <div class="col-md-12 p-3">
+                    <div class="col-md-12">
                         <div class="bg-white">
+                            <h4>Danh sách đơn</h4>
+                            <HR/>
                             <table data-toggle="table" data-url="tables/data1.json" data-show-refresh="true"
                                    data-show-toggle="true" data-show-columns="true" data-search="true"
                                    data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name"
@@ -85,8 +98,8 @@
                                 </thead>
 
                                 <tbody>
-                                {{-- @foreach ($danhsachdon as $key => $item)
-                                    <tr data-index="{{$key}}" role="button" onclick="window.open('{{route('xem_hs', ['don_id' => $item->don_id])}}')">
+                                 @foreach ($listdon as $key => $item)
+                                    <tr data-index="{{$key}}" role="button" onclick="window.open('{{route('xem_hs', ['don_id' => $item->id])}}')">
                                         <td class="bs-checkbox"><input data-index="{{$key}}" name="toolbar1" type="checkbox">
                                         </td>
                                         <td style="width:200px">{{$item->hodem . " " . $item->ten}}</td>
@@ -94,9 +107,9 @@
                                         <td style="">{{$item->tenmaudon}}</td>
                                         <td style="">{{$item->thoigiantao}}</td>
                                         <td style="">{{$item->thoigianhethan}}</td>
-                                        <td><span class="badge badge-{{ $item->css }}">{{ $item->tentrangthai }}</span></td>
+                                        <td><span class="badge">{{ $item->tentrangthai }}</span></td>
                                     </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
 
                             </table>

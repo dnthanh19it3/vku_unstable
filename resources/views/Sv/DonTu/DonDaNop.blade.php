@@ -98,7 +98,7 @@
                                     ?>
                                     <td><span class="badge {{$temp_css}}">{{ $item->tentrangthai }}</span></td>
                                     <td>
-                                        <a href="{{ route('sv.theodoidon.chitiet', ['don_id' => $item->don_id]) }}">
+                                        <a href="{{ route('sv.theodoidon.chitiet', ['don_id' => $item->id]) }}">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </td>

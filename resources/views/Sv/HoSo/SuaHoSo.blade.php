@@ -110,7 +110,7 @@
                             <div class="row">
                                 <div class="col-lg-4 col-xs-12 form-group">
                                     <div class="title-text">Đoàn thể</div>
-                                    <input type="text" class="form-control rounded" value="{{getTruongTinh('doanthe', $sinhvien)}}" disabled/>
+                                    <input type="text" class="form-control rounded" value="{{$sinhvien->doanthe}}" disabled/>
                                 </div>
                                 <div class="col-lg-4 col-xs-12 form-group">
                                     <div class="title-text">Ngày kết nạp</div>

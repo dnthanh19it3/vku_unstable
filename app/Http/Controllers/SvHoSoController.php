@@ -84,7 +84,6 @@ class SvHosoController extends Controller
      */
     public function hosoIndex(Request $request){
         $masv = '17IT021';
-
         $sinhvien = null;
         $sinhvien_chitiet = DB::table('table_sinhvien_chitiet')->where('masv', $masv)->first();
         $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));

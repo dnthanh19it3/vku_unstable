@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use xCarbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdDonTuController extends Controller
 {
     function getLoaiDon($don_id){
-        $don = DB::table('table_don')->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')
+        $don = DB::table('table_don')->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.id')
             ->where('table_don.don_id', $don_id)
             ->first();
         if ($don->loai_id){
@@ -210,7 +210,30 @@ class AdDonTuController extends Controller
     }
 
 
+    /*
+           phản hồi controller
+    */
 
+    function phanHoiPost(Request $request, $don_id){
+        $nguoigui = "dnthanh@vku.udn.vn";
+        if($request->noidung != null){
+            $insert = DB::table('table_don_phanhoi')->insert([
+                'don_id' => $don_id,
+                'nguoigui' => $nguoigui,
+                'noidung' => $request->noidung,
+                'daxem' => 0,
+                'created_at' => \Carbon\Carbon::now()
+            ]);
+
+            if($insert){
+                $request->session()->flash('success', "Phản hồi thành công!");
+                return back();
+            } else {
+                $request->session()->flash('error', "Phản hồi thất bại!");
+                return back();
+            }
+        }
+    }
 
     /*
         Xử lý đơn controller
@@ -223,9 +246,27 @@ class AdDonTuController extends Controller
         $trangthai = DB::table('table_don_trangthai')->get();
         $maudon = DB::table('table_maudon')->get();
 
+        $listdon = DB::table('table_don as don')
+            ->join('table_don_trangthai as tt', 'don.trangthai', 'tt.id')
+            ->join('table_sinhvien as sv', 'don.masv', 'sv.masv')
+            ->join('table_maudon as mau', 'don.maudon_id', 'mau.id');
+        if($request->maudon_id){
+            $listdon->orWhere('don.maudon_id', $request->maudon_id);
+        }
+        if($request->masv){
+            $listdon->orWhere('sv.masv', $request->masv);
+        }
+        if($request->trangthai){
+            $listdon->orWhere('don.trangthai', $request->trangthai);
+        }
+        $listdon = $listdon->get(['don.*', 'sv.hodem', 'sv.ten', 'mau.tenmaudon', 'tt.tentrangthai']);
+//        dd($listdon);
+        dump($listdon, $request->all());
+
         return view('Admin/DonTu/DanhSachDon')->with([
             'trangthai' => $trangthai,
-            'maudon' => $maudon
+            'maudon' => $maudon,
+            'listdon' => $listdon
         ]);
     }
 
@@ -236,7 +277,7 @@ class AdDonTuController extends Controller
 
         $stmt = DB::table('table_don')
             ->join('table_sinhvien', 'table_sinhvien.masv', '=', 'table_don.masv')
-            ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id');
+            ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.id');
 
         if (isset($request->trangthai)) {
             $stmt->where('table_don.trangthai', $request->trangthai);
@@ -283,67 +324,55 @@ class AdDonTuController extends Controller
     // View xem hồ sơ
     function xemHoSo(Request $request, $don_id)
     {
-        $phongban = DB::table('table_donvi_phongban')
-            ->orWhere('id', 2)
-            ->orWhere('id', 7)
-            ->orWhere('id', 8)
-            ->orWhere('id', 9)
-            ->orWhere('id', 10)
-            ->get();
-        $don = DB::table('table_don')
-            ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')
-            ->join('table_donvi_phongban', 'table_maudon.donvi_id', '=', 'table_donvi_phongban.id')
-            ->where('table_don.don_id', $don_id)
-            ->first();
-        $donvihientai = DB::table('table_don')
-            ->join('table_donvi_phongban', 'table_don.phongban_xuly', '=', 'table_donvi_phongban.id')
-            ->where('table_don.don_id', $don_id)
-            ->first()->tenphongkhoa;
-        $sinhvien = getSinhVienData($don->masv);
+        $don = DB::table('table_don as don')
+            ->join('table_maudon as mau', 'don.maudon_id', '=', 'mau.id')
+            ->join('table_donvi_phongban as pb', 'mau.donvi_id', '=', 'pb.id')
+            ->join('table_don_trangthai as tt', 'don.trangthai', '=', 'tt.id')
+            ->where('don.id', $don_id)
+            ->first(['don.*', 'pb.tenphongkhoa', 'tt.tentrangthai']);
+        $mau = null;
+        $traloi_cauhoi = null;
+        $traloi_taptin = null;
+        $cauhoi = null;
+        $taptin = null;
+        $sinhvien = null;
+        $phanhoi = null;
+        $timeline = DB::table('table_don_logs')->where('don_id', $don_id)->where('an', '<>', '1')->orderBy('thoigian', 'DESC')->get();
 
-
-        $timeline = DB::table('table_don_logs')->where('don_id', $don_id)->orderBy('thoigian', 'DESC')->get();
-        $filedList = explode(',', $don->truong);
-        foreach ($filedList as $key => $item) {
-            if($item == null){
-                unset($filedList[$key]);
-            }
-        }
-
-        $mangTruong = array();
-        foreach ($filedList as $key => $item) {
-            $rs = DB::table('table_maudon_chitiet')
-                ->join('table_don_chitiet', 'table_maudon_chitiet.id', '=', 'table_don_chitiet.truong_id')
-                ->where('table_maudon_chitiet.id', $item)
-                ->where('table_don_chitiet.don_id', $don_id)
-                ->first();
-            if ($rs != null) {
-                $mangTruong[$rs->id] = $rs;
+        if ($don != null) {
+            $don_chitiet = DB::table('table_don_chitiet')->where('don_id', $don->id)->where('trangthai', 1)->first();
+            $sinhvien = $this->getSinhVienData($don->masv);
+            $phanhoi = DB::table('table_don_phanhoi')->where('don_id', $don_id)->get();
+            if ($don_chitiet) {
+                $sinhvien = $this->getSinhVienData($don->masv);
+                $mau = DB::table('table_maudon')->where('id', $don->maudon_id)->first();
+                if ($mau) {
+                    $cauhoi = json_decode($mau->cauhoi, true);
+                    $traloi_cauhoi = json_decode($don_chitiet->traloi_cauhoi, true);
+                    $taptin = json_decode($mau->taptin, true);
+                    $traloi_taptin = json_decode($don_chitiet->traloi_taptin, true);
+                } else {
+                    die("Lỗi khi truy xuất mẫu đơn! Vui lòng kiểm tra lại");
+                }
             } else {
-                $rs_emp = DB::table('table_maudon_chitiet')
-                    ->where('table_maudon_chitiet.id', $item)
-                    ->first();
-                $mangTruong[$rs_emp->id] = (object) [
-                    'tentruong' => $rs_emp->tentruong,
-                    'lienket' => $rs_emp->lienket,
-                    'loai_id' => $rs_emp->loai_id,
-                ];
+                die("Đơn này không tồn tại! Vui lòng kiểm tra lại!");
             }
+        } else {
+            die("Lỗi khi truy xuất mẫu đơn! Vui lòng kiểm tra lại");
         }
-        $hocky_hientai =  DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first();
-        $landcap = DB::table('table_don')->where('maudon_id', $don->maudon_id)->where('namhoc', $hocky_hientai->id)->where('hoanthanh', 1)->count('don_id');
-
-
+//        dd($don, $cauhoi, $traloi_cauhoi);
         return view('Admin/DonTu/ChiTietDon')->with([
-            'mangTruong' => $mangTruong,
             'don' => $don,
-            'donvihientai' => $donvihientai,
+            'mau' => $mau,
             'sinhvien' => $sinhvien,
-            'sinhvien' => get_object_vars($sinhvien),
             'timeline' => $timeline,
-            'phongban' => $phongban,
-            'lancap' => $landcap
+            'cauhoi' => $cauhoi,
+            'taptin' => $taptin,
+            'traloi_cauhoi' => $traloi_cauhoi,
+            'traloi_taptin' => $traloi_taptin,
+            'phanhoi' => $phanhoi
         ]);
+
     }
 
     // Controller xử lý
@@ -388,7 +417,7 @@ class AdDonTuController extends Controller
     }
 
     function chuyenTiep(Request $request, $don_id){
-        $don = DB::table('table_don')->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')->where('don_id', '=', $don_id)->first();
+        $don = DB::table('table_don')->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.id')->where('don_id', '=', $don_id)->first();
         $update = DB::table("table_don")->where('don_id', '=', $don_id)->update([
             'chuyentiep' => 1,
             'phongban_xuly' => $request->phongban,
@@ -489,7 +518,7 @@ class AdDonTuController extends Controller
             ->orWhere('id', 9)
             ->orWhere('id', 10);
         $chuahoanthanh = DB::table('table_don')
-            ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.maudon_id')
+            ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.id')
             ->join('table_sinhvien', 'table_don.masv', '=', 'table_sinhvien.masv')
             ->where('table_don.hoanthanh', 0);
         if(isset($request->phongban)){
@@ -583,7 +612,57 @@ class AdDonTuController extends Controller
             'stats' => (object) $stats
         ]);
     }
-
+    function getSinhVienData($masv){
+        $sinhvien_static = null;
+        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
+        foreach ($sinhvien_all as $key => $item){
+            if($item->masv == $masv){
+                $sinhvien_static = $item;
+                break;
+            }
+        }
+        $sinhvien_chitiet = DB::table('table_sinhvien_chitiet')
+            ->where('table_sinhvien_chitiet.masv', $masv)
+            ->first();
+        $sinhvien = array_merge((array) $sinhvien_chitiet, (array) $sinhvien_static);
+        $sinhvien['email'] = DB::table('table_sinhvien')->where('masv', $masv)->first('email')->email;
+//        dd($sinhvien);
+        return $sinhvien;
+    }
+    function getTruongTinh($key, $data){
+        $data = (object) $data;
+        switch ($key) {
+            case 'hoten':
+                return $data->hodem." ".$data->ten;
+            case 'ngaysinh':
+                return vnDate($data->ngaysinh);
+            case 'gioitinh':
+                return $data->gioitinh ? 'Nữ' : 'Nam';
+            case 'tongiao':
+                if($data->tongiao == 0){
+                    return "Không";
+                }
+                return $data->tongiao;
+            case 'doanthe':
+                switch ($data->doanthe) {
+                    case 0:
+                        return "Không";
+                    case 1:
+                        return "Đoàn viên";
+                    case 2:
+                        return "Đảng viên";
+                }
+            case 'ngayketnap':
+                return \Illuminate\Support\Carbon::make($data->ngayketnap)->format('d/m/Y');
+            case 'hokhauthuongtru':
+                return $data->xa_phuong . ', ' . $data->quan_huyen . ', ' . $data->tinh_thanh;
+            default:
+                if(property_exists($data, $key)){
+                    return ((array) $data)[$key];
+                }
+                return "N/A";
+        }
+    }
 }
 /*
  *
