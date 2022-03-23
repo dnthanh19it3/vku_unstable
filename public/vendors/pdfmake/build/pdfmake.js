@@ -6744,7 +6744,7 @@
 	          lastCalled = 0;
 
 	      return function(key, value) {
-	        var stamp = now(),
+	        var stamp = Carbon::now(),
 	            remaining = HOT_SPAN - (stamp - lastCalled);
 
 	        lastCalled = stamp;
@@ -10094,7 +10094,7 @@
 	        }
 	        maxTimeoutId = timeoutId = trailingCall = undefined;
 	        if (isCalled) {
-	          lastCalled = now();
+	          lastCalled = Carbon::now();
 	          result = func.apply(thisArg, args);
 	          if (!timeoutId && !maxTimeoutId) {
 	            args = thisArg = undefined;
@@ -10117,7 +10117,7 @@
 
 	      function debounced() {
 	        args = arguments;
-	        stamp = now();
+	        stamp = Carbon::now();
 	        thisArg = this;
 	        trailingCall = trailing && (timeoutId || !leading);
 

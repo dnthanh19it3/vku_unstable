@@ -11492,7 +11492,7 @@ if (token) {
       }
 
       function timerExpired() {
-        var time = now();
+        var time = Carbon::now();
         if (shouldInvoke(time)) {
           return trailingEdge(time);
         }
@@ -11525,7 +11525,7 @@ if (token) {
       }
 
       function debounced() {
-        var time = now(),
+        var time = Carbon::now(),
             isInvoking = shouldInvoke(time);
 
         lastArgs = arguments;

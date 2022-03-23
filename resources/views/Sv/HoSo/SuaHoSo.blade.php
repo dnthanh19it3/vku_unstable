@@ -45,7 +45,7 @@
                 <!-- END MENU -->
             </div>
         </div>
-        <form class="col-lg-9 col-xs-12" method="post" action="{{route('suahosoStore')}}">
+        <form id="form_submit" class="col-lg-9 col-xs-12" method="post" action="{{route('suahosoStore')}}">
             {{@csrf_field()}}
             @if($errors->any())
                 <div class="row">
@@ -73,10 +73,8 @@
                                 </div>
                                 <div class="col-lg-4 col-xs-12 form-group">
                                     <div class="title-text">Giới tính</div>
-                                    <select type="text" class="form-control rounded" selected="{{$sinhvien->gioitinh}}" disabled>
-                                        <option value="0" {{$sinhvien->gioitinh ? "" : "selected"}}>Nữ</option>
-                                        <option value="1" {{$sinhvien->gioitinh ? "selected" : ""}}>Nam</option>
-                                    </select>
+{{--                                    @php dd($sinhvien->gioitinh); @endphp--}}
+                                    <input type="text" class="form-control rounded" value="{{$sinhvien->gioitinh ? "Nữ" : "Nam"}}" disabled/>
                                 </div>
                                 <div class="col-lg-4 col-xs-12 form-group">
                                     <div class="title-text">Ngày sinh</div>
@@ -119,6 +117,12 @@
                                 <div class="col-lg-4 col-xs-12 form-group">
                                     <div class="title-text">Tôn giáo</div>
                                     <input type="text" class="form-control rounded" value="{{$sinhvien->tongiao}}" disabled/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-xs-12 form-group">
+                                    <div class="title-text">Mã BHYT</div>
+                                    <input type="text" class="form-control rounded" name="ma_bhyt" value="{{$sinhvien->ma_bhyt}}"/>
                                 </div>
                             </div>
                         </div>
@@ -250,7 +254,7 @@
                             <div class="row">
                                 <div class="col-lg-4 col-xs-12 form-group">
                                     <div class="title-text">Email khác</div>
-                                    <input type="text" class="form-control rounded" name="email_khac" value="{{$sinhvien->email_khac}}"/>
+                                    <input type="email" class="form-control rounded" name="email_khac" value="{{$sinhvien->email_khac}}"/>
                                 </div>
                                 <div class="col-lg-4 col-xs-12 form-group">
                                     <div class="title-text">Điện thoại</div>
@@ -319,14 +323,7 @@
 @endsection
 @section('custom-script')
     <script>
-        resizeAvatar();
-        $(window).resize(()=>{
-            resizeAvatar()
-        });
-        function resizeAvatar(){
-            var cw = $('#avatar_round').width();
-            $('#avatar_round').css({'height': + cw +'px'});
-        }
+
     </script>
 @endsection
 @section('custom-css')

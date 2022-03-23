@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use xCarbon\Carbon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -521,11 +521,12 @@ class AdDonTuController extends Controller
             ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.id')
             ->join('table_sinhvien', 'table_don.masv', '=', 'table_sinhvien.masv')
             ->where('table_don.hoanthanh', 0);
+
         if(isset($request->phongban)){
             $chuahoanthanh = $chuahoanthanh->where('phongban_xuly', $request->phongban)->get();
             $listphongban = $listphongban->where('id', $request->phongban)->get();
         }else{
-            $chuahoanthanh = $chuahoanthanh->get();
+            $chuahoanthanh = $chuahoanthanh->get(['table_don.*', 'table_sinhvien.hodem', 'table_sinhvien.masv', 'table_sinhvien.ten', 'table_maudon.tenmaudon']);
             $listphongban = $listphongban->get();
         }
 //        dd(count($chuahoanthanh));
@@ -600,6 +601,7 @@ class AdDonTuController extends Controller
             'quahan_percent' => $quahan_percent
         ];
 
+//        dd($chuahoanthanh);
 
         return view('Admin/DonTu/DonTuDash')->with([
             'listphongban_chart' => $listphongban_chart,
@@ -614,7 +616,7 @@ class AdDonTuController extends Controller
     }
     function getSinhVienData($masv){
         $sinhvien_static = null;
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
+        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien_full.json"));
         foreach ($sinhvien_all as $key => $item){
             if($item->masv == $masv){
                 $sinhvien_static = $item;

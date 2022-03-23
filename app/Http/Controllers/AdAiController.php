@@ -52,7 +52,7 @@ class AdAiController extends Controller
     public function editIntentPost(Request $request, $intent_id){
          $insert = DB::table('ai_intents')
             ->where('id', $intent_id)
-            ->update(['tag' => $request->tag, 'description' => $request->description, 'updated_at' => now()]);
+            ->update(['tag' => $request->tag, 'description' => $request->description, 'updated_at' => Carbon::now()]);
         return back();
     }
 
@@ -64,7 +64,7 @@ class AdAiController extends Controller
                 [
                     'intent_id' => $intent_id,
                     'pattern' => $pattern,
-                    'created_at' => now()
+                    'created_at' => Carbon::now()
                 ]);
         return back();
     }
@@ -78,7 +78,7 @@ class AdAiController extends Controller
                 ->where('id', $value)->update(
                     [
                         'pattern' => $pattern[$key],
-                        'updated_at' => now()
+                        'updated_at' => Carbon::now()
                     ]);
         }
         return back();
@@ -92,7 +92,7 @@ class AdAiController extends Controller
                 [
                     'intent_id' => $intent_id,
                     'response' => $response,
-                    'created_at' => now()
+                    'created_at' => Carbon::now()
                 ]);
         return back();
     }
@@ -106,7 +106,7 @@ class AdAiController extends Controller
                 ->where('id', $value)->update(
                     [
                         'response' => $response[$key],
-                        'updated_at' => now()
+                        'updated_at' => Carbon::now()
                     ]);
         }
         return back();

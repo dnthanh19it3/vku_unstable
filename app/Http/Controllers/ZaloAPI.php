@@ -60,13 +60,13 @@ class ZaloAPI extends Controller
                     ->where('masv', $checkSinhVien->masv)
                     ->update([
                         'zalo_id_sinhvien' => $user_id,
-                        'updated_at' => now()
+                        'updated_at' => Carbon::now()
                     ]);
             } else {
                 $insert = DB::table('table_zalo_connect')->insert([
                     'masv' => $checkSinhVien->masv,
                     'zalo_id_sinhvien' => $user_id,
-                    'created_at' => now()
+                    'created_at' => Carbon::now()
                 ]);
             }
             $this->guiTinNhanText($user_id, "Tài khoản của bạn đã được kết nối với Zalo OA");
@@ -205,13 +205,13 @@ class ZaloAPI extends Controller
                     ->where('masv', $checkSinhVien->masv)
                     ->update([
                         'zalo_id_sinhvien' => $user_info['user_id'],
-                        'updated_at' => now()
+                        'updated_at' => Carbon::now()
                     ]);
             } else {
                 $insert = DB::table('table_zalo_connect')->insert([
                     'masv' => $checkSinhVien->masv,
                     'zalo_id_sinhvien' => $user_info['user_id'],
-                    'created_at' => now()
+                    'created_at' => Carbon::now()
                 ]);
             }
             $this->guiTinNhanText($user_info['user_id'], "Bạn đã liên kết thành công với Cổng thông tin VKU! Từ bây giờ bạn có thể thực hiện được các chức năng như");

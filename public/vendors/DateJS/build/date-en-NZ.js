@@ -634,7 +634,7 @@ Date.CultureStrings.lang = "en-NZ";
 		 * Overload of Date.now. Allows an alternate call for Date.now where it returns the 
 		 * current Date as an object rather than just milliseconds since the Unix Epoch.
 		 *
-		 * Also provides an implementation of now() for browsers (IE<9) that don't have it.
+		 * Also provides an implementation of Carbon::now() for browsers (IE<9) that don't have it.
 		 * 
 		 * Backwards compatible so with work with either:
 		 *  Date.now() [returns ms]
@@ -642,7 +642,7 @@ Date.CultureStrings.lang = "en-NZ";
 		 *  Date.now(true) [returns Date]
 		 */
 		if (!$D.now) {
-			$D._now = function now() {
+			$D._now = function Carbon::now() {
 				return new Date().getTime();
 			};
 		} else if (!$D._now) {

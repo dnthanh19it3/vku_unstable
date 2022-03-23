@@ -34,8 +34,9 @@
                 <div class="profile-usermenu">
                     <div class="profile-usermenu">
                         <ul class="nav nav-pills nav-stacked" id="leftmenu">
-                            <li><a href="{{route('ad.suasinhvien.canhan', ['masv' => $sinhvien->masv])}}"> Thông tin cá nhân</a></li>
+                            <li><a href="{{route('ad.suasinhvien.canhan', ['masv' => $sinhvien->masv])}}"><span class="glyphicon glyphicon-user"></span> Thông tin cá nhân</a></li>
                             <li class="active"><a href="{{route('ad.suasinhvien.khenthuong', ['masv' => $sinhvien->masv])}}"><span class="glyphicon glyphicon-star"></span> Khen thưởng kỷ luật</a></li>
+                            <li><a href="{{route('ad.suasinhvien.tamtru', ['masv' => $sinhvien->masv])}}"><span class="glyphicon glyphicon-plane"></span> Tạm trú</a></li>
                         </ul>
                     </div>
                 </div>
@@ -43,24 +44,20 @@
             </div>
         </div>
         <div class="col-lg-9 col-xs-12" method="post" action="{{route('ad.suasinhvien.canhan.store', ['masv' => $sinhvien->masv])}}">
-            @if($errors->any())
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-danger">
-                            Có lỗi xảy ra
-                            <ol style="">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ol>
-                        </div>
-                    </div>
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
                 </div>
             @endif
             <div class="tab-content" style="height: 100%">
                 <div class="tab-pane active" id="canhan">
                     <div class="profile_main_block p-4 bg-white">
-                        <h4><i class="fa fa-info-circle mr-2"></i>Thông tin cá nhân</h4>
+                        <h4><i class="fa fa-info-circle mr-2"></i>Thông tin khen thưởng</h4>
                         <hr/>
                         <div class="table-responsive mb-3">
                             <div class="table-wrapper">
@@ -101,12 +98,12 @@
                                             <td>{{ ($item->created_at != null) ? \Carbon\Carbon::make($item->created_at)->format('d-m-Y') : "" }}</td>
                                             <td>
                                                 <a href="{{route('ad.suasinhvien.suakhenthuong', ['masv' => $sinhvien->masv, 'id' => $item->id])}}" class="settings" title="Sửa" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                                                <a href="{{route('ad.suasinhvien.xoakhenthuong', ['masv' => $sinhvien->masv, 'id' => $item->id])}}" class="delete" title="Xoá" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
+                                                <a href="javascript:void(0)" onclick="deleteModal('{{route('ad.suasinhvien.xoakhenthuong', ['masv' => $sinhvien->masv, 'id' => $item->id])}}')" class="delete" title="Xoá" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></button>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8">
+                                            <td colspan="9">
                                                 <center>Sinh viên này không có thông tin khen thưởng!</center>
                                             </td>
                                         </tr>
@@ -211,6 +208,25 @@
             </style>
         </div>
     </div>
+    <div class="modal" id="deleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xoá bản ghi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc muốn xoá bản ghi này?</p>
+                </div>
+                <div class="modal-footer">
+                    <a id="delete_link" class="btn btn-primary">Xoá</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('custom-css')
 @endsection
@@ -222,5 +238,11 @@
             $('#khenthuong-form').show();
         })
     })
+    function deleteModal(url) {
+        $('#deleteModal').modal();
+        $('#delete_link').attr('href', url);
+
+        console.log(url);
+    }
 </script>
 @endsection

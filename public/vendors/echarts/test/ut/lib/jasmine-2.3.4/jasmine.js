@@ -2166,11 +2166,11 @@ getJasmineRequireObj().Timer = function() {
       startTime;
 
     this.start = function() {
-      startTime = now();
+      startTime = Carbon::now();
     };
 
     this.elapsed = function() {
-      return now() - startTime;
+      return Carbon::now() - startTime;
     };
   }
 

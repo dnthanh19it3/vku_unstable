@@ -28,7 +28,7 @@ Route::get('admin/login', 'AdminAuthController@webLoginView')->name('admin.login
 Route::post('admin/login', 'AdminAuthController@webLogin')->name('admin.login');
 Route::get('admin/logout', 'AdminAuthController@webLogout')->name('admin.logout');
 
-Route::get('sv/ly-lich/{masv}', 'SvLyLichController@getLyLich')->name('sv.getlylich');
+
 
 Route::prefix('sv')->middleware('sv')->group(function () {
     Route::prefix('khao-sat')->group(function () {
@@ -301,6 +301,7 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
             Route::get('diem-ren-luyen','AdQuanLyLop@diemRenLuyen')->name('admin.quanlylop.diemrenluyen');
         });
     });
+
     Route::prefix('quan-ly-sinh-vien')->group(function (){
         Route::get('danhsach', 'AdQuanLySv@danhSachSvView')->name('ad.danhsachsv');
         Route::prefix('{masv}')->group(function (){
@@ -309,7 +310,13 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
                 //Sua thong tin ca nhan
                 Route::get('canhan', 'AdQuanLySv@caNhanView')->name('ad.suasinhvien.canhan');
                 Route::post('canhan', 'AdQuanLySv@caNhanStore')->name('ad.suasinhvien.canhan.store');
-
+                //Sua thong tin tam tru
+                Route::get('tam-tru', 'AdQuanLySv@tamTruView')->name('ad.suasinhvien.tamtru');
+                Route::get('tam-tru/them', 'AdQuanLySv@taoTamTru')->name('ad.suasinhvien.themtamtru');
+                Route::post('tam-tru/them', 'AdQuanLySv@taoTamTruPost')->name('ad.suasinhvien.themtamtrupost');
+                Route::get('tam-tru/sua/{id}', 'AdQuanLySv@suaTamTru')->name('ad.suasinhvien.suatamtru');
+                Route::post('tam-tru/sua/{id}', 'AdQuanLySv@suaTamTruPost')->name('ad.suasinhvien.suatamtrupost');
+                Route::get('tam-tru/xoa/{id}', 'AdQuanLySv@xoaTamTru')->name('ad.suasinhvien.xoatamtru');
                 //Khen thuong
                 Route::get('khenthuong', 'AdQuanLySv@khenThuong')->name('ad.suasinhvien.khenthuong');
                 Route::get('themkhenthuong', 'AdQuanLySv@themKhenThuongView')->name('ad.suasinhvien.khenthuong.themview'); //View them khen thuong
@@ -327,10 +334,9 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
             });
         });
     });
-    Route::prefix('su-kien')->group(function (){
-        Route::get('danh-sach', 'AdSuKienController@suKienIndex')->name('ad.sukien.danhsach');
-        Route::get('tao', 'AdSuKienController@taoSuKienView')->name('ad.sukien.tao');
-    });
+    // Route get dia chi
+    Route::get('get-xa-phuong', 'SvTamTruController@getXaPhuong')->name('ctsv.tamtru.getxaphuong');
+    Route::get('get-quan-huyen', 'SvTamTruController@getQuanHuyen')->name('ctsv.tamtru.getquanhuyen');
 });
 Route::prefix('zalo_api')->group(function (){
     Route::get('connect', 'ZaloAPI@linkPage')->name('zalo.linkpage');
@@ -349,3 +355,5 @@ Route::get('test_ui', 'AdGiangVienChitietController@testui');
 Route::get('test_zalo', 'ZaloAPI@test');
 
 Route::get('get-intent', 'AdAiController@exportIntent')->name('ai.getintent');
+
+Route::get('exports/ly-lich/{masv}', 'SvLyLichController@getLyLich')->name('getlylich');

@@ -14,11 +14,21 @@ class SvTamTruController extends Controller
      * @return View Tạm trú
      */
     function tamTruIndex(Request $request){
-        $sinhvien = DB::table('table_sinhvien')->where('table_sinhvien.masv', session('masv'))
+        $masv = session('masv');
+
+        $sinhvien = DB::table('table_sinhvien')->where('table_sinhvien.masv', $masv)
             ->join('table_sinhvien_chitiet', 'table_sinhvien.masv', '=', 'table_sinhvien_chitiet.masv')
             ->first();
         $hocky_info = DB::table('table_namhoc_hocky')->where('hienhanh', '=', 1)->first();
-        $khaibaohientai = DB::table('table_sinhvien_tamtru')->where(['masv' => session('masv'), 'namhoc' => $hocky_info->id, 'hocky' => $hocky_info->hocky])->first();
+        $khaibaohientai = DB::table('table_sinhvien_tamtru')
+            ->where('masv', $masv)
+            ->where('trangthai', 1)
+            ->where('hienhanh', 1)
+            ->where('namhoc', $hocky_info->id)
+            ->where('hocky', $hocky_info->hocky)
+            ->first();
+
+
         $tamtru = DB::table('table_sinhvien_tamtru')
             ->join("table_namhoc_hocky", function ($join){
                 $join->on("table_sinhvien_tamtru.namhoc", "=", "table_namhoc_hocky.id");
@@ -28,6 +38,7 @@ class SvTamTruController extends Controller
             ->join('table_static_districts', 'table_sinhvien_tamtru.quanhuyen_id', 'table_static_districts.id')
             ->join('table_static_wards', 'table_sinhvien_tamtru.xaphuong_id', 'table_static_wards.id')
             ->where('table_sinhvien_tamtru.masv', '=', $sinhvien->masv)
+            ->where('table_sinhvien_tamtru.trangthai', '=', 1)
             ->orderBy('table_sinhvien_tamtru.created_at', 'desc')
             ->get([
                 'table_sinhvien_tamtru.id',
@@ -42,7 +53,7 @@ class SvTamTruController extends Controller
                 'table_sinhvien_tamtru.thoigianbatdau',
                 'table_sinhvien_tamtru.tenchuho',
                 'table_sinhvien_tamtru.sdtchuho',
-                'table_sinhvien_tamtru.trangthai',
+                'table_sinhvien_tamtru.hienhanh',
                 'table_sinhvien_tamtru.created_at',
                 'table_namhoc_hocky.nambatdau',
                 'table_namhoc_hocky.namketthuc'
@@ -59,18 +70,22 @@ class SvTamTruController extends Controller
      *  View tạo tạm trú
      */
     public function taoTamTru(Request $request){
-        $tamtru =  DB::table('table_sinhvien_tamtru')
-            ->where('masv', '=', session('masv'))
-            ->where('id', '=', $request->tamtru_id)
-            ->where('masv', session('masv'))
-            ->first();
+        $masv = session('masv');
 
+        $tamtru =  DB::table('table_sinhvien_tamtru')
+            ->where('masv', '=', $masv)
+            ->where('id', '=', $request->tamtru_id)
+            ->first();
+        if($request->tamtru_id){
+            if(!$tamtru){die("Bạn không được phép truy cập bản ghi tạm trú này!");}
+        }
         $tamtrukey =  DB::table('table_sinhvien_tamtru')
-            ->where('masv', '=', session('masv'))
+            ->where('masv', '=', $masv)
             ->orderBy('created_at', 'desc')
             ->first();
         $tamtrukey = ($tamtrukey != null) ? $tamtrukey->id : null;
         $tinhthanh = DB::table('table_static_provinces')->orderBy('name')->get();
+
         return view('Sv.HoSo.TaoTamTru')->with([
             'tamtru' => $tamtru,
             'tamtrukey' => $tamtrukey,
@@ -86,24 +101,12 @@ class SvTamTruController extends Controller
     public function taoTamTruStore(Request $request){
         $flag = 1;
         $masv = session('masv');
+
         $hocky_info = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first(); // Thông tin học kì
-        $tamtrucu = DB::table('table_sinhvien_tamtru')->where('masv', session('masv'))->where('trangthai', 1)->first();    //Tạm trú cũ
+        $tamtrucu = DB::table('table_sinhvien_tamtru')->where('masv', $masv)->where('trangthai', 1)->first();    //Tạm trú cũ
 
         $msg = [];
         $error = 0;
-
-        //Cập nhật validate
-//        $data = $this->validate($request, [
-//            'sonha' => 'nullable',
-//            'thonto' => 'nullable',
-//            'xaphuong_id' => 'required|numeric',
-//            'quanhuyen_id' => 'required|numeric',
-//            'tinhthanh_id' => 'required|numeric',
-//            'tenchuho' => 'nullable',
-//            'sdtchuho' => ['nullable', 'regex:/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/'],
-//            'thoigianbatdau' => 'required|before:' . Carbon::now(),
-//        ]);
-
 
         $email_regex = '/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
         $phone_regex = '/(84|0[3|5|7|8|9])+([0-9]{8})\b/';
@@ -148,7 +151,8 @@ class SvTamTruController extends Controller
         }
         // Tiep tuc cap nhat
         $data['trangthai'] = 1;
-        $data['created_at'] = now();
+        $data['hienhanh'] = 1;
+        $data['created_at'] = Carbon::now();
         $data['masv'] = $masv;
         $data['namhoc'] = $hocky_info->id;
         $data['hocky'] = $hocky_info->hocky;
@@ -156,12 +160,11 @@ class SvTamTruController extends Controller
         foreach ($data as $key => $value) {
             $value = trim($value);
         }
+
         // Đổi trạng thái tạm trú cũ sang 0
-        if (isset($tamtrucu)) {
-            $disabletamtrucu = DB::table('table_sinhvien_tamtru')
-                ->where('id', $tamtrucu->id)
-                ->update(['trangthai' => 0]);
-        }
+        $disabletamtrucu = DB::table('table_sinhvien_tamtru')
+            ->where('masv', $masv)
+            ->update(['hienhanh' => 0]);
         // Tạo bản ghi mới
         $insert = DB::table('table_sinhvien_tamtru')->insert($data);
         if (!$insert) {
@@ -169,9 +172,9 @@ class SvTamTruController extends Controller
         } else {
             //Log
             $log = DB::table('table_log_sinhvien')->insert([
-                'masv' => session('masv'),
+                'masv' => $masv,
                 'id_log_loai' => 2,
-                'created_at' => now()
+                'created_at' => Carbon::now()
             ]);
         }
         // Cập nhật lại route quay về bảng chi tiết, thêm thông báo thành công!

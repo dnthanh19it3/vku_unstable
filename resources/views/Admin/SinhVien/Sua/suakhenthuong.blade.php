@@ -1,7 +1,4 @@
 @extends('layout.admin_layout')
-@section('title', 'Sửa khen thưởng')
-@section('header')
-@endsection
 @section('body')
     <!-- NEW -->
     <style>
@@ -11,7 +8,7 @@
         .mb-3{margin-bottom: 8px}
     </style>
     <div class="row">
-        <div class="col-lg-12 col-xs-12">
+        <div class="col-lg-12 col-xs-12" method="post" action="{{route('ad.suasinhvien.canhan.store', ['masv' => $sinhvien->masv])}}">
             @if($errors->any())
                 <div class="row">
                     <div class="col-md-12">
@@ -29,32 +26,26 @@
             <div class="tab-content" style="height: 100%">
                 <div class="tab-pane active" id="canhan">
                     <div class="profile_main_block p-4 bg-white">
-                        <h4 style="display: flex; flex-direction: row; align-items: center"><img src="{{$sinhvien_static->anhthe}}" class="avatar mr-2" style="border-radius: 99px"/> Sửa kỷ luật - {{$sinhvien_static->hodem . " " . $sinhvien_static->ten . " (" . $sinhvien_static->masv . ")"}}</h4>
+                        <h4 style="display: flex; flex-direction: row; align-items: center"><img src="{{$sinhvien_static->anhthe}}" class="avatar mr-2" style="border-radius: 99px"/> Sửa khen thưởng - {{$sinhvien_static->hodem . " " . $sinhvien_static->ten . " (" . $sinhvien_static->masv . ")"}}</h4>
                         <hr/>
-                        <form id="khenthuong-form" action="{{route('ad.suasinhvien.suakyluat.store', ['masv' => $sinhvien->masv, 'id' => $kyluat->id])}}" method="post">
+                        <form id="khenthuong-form" action="{{route('ad.suasinhvien.suakhenthuong.store', ['masv' => $sinhvien->masv, 'id' => $khenthuong->id])}}" method="post">
                             {{ csrf_field() }}
                             <div class="form-group row">
                                 <div class="col-xs-12 col-lg-12">
-                                    <label for="capkhenthuong" class="col-form-label">Cấp quyết định</label>
-                                    <input class="form-control rounded" id="capquyetdinh" name="capquyetdinh" type="text" class="form-control" value="{{$kyluat->capquyetdinh}}">
+                                    <label for="capkhenthuong" class="col-form-label">Cấp khen thưởng</label>
+                                    <input id="capkhenthuong" name="capkhenthuong" type="text" class="form-control rounded" value="{{$khenthuong->capkhenthuong}}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-12 col-xs-12">
-                                    <label for="soquyetdinh" class="col-3 col-form-label">Quyết định số</label>
-                                    <input class="form-control rounded" id="soquyetdinh" name="soquyetdinh" type="text" class="form-control" value="{{$kyluat->soquyetdinh}}">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-xs-12 col-lg-12">
-                                    <label for="noidung" class="col-3 col-form-label">Nội dung</label>
-                                    <input id="noidung" name="noidung" type="text" class="form-control rounded" value="{{$kyluat->noidung}}">
-                                </div>
+                               <div class="col-lg-12 col-xs-12">
+                                   <label for="soquyetdinh" class="col-3 col-form-label">Quyết định số</label>
+                                   <input id="soquyetdinh" name="soquyetdinh" type="text" class="form-control rounded" value="{{$khenthuong->soquyetdinh}}">
+                               </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-xs-12 col-lg-12">
                                     <label for="noidung" class="col-3 col-form-label">Nội dung</label>
-                                    <input class="form-control rounded" id="hinhthuckyluat" name="hinhthuckyluat" type="text" class="form-control" value="{{$kyluat->hinhthuckyluat}}">
+                                    <input id="noidung" name="noidung" type="text" class="form-control rounded" value="{{$khenthuong->noidung}}">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -63,7 +54,7 @@
                                     <div class="col-9">
                                         <select name="namhoc" class="form-control rounded">
                                             @foreach($namhoc_hocky as $key => $value)
-                                                <option value="{{$value->id}}" {{$value->id == $kyluat->namhoc ? "selected" : ""}}>{{$value->nambatdau."-".$value->namketthuc}}</option>
+                                                <option value="{{$value->id}}" {{$value->id == $khenthuong->namhoc ? "selected" : ""}}>{{$value->nambatdau."-".$value->namketthuc}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -72,15 +63,15 @@
                                     <label for="thoigian" class="col-3 col-form-label">Học kỳ</label>
                                     <div class="col-9">
                                         <select name="hocky" class="form-control rounded">
-                                            <option value="1" {{1 == $kyluat->hocky ? "selected" : ""}}>Học kỳ 1</option>
-                                            <option value="2" {{2 == $kyluat->hocky ? "selected" : ""}}>Học kỳ 2</option>
+                                            <option value="1" {{1 == $khenthuong->hocky ? "selected" : ""}}>Học kỳ 1</option>
+                                            <option value="2" {{2 == $khenthuong->hocky ? "selected" : ""}}>Học kỳ 2</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-lg-6">
                                     <label for="thoigian" class="col-3 col-form-label">Thời gian</label>
                                     <div class="col-9">
-                                        <input id="thoigian" name="thoigian" type="date" class="form-control rounded" value="{{$kyluat->thoigian}}">
+                                        <input id="thoigian" name="thoigian" type="date" class="form-control rounded" value="{{$khenthuong->thoigian}}">
                                     </div>
                                 </div>
                             </div>

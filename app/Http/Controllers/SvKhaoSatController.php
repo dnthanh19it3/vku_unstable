@@ -115,7 +115,7 @@ class SvKhaoSatController extends Controller
             $data = [
                 'traloi' => $temp_tracnghiem,
                 'tuluan' => $temp_tuluan,
-                'updated_at' => now()
+                'updated_at' => Carbon::now()
             ];
             $action = DB::table('khaosat_traloi')->where('id', $tontai->id)->update($data);
         } else {
@@ -126,7 +126,7 @@ class SvKhaoSatController extends Controller
                 'mau_id' => $request->mau_id,
                 'namhoc' => $hocky_hienhanh->id,
                 'hocky' => $hocky_hienhanh->hocky,
-                'created_at' => now()
+                'created_at' => Carbon::now()
             ];
             $action = DB::table('khaosat_traloi')->insert($data);
         }

@@ -221,7 +221,7 @@ class AdQuanLySv extends Controller
         $log = DB::table('table_log_sinhvien')->insert([
             'masv' => $masv,
             'id_log_loai' => 3,
-            'created_at' => now()
+            'created_at' => Carbon::now()
         ]);
         // Return back
 
@@ -354,7 +354,7 @@ class AdQuanLySv extends Controller
             $log = DB::table('table_log_sinhvien')->insert([
                 'masv' => $masv,
                 'id_log_loai' => 4,
-                'created_at' => now()
+                'created_at' => Carbon::now()
             ]);
         }
 
@@ -390,7 +390,7 @@ class AdQuanLySv extends Controller
             $log = DB::table('table_log_sinhvien')->insert([
                 'masv' => $masv,
                 'id_log_loai' => 6,
-                'created_at' => now()
+                'created_at' => Carbon::now()
             ]);
         }
 
@@ -433,7 +433,7 @@ class AdQuanLySv extends Controller
             $log = DB::table('table_log_sinhvien')->insert([
                 'masv' => $masv,
                 'id_log_loai' => 5,
-                'created_at' => now()
+                'created_at' => Carbon::now()
             ]);
         }
         pushNotify($response);
@@ -469,7 +469,7 @@ class AdQuanLySv extends Controller
             $log = DB::table('table_log_sinhvien')->insert([
                 'masv' => $masv,
                 'id_log_loai' => 7,
-                'created_at' => now()
+                'created_at' => Carbon::now()
             ]);
         }
         pushNotify($response);

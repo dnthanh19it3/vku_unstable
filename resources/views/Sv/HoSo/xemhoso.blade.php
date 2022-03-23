@@ -28,7 +28,7 @@
             <div class="profile-userbuttons">
                 <a href="{{route('suahoso')}}" class="btn btn-success btn-sm"><i
                             class="fa fa-edit m-right-xs mr-1"></i>Sửa hồ sơ</a>
-                <a href="{{route('sv.getlylich', ['masv' => session('masv')])}}" class="btn btn-danger btn-sm"><i
+                <a href="{{route('getlylich', ['masv' => session('masv')])}}" class="btn btn-danger btn-sm"><i
                             class="fa fa-file-export m-right-xs mr-1"></i>Xuất lý lịch</a>
             </div>
             <!-- END SIDEBAR BUTTONS -->
@@ -95,7 +95,7 @@
                         <div class="row">
                             <div class="col-md-4 col-xs-12 info_group row">
                                 <div class="col-lg-4 col-xs-6 title-text">Đoàn thể</div>
-                                <div class="col-lg-8 col-xs-6 content-text">{{$sinhvien_chitiet->doanthe}}</div>
+                                <div class="col-lg-8 col-xs-6 content-text">{{ $sinhvien_chitiet->doanthe }}</div>
                             </div>
                             <div class="col-md-4 col-xs-12 info_group row">
                                 <div class="col-lg-4 col-xs-6 title-text">Ngày kết nạp</div>
@@ -104,6 +104,12 @@
                             <div class="col-md-4 col-xs-12 info_group row">
                                 <div class="col-lg-4 col-xs-6 title-text">Tôn giáo</div>
                                 <div class="col-lg-8 col-xs-6 content-text">{{$sinhvien_chitiet->tongiao}}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-xs-12 info_group row">
+                                <div class="col-lg-4 col-xs-6 title-text">Mã BHYT</div>
+                                <div class="col-lg-8 col-xs-6 content-text">{{ $sinhvien_chitiet->ma_bhyt }}</div>
                             </div>
                         </div>
                     </div>
@@ -467,7 +473,7 @@
                                 <td>{{$item->tenchuho}}</td>
                                 <td>{{$item->sdtchuho}}</td>
                                 <td>{{$item->thoigianbatdau ? \Carbon\Carbon::make($item->thoigianbatdau )->format('d-m-Y') : "N/A"}}</td>
-                                <td>@if($item->trangthai)<span class="status text-success">&bull;</span> Hiện tại @else <span class="status text-danger">&bull;</span> Chỗ ở cũ @endif</td>
+                                <td>@if($item->hienhanh)<span class="status text-success">&bull;</span> Hiện tại @else <span class="status text-danger">&bull;</span> Chỗ ở cũ @endif</td>
                                 <td>{{$item->created_at ? \Carbon\Carbon::make($item->created_at)->format('d-m-Y'):"N/A"}}</td>
                             </tr>
                         @empty

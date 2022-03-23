@@ -10373,7 +10373,7 @@ function Calendar_constructor(element, overrides) {
 	t.getNow = function() {
 		var now = t.options.now;
 		if (typeof now === 'function') {
-			now = now();
+			now = Carbon::now();
 		}
 		return t.moment(now).stripZone();
 	};

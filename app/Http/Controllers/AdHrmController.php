@@ -265,7 +265,7 @@ class AdHrmController extends Controller
     function congTacNuocNgoaiThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Congtacnuocngoai'];
 //        dd($data);
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_congtacnuocngoai')->insert($data);
         dd($insert);
@@ -273,12 +273,12 @@ class AdHrmController extends Controller
     function congTacNuocNgoaiSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Congtacnuocngoai'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_congtacnuocngoai')->where('id', $request->id)->update($data);
         dd($update);
     }
     function congTacNuocNgoaiXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_congtacnuocngoai')->where('id', $request->id)->update($data);
         dd($delete);
     }
@@ -304,7 +304,7 @@ class AdHrmController extends Controller
     function congTacThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhcongtac'];
 //        dd($data);
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_congtac')->insert($data);
         dd($insert);
@@ -312,12 +312,12 @@ class AdHrmController extends Controller
     function congTacSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhcongtac'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_congtac')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function congTacXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_congtac')->where('id', $request->id)->update($data);
         dd($delete);
     } //OK
@@ -345,7 +345,7 @@ class AdHrmController extends Controller
     } //
     function nghiPhepThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhnghiphep'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_nghiphep')->insert($data);
         dd($insert);
@@ -353,12 +353,12 @@ class AdHrmController extends Controller
     function nghiPhepSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhnghiphep'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_nghiphep')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function nghiPhepXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_nghiphep')->where('id', $request->id)->update($data);
         dd($delete);
     } //OK
@@ -386,7 +386,7 @@ class AdHrmController extends Controller
     } //OK
     function khenThuongThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhkhenthuong'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_khenthuong')->insert($data);
         dd($insert);
@@ -394,12 +394,12 @@ class AdHrmController extends Controller
     function khenThuongSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhkhenthuong'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_khenthuong')->where('id', $request->id)->update($data);
         dd($update);
     } // OK
     function khenThuongXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_khenthuong')->where('id', $request->id)->update($data);
         dd($delete);
     } //OK
@@ -427,7 +427,7 @@ class AdHrmController extends Controller
     } //OK
     function kyLuatThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhkyluat'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_kyluat')->insert($data);
         dd($insert);
@@ -435,12 +435,12 @@ class AdHrmController extends Controller
     function kyLuatSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhkyluat'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_kyluat')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function kyLuatXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_kyluat')->where('id', $request->id)->update($data);
         dd($delete);
     } //OK
@@ -487,7 +487,7 @@ class AdHrmController extends Controller
     } //
     function daoTaoThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhdaotao'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_daotao')->insert($data);
         dd($insert);
@@ -495,12 +495,12 @@ class AdHrmController extends Controller
     function daoTaoSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhdaotao'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_daotao')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function daoTaoXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_daotao')->where('id', $request->id)->update($data);
         dd($delete);
     } //
@@ -528,7 +528,7 @@ class AdHrmController extends Controller
     } //
     function boiDuongThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhboiduong'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_boiduong')->insert($data);
         dd($insert);
@@ -536,12 +536,12 @@ class AdHrmController extends Controller
     function boiDuongSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhboiduong'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_boiduong')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function boiDuongXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_boiduong')->where('id', $request->id)->update($data);
         dd($delete);
     } //
@@ -570,7 +570,7 @@ class AdHrmController extends Controller
     } //
     function thanNhanTrongNuocThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Thannhantrongnuoc'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_thannhantrongnuoc')->insert($data);
         dd($insert);
@@ -578,12 +578,12 @@ class AdHrmController extends Controller
     function thanNhanTrongNuocSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Thannhantrongnuoc'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_thannhantrongnuoc')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function thanNhanTrongNuocXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_thannhantrongnuoc')->where('id', $request->id)->update($data);
         dd($delete);
     } //
@@ -611,7 +611,7 @@ class AdHrmController extends Controller
     } //
     function thanNhanNgoaiNuocThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Thannhanngoainuoc'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_thannhanngoainuoc')->insert($data);
         dd($insert);
@@ -619,12 +619,12 @@ class AdHrmController extends Controller
     function thanNhanNgoaiNuocSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Thannhanngoainuoc'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_thannhanngoainuoc')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function thanNhanNgoaiNuocXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_thannhanngoainuoc')->where('id', $request->id)->update($data);
         dd($delete);
     } //
@@ -649,7 +649,7 @@ class AdHrmController extends Controller
     } //
     function thamGiaLlvtThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['ThamgiaLlvt'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_thamgiallvt')->insert($data);
         dd($insert);
@@ -657,12 +657,12 @@ class AdHrmController extends Controller
     function thamGiaLlvtSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['ThamgiaLlvt'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_thamgiallvt')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function thamGiaLlvtXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_thamgiallvt')->where('id', $request->id)->update($data);
         dd($delete);
     } //
@@ -689,7 +689,7 @@ class AdHrmController extends Controller
     } //OK
     function huongLuongThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhhuongluong'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_huongluong')->insert($data);
         dd($insert);
@@ -697,12 +697,12 @@ class AdHrmController extends Controller
     function huongLuongSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Quatrinhhuongluong'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_huongluong')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function huongLuongXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_huongluong')->where('id', $request->id)->update($data);
         dd($delete);
     } //OK
@@ -729,7 +729,7 @@ class AdHrmController extends Controller
     } //OK
     function hopDongThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Hopdong'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_hopdong')->insert($data);
         dd($insert);
@@ -737,12 +737,12 @@ class AdHrmController extends Controller
     function hopDongSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Hopdong'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_hopdong')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function hopDongXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_hopdong')->where('id', $request->id)->update($data);
         dd($delete);
     } //OK
@@ -773,7 +773,7 @@ class AdHrmController extends Controller
     } //OK
     function hocHamThemPost(Request $request, $ma_gv= null){
         $data = $request['data']['Bosunghocham'];
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
         $data['trangthai'] = 1;
         $insert = DB::table('table_giangvien_hocham')->insert($data);
         dd($insert, "Check");
@@ -781,12 +781,12 @@ class AdHrmController extends Controller
     function hocHamSuaPost(Request $request, $ma_gv= null){
         $data = $request['data']['Bosunghocham'];
         unset($data['ma_gv']);
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_giangvien_hocham')->where('id', $request->id)->update($data);
         dd($update);
     } //OK
     function hocHamXoa(Request $request, $ma_gv = null){
-        $data = ['updated_at' => now(), 'trangthai'=> 2];
+        $data = ['updated_at' => Carbon::now(), 'trangthai'=> 2];
         $delete = DB::table('table_giangvien_hocham')->where('id', $request->id)->update($data);
         dd($delete);
     } //OK

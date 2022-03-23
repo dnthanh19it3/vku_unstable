@@ -96,7 +96,7 @@ class SvDonTuController extends Controller
             'phongban_xuly' => DB::table('table_maudon')->where('maudon_id', $maudon_id)->first()->donvi_id,
             'namhoc' => $namhoc_hocky->id,
             'hocky' => $namhoc_hocky->hocky,
-            'created_at' => now()
+            'created_at' => Carbon::now()
         ];
 
         //Lấy format của field để validate
@@ -125,7 +125,7 @@ class SvDonTuController extends Controller
                             'don_id' => $donid,
                             'truong_id' => ltrim($key, "field"),
                             'noidung' => $file_path,
-                            'created_at' => now()
+                            'created_at' => Carbon::now()
                         ];
                         array_push($insert_data, $record);
                     }
@@ -134,7 +134,7 @@ class SvDonTuController extends Controller
                         'don_id' => $donid,
                         'truong_id' => ltrim($key, "field"),
                         'noidung' => $value,
-                        'created_at' => now()
+                        'created_at' => Carbon::now()
                     ];
                     array_push($insert_data, $record);
                 }
@@ -394,7 +394,7 @@ class SvDonTuController extends Controller
 
     function getSinhVienData($masv){
         $sinhvien_static = null;
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
+        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien_full.json"));
         foreach ($sinhvien_all as $key => $item){
             if($item->masv == $masv){
                 $sinhvien_static = $item;

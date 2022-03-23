@@ -1,5 +1,10 @@
 @extends('layout.admin_layout')
 @section('body')
+    <style>
+        .p-3 {
+            padding: 16px;
+        }
+    </style>
     <div class="row">
         <div class="col-md-12">
             <div class="x_panel">

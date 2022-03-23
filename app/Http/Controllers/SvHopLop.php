@@ -112,7 +112,7 @@ class SvHopLop extends Controller
         $data['namhoc'] = $kyhoc_hienhanh->id;
         $data['hocky'] = $kyhoc_hienhanh->hocky;
         $data['nguoilapbienban'] = session('masv');
-        $data['created_at'] = now();
+        $data['created_at'] = Carbon::now();
 
 
         $store = DB::table('table_lopsh_hoplop')->insert($data);
@@ -223,7 +223,7 @@ class SvHopLop extends Controller
         ]);
 
         // Add thong tin
-        $data['updated_at'] = now();
+        $data['updated_at'] = Carbon::now();
         $update = DB::table('table_lopsh_hoplop')->where('id', '=', $id)->update($data);
         if(!$update){
             $flag = 0;

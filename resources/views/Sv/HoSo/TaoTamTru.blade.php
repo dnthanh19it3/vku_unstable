@@ -5,8 +5,19 @@
 @section('body')
     <form action="{{route('taotamtru.store')}}" method="post" class="row">
         {{ csrf_field() }}
+        <style>
+            .mb-1 {
+                margin-bottom: 8px;
+            }
+            .p-3 {
+                padding: 16px;
+            }
+            .rounded {
+                border-radius: 4px;
+            }
+        </style>
         <div class="col-md-12 bg-white p-3">
-            <h6><i class="fas fa-address-card mr-2"></i>Nhập thông tin</h6>
+            <h4><i class="fa fa-location-arrow mr-2"></i>   Nhập thông tin tạm trú</h4>
             <hr/>
             <div class="form-row">
                 <div class="form-group col-md-3">

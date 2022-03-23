@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use xCarbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 
 class AdDonTuController extends Controller
 {
@@ -370,7 +371,7 @@ class AdDonTuController extends Controller
         $loai = $this->getLoaiDon($don_id);
         $addLog =  DB::table('table_don_logs')->insert([
             'don_id' => $don_id,
-            'thoigian' => Carbon::now(),
+            'thoigian' => Carbon\Carbon::now(),
             'trangthai' => 1,
             'noidung' => $loai ." đã được tiếp nhận",
             'chuyenvien_id' => "chuyenvien@vku.udn.vn"
@@ -499,7 +500,6 @@ class AdDonTuController extends Controller
     */
     function thuTucDashboard(Request $request)
     {
-//        $hoanthanh = DB::table('table_don')->where('hoanthanh', 1)->get(); //OK
         $listphongban = DB::table('table_donvi_phongban')
             ->orWhere('id', 2)
             ->orWhere('id', 7)
@@ -514,10 +514,10 @@ class AdDonTuController extends Controller
             $chuahoanthanh = $chuahoanthanh->where('phongban_xuly', $request->phongban)->get();
             $listphongban = $listphongban->where('id', $request->phongban)->get();
         }else{
-            $chuahoanthanh = $chuahoanthanh->get();
+            $chuahoanthanh = $chuahoanthanh->get(['table_don.*', 'table_sinhvien.masv']);
             $listphongban = $listphongban->get();
         }
-//        dd(count($chuahoanthanh));
+
 
         // Tạo bộ đếm chưa hoàn thnahf
         foreach ($listphongban as $key => $value){

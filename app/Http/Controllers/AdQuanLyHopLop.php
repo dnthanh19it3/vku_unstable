@@ -20,7 +20,7 @@ class AdQuanLyHopLop extends Controller
         $selected = [
             'namhoc' => ($namhoc) ? $namhoc : $kyhoc_hienhanh->id,
             'hocky' => ($hocky) ? $hocky : $kyhoc_hienhanh->hocky,
-            'thang' => ($request->thang) ? $request->thang : (int) now()->format('m')
+            'thang' => ($request->thang) ? $request->thang : (int) Carbon::now()->format('m')
         ];
 
         $kyhoc_query = $kyhoc_hienhanh = DB::table('table_namhoc_hocky')
@@ -92,7 +92,7 @@ class AdQuanLyHopLop extends Controller
         $selected = [
             'namhoc' => ($namhoc) ? $namhoc : $kyhoc_hienhanh->id,
             'hocky' => ($hocky) ? $hocky : $kyhoc_hienhanh->hocky,
-            'thang' => ($request->thang) ? $request->thang : (int) now()->format('m')
+            'thang' => ($request->thang) ? $request->thang : (int) Carbon::now()->format('m')
         ];
 
         $kyhoc_query = $kyhoc_hienhanh = DB::table('table_namhoc_hocky')
@@ -238,9 +238,9 @@ class AdQuanLyHopLop extends Controller
         $update_content = null;
         $check = DB::table('table_lopsh_hoplop')->where('id', $id)->first()->xacnhan_gvcn;
         if($check){
-            $update_content = ['xacnhan_gvcn' => 0, 'updated_at' => now()];
+            $update_content = ['xacnhan_gvcn' => 0, 'updated_at' => Carbon::now()];
         } else {
-            $update_content = ['xacnhan_gvcn' => 1, 'updated_at' => now()];
+            $update_content = ['xacnhan_gvcn' => 1, 'updated_at' => Carbon::now()];
         }
         $update = DB::table('table_lopsh_hoplop')->where('id', $id)->update($update_content);
         $flag = $update ? 1 : 0;
@@ -258,9 +258,9 @@ class AdQuanLyHopLop extends Controller
         $update_content = null;
         $check = DB::table('table_lopsh_hoplop')->where('id', $id)->first()->xacnhan_khoa;
         if($check){
-            $update_content = ['xacnhan_khoa' => 0, 'updated_at' => now()];
+            $update_content = ['xacnhan_khoa' => 0, 'updated_at' => Carbon::now()];
         } else {
-            $update_content = ['xacnhan_khoa' => 1, 'updated_at' => now()];
+            $update_content = ['xacnhan_khoa' => 1, 'updated_at' => Carbon::now()];
         }
         $update = DB::table('table_lopsh_hoplop')->where('id', $id)->update($update_content);
         $flag = $update ? 1 : 0;
@@ -278,9 +278,9 @@ class AdQuanLyHopLop extends Controller
         $update_content = null;
         $check = DB::table('table_lopsh_hoplop')->where('id', $id)->first()->xacnhan_gvcn;
         if($check){
-            $update_content = ['xacnhan_ctsv' => 0, 'updated_at' => now()];
+            $update_content = ['xacnhan_ctsv' => 0, 'updated_at' => Carbon::now()];
         } else {
-            $update_content = ['xacnhan_ctsv' => 1, 'updated_at' => now()];
+            $update_content = ['xacnhan_ctsv' => 1, 'updated_at' => Carbon::now()];
         }
         $update = DB::table('table_lopsh_hoplop')->where('id', $id)->update($update_content);
         $flag = $update ? 1 : 0;
@@ -298,9 +298,9 @@ class AdQuanLyHopLop extends Controller
         $update_content = null;
         $check = DB::table('table_lopsh_hoplop')->where('id', $id)->first()->xacnhan_gvcn;
         if($check){
-            $update_content = ['xacnhan_bgh' => 0, 'updated_at' => now()];
+            $update_content = ['xacnhan_bgh' => 0, 'updated_at' => Carbon::now()];
         } else {
-            $update_content = ['xacnhan_bgh' => 1, 'updated_at' => now()];
+            $update_content = ['xacnhan_bgh' => 1, 'updated_at' => Carbon::now()];
         }
         $update = DB::table('table_lopsh_hoplop')->where('id', $id)->update($update_content);
         $flag = $update ? 1 : 0;
@@ -315,7 +315,7 @@ class AdQuanLyHopLop extends Controller
         $selected = [
             'namhoc' => ($namhoc) ? $namhoc : $kyhoc_hienhanh->id,
             'hocky' => ($hocky) ? $hocky : $kyhoc_hienhanh->hocky,
-            'thang' => ($request->thang) ? $request->thang : (int) now()->format('m')
+            'thang' => ($request->thang) ? $request->thang : (int) Carbon::now()->format('m')
         ];
 
         $kyhoc_query = $kyhoc_hienhanh = DB::table('table_namhoc_hocky')
@@ -361,7 +361,7 @@ class AdQuanLyHopLop extends Controller
             'hocky' => $request->hocky,
             'thang' => $request->thang,
             'noidung' => $request->noidung,
-            'created_at' => now()
+            'created_at' => Carbon::now()
         ];
 
         $insert = DB::table('table_gvcn_noidungdukien')->insert($data);
@@ -375,7 +375,7 @@ class AdQuanLyHopLop extends Controller
         $flag = 1;
         $data = [
             'noidung' => $request->noidung,
-            'updated_at' => now()
+            'updated_at' => Carbon::now()
         ];
 
         $update = DB::table('table_gvcn_noidungdukien')->where('id', $request->id)->update($data);

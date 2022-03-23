@@ -29,15 +29,12 @@
                         LỚP {{$sinhvien_static->tenlop}} MSV {{$sinhvien_static->masv}}
                     </div>
                 </div>
-                <!-- END SIDEBAR USER TITLE -->
-                <!-- SIDEBAR BUTTONS -->
-                <!-- END SIDEBAR BUTTONS -->
-                <!-- SIDEBAR MENU -->
                 <div class="profile-usermenu">
                     <div class="profile-usermenu">
                         <ul class="nav nav-pills nav-stacked" id="leftmenu">
                             <li class="active"><a href="#canhan" data-toggle="tab"><span class="glyphicon glyphicon-user"></span> Thông tin cá nhân</a></li>
                             <li><a href="{{route('ad.suasinhvien.khenthuong', ['masv' => $sinhvien->masv])}}"><span class="glyphicon glyphicon-star"></span> Khen thưởng kỷ luật</a></li>
+                            <li><a href="{{route('ad.suasinhvien.tamtru', ['masv' => $sinhvien->masv])}}"><span class="glyphicon glyphicon-plane"></span> Tạm trú</a></li>
                         </ul>
                     </div>
                 </div>
@@ -46,18 +43,14 @@
         </div>
         <form class="col-lg-9 col-xs-12" method="post" action="{{route('ad.suasinhvien.canhan.store', ['masv' => $sinhvien->masv])}}">
             {{@csrf_field()}}
-            @if($errors->any())
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-danger">
-                            Có lỗi xảy ra
-                            <ol style="">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ol>
-                        </div>
-                    </div>
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
                 </div>
             @endif
             <div class="tab-content" style="height: 100%">
@@ -113,7 +106,11 @@
                         <div class="row">
                             <div class="col-lg-4 col-xs-12 form-group">
                                 <div class="title-text">Đoàn thể</div>
-                                <input type="text" class="form-control rounded" name="data[chitiet][canhan][doanthe]" value="{{$sinhvien->doanthe}}"/>
+                                <select class="form-control rounded" name="data[chitiet][canhan][doanthe]">
+                                    <option {{$sinhvien->doanthe == 0 ? "selected" : ""}} value="0">Không</option>
+                                    <option {{$sinhvien->doanthe == 1 ? "selected" : ""}} value="1">Đoàn viên</option>
+                                    <option {{$sinhvien->doanthe == 2 ? "selected" : ""}} value="2">Đảng viên</option>
+                                </select>
                             </div>
                             <div class="col-lg-4 col-xs-12 form-group">
                                 <div class="title-text">Ngày kết nạp</div>
@@ -125,7 +122,7 @@
                             </div>
                         </div>
                     </div>
-                <!-- GIA ĐÌNHZ -->
+                <!-- GIA ĐÌNh -->
                     <div class="profile_main_block p-4 bg-white">
                         <h4><i class="fa fa-users mr-2"></i>Thông tin gia đình</h4>
                         <hr/>
@@ -137,7 +134,7 @@
                                     <input type="text" class="form-control rounded" name="data[chitiet][giadinh][hotencha]" value="{{$sinhvien->hotencha}}"/>
                                 </div>
                                 <div class="form-group">
-                                    <div class="title-text">Ngày sinh</div>
+                                    <div class="title-text">Năm sinh cha</div>
                                     <input type="text" class="form-control rounded" name="data[chitiet][giadinh][namsinhcha]" value="{{$sinhvien->namsinhcha}}"/>
                                 </div>
                                 <div class="form-group">
@@ -203,7 +200,10 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-xs-12 mt-3">
-                                <h4 style="border-left: 3px solid #00a180; padding-left: 3px">Anh chị em</h4> <button type="button" class="btn btn-sm btn-primary" id="btn_add_thanhphan"><i class="glyphicon glyphicon-plus"></i> Thêm thành phần</button>
+                                <h4 style="border-left: 3px solid #00a180; padding-left: 3px">Anh chị em</h4>
+                                <button type="button" class="btn btn-sm btn-primary" id="btn_add_thanhphan">
+                                    <i class="glyphicon glyphicon-plus"></i> Thêm thành phần
+                                </button>
                                 <div class="form-group" id="thanhphan">
                                     <div class="label">Anh chị em</div>
                                     @if($sinhvien->thanhphangiadinh != null)
@@ -233,19 +233,19 @@
                         <hr/>
                         <i>Hộ khẩu thường trú</i>
                         <div class="row">
-                            <div class="col-lg-4 col-xs-12 form-group">
+                            <div class="col-lg-3 col-xs-12 form-group">
                                 <div class="title-text">Thôn tổ</div>
                                 <input type="text" class="form-control rounded" name="data[chitiet][diachi][thon_to]" value="{{$sinhvien->thon_to}}"/>
                             </div>
-                            <div class="col-lg-4 col-xs-12 form-group">
+                            <div class="col-lg-3 col-xs-12 form-group">
                                 <div class="title-text">Xã phường</div>
                                 <input type="text" class="form-control rounded" name="data[chitiet][diachi][xa_phuong]"value="{{$sinhvien->xa_phuong}}"/>
                             </div>
-                            <div class="col-lg-4 col-xs-12 form-group">
+                            <div class="col-lg-3 col-xs-12 form-group">
                                 <div class="title-text">Quận huyện</div>
                                 <input type="text" class="form-control rounded" name="data[chitiet][diachi][quan_huyen]" value="{{$sinhvien->quan_huyen}}"/>
                             </div>
-                            <div class="col-lg-4 col-xs-12 form-group">
+                            <div class="col-lg-3 col-xs-12 form-group">
                                 <div class="title-text">Tỉnh/ Thành phố</div>
                                 <input type="text" class="form-control rounded" name="data[chitiet][diachi][tinh_thanh]" value="{{$sinhvien->tinh_thanh}}"/>
                             </div>
@@ -338,9 +338,9 @@
         let input_thanhphan_container = $('#thanhphan');
         let btn_add_thanhphan = $('#btn_add_thanhphan');
 
-        $(document).ready(()=>{
-
+        $(document).ready(() => {
             btn_add_thanhphan.click(() => {
+                console.log("Clicked");
                 let container = document.createElement('div');
                 container.className = 'form-group row mb-3';
 
@@ -374,6 +374,6 @@
 
                 input_thanhphan_container.append(container);
             });
-        })
+        });
     </script>
 @endsection

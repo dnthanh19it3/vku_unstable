@@ -583,7 +583,7 @@ function begin() {
 	if ( !config.started ) {
 
 		// Record the time of the test run's beginning
-		config.started = now();
+		config.started = Carbon::now();
 
 		verifyLoggingCallbacks();
 
@@ -615,12 +615,12 @@ function process( last ) {
 	function next() {
 		process( last );
 	}
-	var start = now();
+	var start = Carbon::now();
 	config.depth = ( config.depth || 0 ) + 1;
 
 	while ( config.queue.length && !config.blocking ) {
 		if ( !defined.setTimeout || config.updateRate <= 0 ||
-				( ( now() - start ) < config.updateRate ) ) {
+				( ( Carbon::now() - start ) < config.updateRate ) ) {
 			if ( config.current ) {
 
 				// Reset async tracking for each phase of the Test lifecycle
@@ -688,12 +688,12 @@ function done() {
 			failed: config.moduleStats.bad,
 			passed: config.moduleStats.all - config.moduleStats.bad,
 			total: config.moduleStats.all,
-			runtime: now() - config.moduleStats.started
+			runtime: Carbon::now() - config.moduleStats.started
 		} );
 	}
 	delete config.previousModule;
 
-	runtime = now() - config.started;
+	runtime = Carbon::now() - config.started;
 	passed = config.stats.all - config.stats.bad;
 
 	runLoggingCallbacks( "done", {
@@ -777,11 +777,11 @@ Test.prototype = {
 					failed: config.moduleStats.bad,
 					passed: config.moduleStats.all - config.moduleStats.bad,
 					total: config.moduleStats.all,
-					runtime: now() - config.moduleStats.started
+					runtime: Carbon::now() - config.moduleStats.started
 				} );
 			}
 			config.previousModule = this.module;
-			config.moduleStats = { all: 0, bad: 0, started: now() };
+			config.moduleStats = { all: 0, bad: 0, started: Carbon::now() };
 			runLoggingCallbacks( "moduleStart", {
 				name: this.module.name,
 				tests: this.module.tests
@@ -796,7 +796,7 @@ Test.prototype = {
 		}
 		this.testEnvironment = extend( {}, this.module.testEnvironment );
 
-		this.started = now();
+		this.started = Carbon::now();
 		runLoggingCallbacks( "testStart", {
 			name: this.testName,
 			module: this.module.name,
@@ -817,7 +817,7 @@ Test.prototype = {
 			QUnit.stop();
 		}
 
-		this.callbackStarted = now();
+		this.callbackStarted = Carbon::now();
 
 		if ( config.notrycatch ) {
 			runTest( this );
@@ -909,7 +909,7 @@ Test.prototype = {
 		var i,
 			bad = 0;
 
-		this.runtime = now() - this.started;
+		this.runtime = Carbon::now() - this.started;
 		config.stats.all += this.assertions.length;
 		config.moduleStats.all += this.assertions.length;
 
@@ -1001,7 +1001,7 @@ Test.prototype = {
 				expected: resultInfo.expected,
 				testId: this.testId,
 				negative: resultInfo.negative || false,
-				runtime: now() - this.started
+				runtime: Carbon::now() - this.started
 			};
 
 		if ( !resultInfo.result ) {
@@ -1033,7 +1033,7 @@ Test.prototype = {
 				message: message || "error",
 				actual: actual || null,
 				testId: this.testId,
-				runtime: now() - this.started
+				runtime: Carbon::now() - this.started
 			};
 
 		if ( source ) {

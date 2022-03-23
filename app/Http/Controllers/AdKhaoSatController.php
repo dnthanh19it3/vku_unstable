@@ -38,7 +38,7 @@ class AdKhaoSatController extends Controller
             'mota' => $request->mota,
             'slug' => $request->slug,
             'trangthai' => 1,
-            'created_at' => now()
+            'created_at' => Carbon::now()
         ];
         $mau_id = DB::table('khaosat_mau')->insertGetId($thongtin);
         if ($mau_id) {
@@ -49,7 +49,7 @@ class AdKhaoSatController extends Controller
                 $cauhoi_temp['loai'] = $loai[$key];
                 $cauhoi_temp['mau_id'] = $mau_id;
                 $cauhoi_temp['trangthai'] = 1;
-                $cauhoi_temp['created_at'] = now();
+                $cauhoi_temp['created_at'] = Carbon::now();
                 array_push($array_cauhoi, $cauhoi_temp);
             }
             $insert = DB::table('khaosat_cauhoi')->insert($array_cauhoi);
@@ -93,7 +93,7 @@ class AdKhaoSatController extends Controller
         //Check delete cau hoi
         if ($delete != null) {
             $delete = explode(',', $delete);
-            $delete_cauhoi = DB::table('khaosat_cauhoi')->whereIn('id', $delete)->update(['trangthai' => 2, 'updated_at' => now()]);
+            $delete_cauhoi = DB::table('khaosat_cauhoi')->whereIn('id', $delete)->update(['trangthai' => 2, 'updated_at' => Carbon::now()]);
         }
 
 
@@ -102,7 +102,7 @@ class AdKhaoSatController extends Controller
             'tenmau' => $request->tenmau,
             'mota' => $request->mota,
             'slug' => $request->slug,
-            'updated_at' => now()
+            'updated_at' => Carbon::now()
         ];
         $update_mau = DB::table('khaosat_mau')->where('id', $id)->update($thongtin);
 
@@ -113,7 +113,7 @@ class AdKhaoSatController extends Controller
             $cauhoi_temp['cauhoi'] = $cauhoi;
             $cauhoi_temp['loai'] = $loai[$key];
             $cauhoi_temp['mau_id'] = $id;
-            $cauhoi_temp['updated_at'] = now();
+            $cauhoi_temp['updated_at'] = Carbon::now();
             array_push($array_cauhoi, $cauhoi_temp);
         }
         $update_cauhoi = 0;
@@ -133,7 +133,7 @@ class AdKhaoSatController extends Controller
                 $cauhoi_temp['loai'] = $loai_add[$key];
                 $cauhoi_temp['mau_id'] = $id;
                 $cauhoi_temp['trangthai'] = 1;
-                $cauhoi_temp['created_at'] = now();
+                $cauhoi_temp['created_at'] = Carbon::now();
                 array_push($array_cauhoi_add, $cauhoi_temp);
             }
             $insert = DB::table('khaosat_cauhoi')->insert($array_cauhoi_add);

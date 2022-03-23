@@ -2831,7 +2831,7 @@ if (typeof sinon == "undefined") {
 
     function mirrorDateProperties(target, source) {
         if (source.now) {
-            target.now = function now() {
+            target.now = function Carbon::now() {
                 return target.clock.now;
             };
         } else {

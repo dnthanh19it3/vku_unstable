@@ -46,8 +46,8 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-xs-12 col-lg-12">
-                                    <label for="soquyetdinh" class="col-3 col-form-label">Quyết định số</label>
-                                    <input class="form-control rounded" id="noidung" name="noidung" type="text"
+                                    <label for="soquyetdinh" class="col-3 col-form-label">Nội dung</label>
+                                    <input class="form-control rounded" id= "noidung" name="noidung" type="text"
                                            class="form-control">
                                 </div>
                             </div>

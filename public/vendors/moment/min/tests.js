@@ -65657,8 +65657,8 @@
             momentNowTime = moment.now(),
             afterMomentCreationTime = new Date().valueOf();
 
-        assert.ok(startOfTest <= momentNowTime, 'moment now() time should be now, not in the past');
-        assert.ok(momentNowTime <= afterMomentCreationTime, 'moment now() time should be now, not in the future');
+        assert.ok(startOfTest <= momentNowTime, 'moment Carbon::now() time should be now, not in the past');
+        assert.ok(momentNowTime <= afterMomentCreationTime, 'moment Carbon::now() time should be now, not in the future');
     });
 
     test('now - Date mocked', function (assert) {
@@ -65680,7 +65680,7 @@
         Date = MockDate;
 
         try {
-            assert.equal(moment().valueOf(), customTimeMs, 'moment now() time should use the global Date object');
+            assert.equal(moment().valueOf(), customTimeMs, 'moment Carbon::now() time should use the global Date object');
         } finally {
             Date = RealDate;
         }

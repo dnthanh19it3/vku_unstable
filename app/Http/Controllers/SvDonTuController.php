@@ -512,7 +512,7 @@ class SvDonTuController extends Controller
 
     function getSinhVienData($masv){
         $sinhvien_static = null;
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien.json"));
+        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien_full.json"));
         foreach ($sinhvien_all as $key => $item){
             if($item->masv == $masv){
                 $sinhvien_static = $item;

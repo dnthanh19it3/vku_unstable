@@ -1,16 +1,21 @@
 @extends('layout.admin_layout')
 @section('body')
+    <style>
+        .p-3 {
+            padding: 16px;
+        }
+    </style>
     <div class="row">
         <div class="col-md-12">
             <div class="bg-white p-3">
-                <h5>Danh sách lớp</h5>
+                <h4>Danh sách lớp</h4>
                 <hr/>
                 <div class="table-responsive">
                     <div class="table-wrapper">
                         <div class="table-title">
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <h2>Danh sách lớp sinh hoạt</h2>
+                                    <h4><i class="fa fa-list"></i> Danh sách lớp sinh hoạt</h4>
                                 </div>
                                 <div class="col-sm-7">
 
@@ -34,7 +39,7 @@
                                         <tr>
                                             <td>#</td>
                                             <td>{{$lopsh_item->tenlop}}</td>
-                                            <td><a class="" href="{{route('admin.quanlylop.chitietlop', ['lop_id' => $lopsh_item->id])}}"><i class="fas fa-eye mr-2"></i>Xem</a> </td>
+                                            <td><a class="btn btn-sm btn-primary text-white" style="color: white" href="{{route('admin.quanlylop.chitietlop', ['lop_id' => $lopsh_item->id])}}"><i class="fa fa-eye mr-2"></i>Xem</a> </td>
                                         </tr>
                                     @endforeach
 

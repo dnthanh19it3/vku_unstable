@@ -28,7 +28,7 @@
             <div class="profile-userbuttons">
                 <a href="{{route('ad.suasinhvien.canhan', ['masv' => $sinhvien->masv])}}" class="btn btn-success btn-sm"><i
                             class="fa fa-edit m-right-xs mr-1"></i>Sửa hồ sơ</a>
-                <a href="{{route('sv.getlylich', ['masv' => session('masv')])}}" class="btn btn-danger btn-sm"><i
+                <a href="{{route('getlylich', ['masv' => $sinhvien->masv])}}" class="btn btn-danger btn-sm"><i
                             class="fa fa-file-export m-right-xs mr-1"></i>Xuất lý lịch</a>
             </div>
             <!-- END SIDEBAR BUTTONS -->
@@ -470,7 +470,7 @@
                                 <td>{{$item->sdtchuho}}</td>
                                 <td>{{$item->thoigianbatdau ? \Carbon\Carbon::make($item->thoigianbatdau )->format('d-m-Y') : "N/A"}}</td>
                                 <td>@if($item->trangthai)<span class="status text-success">&bull;</span> Hiện tại @else <span class="status text-danger">&bull;</span> Chỗ ở cũ @endif</td>
-                                <td>{{$item->crated_at ? \Carbon\Carbon::make($item->created_at)->format('d-m-Y') : "N/A"}}</td>
+                                <td>{{$item->created_at ? \Carbon\Carbon::make($item->created_at)->format('d-m-Y') : "N/A"}}</td>
                             </tr>
                         @empty
                         @endforelse
