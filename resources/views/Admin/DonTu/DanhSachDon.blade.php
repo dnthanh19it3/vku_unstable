@@ -1,6 +1,7 @@
 @extends('layout.admin_layout')
 @section('title', 'Danh sách hồ sơ')
 @section('body')
+    <?php $old = session()->get('old'); ?>
     <style>
         .mb-3 {
             margin-bottom: 8px;
@@ -13,46 +14,47 @@
         }
     </style>
     <div class="row">
-        <div class="col-xs-12 col-md-4 col-xl-4 col-lg-4">
-            <form method="get" class="bg-white p-3 mb-3">
+        <div class="col-xs-12 col-md-3 col-xl-3 col-lg-3">
+            <form id="filter_form" method="get" class="bg-white p-3 mb-3" >
+                <input name="trangthai" id="trangthai" value="{{ $old ? $old['trangthai'] : ""}}" hidden>
                 <h4>Bộ lọc</h4>
                 <hr/>
                 <div class="form-group">
-                    <span>Loại</span>
-                    <select class="form-control" name="loai" id="loai">
-                        <option value>Tất cả</option>
-                        <option value="0">Đơn</option>
-                        <option value="1">Yêu cầu</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <span>Trạng thái</span>
-                    <select class="form-control" name="trangthai" id="trangthai">
-                        <option value="">Tất cả</option>
-                        @foreach ($trangthai as $item)
-                            <option value="{{$item->id}}">{{ $item->tentrangthai }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
+                    <div class="profile-sidebar">
+                        <div class="profile-usermenu">
+                            <div class="profile-usermenu">
+                                <ul class="nav nav-pills nav-stacked" id="leftmenu">
+                                    @foreach($thongke as $key => $item)
+                                        <li class="{{ $item['is_active'] }}"><a href="javascript:void(0)" onclick="locTrangThai('{{$key}}')"><span class="label label-primary">{{$item['count']}}</span> {{ $item['tentrangthai'] }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END MENU -->
+                    </div>
                     <span>Tên mẫu</span>
-                    <select class="form-control" id="maudon_id" name="maudon_id">
+                    <select class="form-control" id="maudon_id" name="mau">
                         <option value="">Tất cả</option>
                         @foreach ($maudon as $item)
-                            <option value="{{$item->id}}">{{ $item->tenmaudon }}</option>
+                            <option value="{{$item->id}}" {{ $old ['mau'] == $item->id ? 'selected' : ''}}>{{ $item->tenmaudon }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <span>Mã sinh viên</span>
-                    <input type="text" id="masv" class="form-control" name="masv" placeholder="Tìm theo mã sinh viên" />
+                    <input type="text" id="masv" class="form-control" name="masv" value="{{ $old ? $old['masv'] : ""}}"  placeholder="Tìm theo mã sinh viên" />
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary" style="width: 100%">Lọc</button>
                 </div>
             </form>
+            <form method="get" class="bg-white p-3 mb-3">
+                <h4>Bộ lọc</h4>
+                <hr/>
+
+            </form>
         </div>
-        <div class="col-xs-12 col-md-8 col-xl-8 col-lg-8">
+        <div class="col-xs-12 col-md-9 col-xl-9 col-lg-9">
             <div class="bg-white p-3">
                 <div class="row">
                     <div class="col-md-12">
@@ -107,7 +109,9 @@
                                         <td style="">{{$item->tenmaudon}}</td>
                                         <td style="">{{$item->thoigiantao}}</td>
                                         <td style="">{{$item->thoigianhethan}}</td>
-                                        <td><span class="badge">{{ $item->tentrangthai }}</span></td>
+                                        <td>
+                                            <span class="badge {{ ($item->thoigianhethan < \Illuminate\Support\Carbon::now() && $item->trangthai != 2) ? 'bg-red' : 'bg-green' }}">{{ $item->tentrangthai }}</span>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -125,6 +129,12 @@
 
 @endsection
 @section('custom-script')
+    <script>
+        function locTrangThai(trangthai) {
+            $('#trangthai').val(trangthai);
+            $('#filter_form').submit();
+        }
+    </script>
     <script type="text/javascript">
         var rowTemplate = '<tr role="button" onclick="window.location=\'<%this.url%>\'">' +
             '<td><input type="checkbox" name="id" value="<%this.hodem + this.ten%>"></td>' +

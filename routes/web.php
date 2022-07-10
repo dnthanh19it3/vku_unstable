@@ -37,14 +37,9 @@ Route::prefix('sv')->middleware('sv')->group(function () {
     });
     Route::prefix('hoso')->group(function () {
         //Ho so
-        Route::post('upload', 'SvHoSoController@imgUpload')->name('upload');
         Route::get('suahoso', 'SvHoSoController@suahosoIndex')->name('suahoso');
         Route::get('xemhoso', 'SvHoSoController@hosoIndex')->name('xemhoso');
-        Route::get('xemhoso2', 'SvHoSoController@hosoIndex2')->name('xemhoso2');
         Route::post('suahoso', 'SvHoSoController@suahosoStore')->name('suahosoStore');
-        Route::get('xuatpdf', 'SvHoSoController@exportPDF');
-        //Ly Lich
-
     });
     Route::prefix('tam-tru')->group(function(){
         //Tam tru
@@ -263,8 +258,8 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
             Route::get('xoamau/{mau_id}', 'AdDonTuController@xoaMau')->name('maudon.Delete');
 
             // AJAX
-            Route::get('ajax/ajaxtruong', 'AdDonTuController@ajaxTruong')->name('ajaxTruong');
-            Route::get('ajax_truong', 'AdDonTuController@ajaxSearchTruong')->name('ajax_searchtruong');
+//            Route::get('ajax/ajaxtruong', 'AdDonTuController@ajaxTruong')->name('ajaxTruong');
+//            Route::get('ajax_truong', 'AdDonTuController@ajaxSearchTruong')->name('ajax_searchtruong');
             // Truong don
             Route::prefix('truong')->group(function (){
                 Route::post('store', 'AdDonTuController@truongStore')->name('truong.Store');
@@ -273,12 +268,14 @@ Route::prefix('admin')->middleware('chuyenvien')->group(function(){
 
 
         });
-        Route::prefix('hoso')->group(function(){
-            Route::get('danhsachhoso', 'AdDonTuController@danhSachHoSoIndex')->name('ds_hs');
+        Route::prefix('ho-so')->group(function(){
+            Route::get('danh-sach', 'AdDonTuController@danhSachHoSoIndex')->name('ds_hs');
             Route::get('ajaxdanhsachhs', 'AdDonTuController@ajaxDsHoSo')->name('ajax_ds_hs');
             Route::get('chitiet/{don_id}', 'AdDonTuController@xemHoSo')->name('xem_hs');
             // Phan hoi
             Route::post('phan-hoi/{don_id}', 'AdDonTuController@phanHoiPost')->name('admin.thutuc.phanhoi');
+            // Xu Ly
+            Route::post('xu-ly/{don_id}', 'AdDonTuController@xuLyPost')->name('admin.thutuc.xuly');
             // Ajax solve
             Route::get('tiepnhan/{don_id}', 'AdDonTuController@tiepNhanHoSo')->name('admin.thutuc.tiepnhan');
             Route::post('chuyentiep/{don_id}', 'AdDonTuController@chuyenTiep')->name('admin.thutuc.chuyentiep');

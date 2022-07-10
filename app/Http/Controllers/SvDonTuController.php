@@ -7,6 +7,7 @@ use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class SvDonTuController extends Controller
@@ -63,6 +64,7 @@ class SvDonTuController extends Controller
         $namhoc_hocky = DB::table('table_namhoc_hocky')->where('hienhanh', 1)->first();
         // Prepare mẫu đơn data
         $thongtindon = [
+            'id' => Str::uuid(),
             'masv' => session('masv'),
             'maudon_id' => $maudon_id,
             'thoigiantao' => Carbon::now(),
@@ -475,22 +477,21 @@ class SvDonTuController extends Controller
 
                 if (count($array_file_url) > 0) {
                     ksort($array_file_url);
-                    dd("Go there");
                     $chitietdon['traloi_taptin'] = json_encode((object)$array_file_url);
                 } else {
-                    dd("Go here");
                     $chitietdon['traloi_taptin'] = json_encode([]);
                 }
             }
         } else {
             $chitietdon['traloi_taptin'] = $don_chitiet->traloi_taptin;
         }
-        
+
+
         if ($flag) {
             DB::beginTransaction();
             $update = DB::table('table_don')->where('id', $don_id)->update($thongtindon);
             if($update){
-                $disabled_all_oldrecord = DB::table('table_don_chitiet')->where('don_id', $don->id)->update(['trangthai' => 0]);
+                $disabled_all_oldrecord = DB::table('table_don_chitiet')->where('don_id', $don->id)->update(['enable' => 0]);
                 $update_chitiet = DB::table('table_don_chitiet')->insert($chitietdon);
                 if ($disabled_all_oldrecord && $update_chitiet) {
                     DB::commit();
@@ -512,7 +513,7 @@ class SvDonTuController extends Controller
 
     function getSinhVienData($masv){
         $sinhvien_static = null;
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien_full.json"));
+        $sinhvien_all = json_decode(Storage::disk('public')->get(("config/sinhvien_full.json")));
         foreach ($sinhvien_all as $key => $item){
             if($item->masv == $masv){
                 $sinhvien_static = $item;

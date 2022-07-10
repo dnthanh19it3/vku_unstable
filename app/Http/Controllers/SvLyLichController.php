@@ -18,7 +18,6 @@ class SvLyLichController extends Controller
             if($sinhvien_chitiet != null){
                 if($sinhvien_chitiet->thanhphangiadinh != null){
                     $sinhvien_chitiet->thanhphangiadinh = ($sinhvien_chitiet->thanhphangiadinh != null) ? explode('|', $sinhvien_chitiet->thanhphangiadinh) : null;
-
                 }
             }
             

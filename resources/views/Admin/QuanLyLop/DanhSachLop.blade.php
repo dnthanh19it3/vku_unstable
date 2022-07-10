@@ -42,11 +42,9 @@
                                             <td><a class="btn btn-sm btn-primary text-white" style="color: white" href="{{route('admin.quanlylop.chitietlop', ['lop_id' => $lopsh_item->id])}}"><i class="fa fa-eye mr-2"></i>Xem</a> </td>
                                         </tr>
                                     @endforeach
-
                             @endforeach
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>

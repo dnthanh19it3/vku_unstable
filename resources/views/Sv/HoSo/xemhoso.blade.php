@@ -1,7 +1,7 @@
 @extends('layout.sv_layout')
 @section('body')
 
-    <div class="col-lg-3 col-xs-12">
+    <div class="col-lg-3 col-xs-12" style="margin-bottom: 8px">
         <div class="profile-sidebar">
             <!-- SIDEBAR USERPIC -->
             <div class="profile-userpic">

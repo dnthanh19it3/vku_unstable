@@ -1,7 +1,7 @@
 @extends('layout.admin_layout')
 @section('body')
 
-    <form method="post" action="{{route('ad.hrm.nhanvien.sua.post')}}" class="row">
+    <form method="post" action="{{route('ad.hrm.nhanvien.sua.post', ['ma_gv' => 'natuan123'])}}" class="row">
         {{ csrf_field() }}
         <div class="col-12 demuc-wrapper bg-white p-3 mb-3">
             <div class="title">

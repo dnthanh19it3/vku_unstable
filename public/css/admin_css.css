@@ -4,6 +4,10 @@
   font-family: system-ui;
 }
 
+.p-3 {
+  padding: 2rem;
+}
+
 a.disabled {
   pointer-events: none;
   cursor: not-allowed;

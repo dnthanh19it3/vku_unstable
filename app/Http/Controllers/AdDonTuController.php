@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdDonTuController extends Controller
 {
-    function getLoaiDon($don_id){
+    function getLoaiDon($don_id)
+    {
         $don = DB::table('table_don')->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.id')
             ->where('table_don.don_id', $don_id)
             ->first();
-        if ($don->loai_id){
+        if ($don->loai_id) {
             return "Đơn";
         } else {
             return "Yêu cầu";
@@ -109,7 +111,7 @@ class AdDonTuController extends Controller
     {
         $danhsachmau = DB::table('table_maudon');
 
-        if(isset($request->loai_id)){
+        if (isset($request->loai_id)) {
             $danhsachmau->where('loai_id', '=', $request->loai_id);
         }
 
@@ -162,15 +164,15 @@ class AdDonTuController extends Controller
         $listmauddon = DB::table('table_maudon')->where('maudon_id', '<>', $mau_id)->get();
         // Convert to array
         $maudon->truong = explode(',', $maudon->truong);
-        foreach ($listmauddon as $key => $item){
+        foreach ($listmauddon as $key => $item) {
             $item->truong = explode(',', $item->truong);
         }
         //Loop for compare
-        foreach ($maudon->truong as $key_truongxoa => $value_truongxoa){
-            foreach ($listmauddon as $key_maudon => $value_maudon){
+        foreach ($maudon->truong as $key_truongxoa => $value_truongxoa) {
+            foreach ($listmauddon as $key_maudon => $value_maudon) {
                 $check = array_search($value_truongxoa, $value_maudon->truong);
                 dump($value_maudon, $value_truongxoa, $check);
-                if(is_numeric($check)){
+                if (is_numeric($check)) {
                     echo "Tìm $value_truongxoa | Tìm thấy | $check | Bỏ qua<hr/>";
                     unset($maudon->truong[$key_truongxoa]);
                     break;
@@ -182,30 +184,29 @@ class AdDonTuController extends Controller
         }
         // Tìm trường không phải trường tĩnh (Họ tên, ngày sinh, giới tính, blah blah
         $dynamic_field = array();
-        foreach ($maudon->truong as $key => $item){
+        foreach ($maudon->truong as $key => $item) {
             $item = DB::table('table_maudon_chitiet')->where('id', $item)->where('lienket', null)->first();
             array_push($dynamic_field, $item);
         }
 
-        foreach ($dynamic_field as $key => $item){
+        foreach ($dynamic_field as $key => $item) {
             $delete = DB::table('table_maudon_chitiet')->delete($item->id);
-            if(!$delete){
+            if (!$delete) {
                 $flag = 0;
             }
         }
         $delete = DB::table('table_maudon')->where('maudon_id', $mau_id)->delete();
-        if(!$delete){
+        if (!$delete) {
             $flag = 0;
         }
 
 
-
-        if(!$flag){
+        if (!$flag) {
             DB::rollBack();
-            return back()->with(['flash_level'=>'danger','flash_message'=>'Thất bại!']);
+            return back()->with(['flash_level' => 'danger', 'flash_message' => 'Thất bại!']);
         } else {
             DB::commit();
-            return back()->with(['flash_level'=>'success','flash_message'=>'Thành công!']);
+            return back()->with(['flash_level' => 'success', 'flash_message' => 'Thành công!']);
         }
     }
 
@@ -214,9 +215,10 @@ class AdDonTuController extends Controller
            phản hồi controller
     */
 
-    function phanHoiPost(Request $request, $don_id){
+    function phanHoiPost(Request $request, $don_id)
+    {
         $nguoigui = "dnthanh@vku.udn.vn";
-        if($request->noidung != null){
+        if ($request->noidung != null) {
             $insert = DB::table('table_don_phanhoi')->insert([
                 'don_id' => $don_id,
                 'nguoigui' => $nguoigui,
@@ -225,7 +227,7 @@ class AdDonTuController extends Controller
                 'created_at' => \Carbon\Carbon::now()
             ]);
 
-            if($insert){
+            if ($insert) {
                 $request->session()->flash('success', "Phản hồi thành công!");
                 return back();
             } else {
@@ -236,37 +238,85 @@ class AdDonTuController extends Controller
     }
 
     /*
-        Xử lý đơn controller
+     *     Xử lý đơn controller
+     *  trangthai
+     *  0 => Waiting
+     *  1 => Doing
+     *  2 => Done
+     *  3 => Decline
+     *  4 => Canceled
     */
 
 
     // List hồ sơ
     function danhSachHoSoIndex(Request $request)
     {
+        $thongke = [];
+        $sapxep = $request->sapxep;
+        $trangthai = $request->trangthai;
+        $loai = $request->loai;
+        $mau = $request->mau;
+        $masv = $request->mau;
+
+        session(
+            [
+                'old' => [
+                    'sort' => '',
+                    'mau' => $request->mau,
+                    'masv' => $request->masv,
+                    'trangthai' => $request->trangthai
+                ]
+            ]);
+
         $trangthai = DB::table('table_don_trangthai')->get();
+
+        foreach ($trangthai as $key => $item) {
+            $thongke[$key]['count'] = DB::table('table_don')->where('trangthai', $item->id)->count();
+            $thongke[$key]['tentrangthai'] = $item->tentrangthai;
+            $thongke[$key]['is_active'] = ($request->trangthai == $key ? 'active' : '') ?? '';
+        }
+
+
+        $thongke[5] = [
+            'count' => $thongke[5]['count'] = DB::table('table_don')
+                ->whereIn('trangthai', [0, 1])
+                ->whereDate('thoigianhethan', '<=', Carbon::now())
+                ->count(),
+            'tentrangthai' => 'Hết hạn',
+            'is_active' => ($request->trangthai == 5 ? 'active' : '') ?? ''
+        ];
+
         $maudon = DB::table('table_maudon')->get();
 
         $listdon = DB::table('table_don as don')
             ->join('table_don_trangthai as tt', 'don.trangthai', 'tt.id')
             ->join('table_sinhvien as sv', 'don.masv', 'sv.masv')
             ->join('table_maudon as mau', 'don.maudon_id', 'mau.id');
-        if($request->maudon_id){
-            $listdon->orWhere('don.maudon_id', $request->maudon_id);
+
+        if ($request->mau) {
+            $listdon->where('don.maudon_id', $request->mau);
         }
-        if($request->masv){
-            $listdon->orWhere('sv.masv', $request->masv);
+        if ($request->masv) {
+            $listdon->where('don.masv', $request->masv);
         }
-        if($request->trangthai){
-            $listdon->orWhere('don.trangthai', $request->trangthai);
+        if ($request->trangthai) {
+            if ($request->trangthai == 5) {
+                $listdon
+                    ->whereIn('don.trangthai', [0, 1])
+                    ->whereDate('don.thoigianhethan', '<=', Carbon::now());
+            } else {
+                $listdon->where('don.trangthai', $request->trangthai);
+            }
         }
+
         $listdon = $listdon->get(['don.*', 'sv.hodem', 'sv.ten', 'mau.tenmaudon', 'tt.tentrangthai']);
-//        dd($listdon);
-        dump($listdon, $request->all());
+
 
         return view('Admin/DonTu/DanhSachDon')->with([
             'trangthai' => $trangthai,
             'maudon' => $maudon,
-            'listdon' => $listdon
+            'listdon' => $listdon,
+            'thongke' => $thongke
         ]);
     }
 
@@ -300,20 +350,20 @@ class AdDonTuController extends Controller
             //Ngay het han
             $ngayhethan = Carbon::make($item->thoigianhethan);
 
-            if ($item->hoanthanh == 0 && $ngayhethan->isToday() == false){
-                $item->thoigianhethan = $item->thoigianhethan . " (" . $ngayhethan->diffForHumans(Carbon::now()) .')';
-            } elseif ($item->hoanthanh == 0 && $ngayhethan->isToday()){
+            if ($item->hoanthanh == 0 && $ngayhethan->isToday() == false) {
+                $item->thoigianhethan = $item->thoigianhethan . " (" . $ngayhethan->diffForHumans(Carbon::now()) . ')';
+            } elseif ($item->hoanthanh == 0 && $ngayhethan->isToday()) {
                 $item->thoigianhethan = "Hôm nay";
             }
             //Trang thai
 
             $timeline = DB::table('table_don_logs')->where('don_id', $item->don_id)->orderBy('thoigian', 'DESC')->get();
 
-            if($item->hoanthanh == 0 && $item->trangthai > 0) {
+            if ($item->hoanthanh == 0 && $item->trangthai > 0) {
                 $item->tentrangthai = "Đang xử lý";
-            } elseif($item->trangthai == 0) {
+            } elseif ($item->trangthai == 0) {
                 $item->tentrangthai = "Chưa hoàn thành";
-            } elseif($item->hoanthanh == 1){
+            } elseif ($item->hoanthanh == 1) {
                 $item->hoanthanh = "Hoàn thành";
             }
         }
@@ -324,11 +374,14 @@ class AdDonTuController extends Controller
     // View xem hồ sơ
     function xemHoSo(Request $request, $don_id)
     {
+        Carbon::setLocale('vi');
+        $trangthai = DB::table('table_don_trangthai')->get();
         $don = DB::table('table_don as don')
             ->join('table_maudon as mau', 'don.maudon_id', '=', 'mau.id')
             ->join('table_donvi_phongban as pb', 'mau.donvi_id', '=', 'pb.id')
             ->join('table_don_trangthai as tt', 'don.trangthai', '=', 'tt.id')
             ->where('don.id', $don_id)
+            ->where('don.enable', 1)
             ->first(['don.*', 'pb.tenphongkhoa', 'tt.tentrangthai']);
         $mau = null;
         $traloi_cauhoi = null;
@@ -360,7 +413,38 @@ class AdDonTuController extends Controller
         } else {
             die("Lỗi khi truy xuất mẫu đơn! Vui lòng kiểm tra lại");
         }
-//        dd($don, $cauhoi, $traloi_cauhoi);
+
+        foreach ($cauhoi as $key => $item) {
+            if ($cauhoi[$key]['dapan']) {
+                if ($cauhoi[$key]['loai'] == 3) {
+                    $temp = $traloi_cauhoi[$key];
+                    $temp_dapan = [];
+                    foreach ($temp as $key_traloi => $temp_traloi) {
+                        foreach ($cauhoi[$key]['dapan'] as $key_dapan => $value_dapan) {
+                            if ($temp_traloi == $key_dapan) {
+                                array_push($temp_dapan, $value_dapan);
+                            }
+                        }
+                    }
+                    $traloi_cauhoi[$key] = $temp_dapan;
+                } elseif ($cauhoi[$key]['loai'] == 2) {
+                    foreach ($cauhoi[$key]['dapan'] as $key_dapan => $value_dapan) {
+                        if ($key_dapan == $traloi_cauhoi[$key]) {
+                            $traloi_cauhoi[$key] = $value_dapan;
+                            break;
+                        }
+                    }
+                } elseif ($cauhoi[$key]['loai'] == 4) {
+                    foreach ($cauhoi[$key]['dapan'] as $key_dapan => $value_dapan) {
+                        if ($key_dapan == $traloi_cauhoi[$key]) {
+                            $traloi_cauhoi[$key] = $value_dapan;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         return view('Admin/DonTu/ChiTietDon')->with([
             'don' => $don,
             'mau' => $mau,
@@ -370,20 +454,56 @@ class AdDonTuController extends Controller
             'taptin' => $taptin,
             'traloi_cauhoi' => $traloi_cauhoi,
             'traloi_taptin' => $traloi_taptin,
-            'phanhoi' => $phanhoi
+            'phanhoi' => $phanhoi,
+            'trangthai' => $trangthai,
+            'hethan' => ($don->trangthai != [2, 3, 4] && $don->thoigianhethan < Carbon::now()) ? 1 : 0,
+            'hethan_humantime' => Carbon::make($don->thoigianhethan)->diffForHumans(Carbon::now()) ?? 0
         ]);
+
 
     }
 
     // Controller xử lý
+    function xuLyPost(Request $request, $don_id)
+    {
+        $don = DB::table('table_don')->where('id', $don_id)->first();
+        if (!$don_id) {
+            die('Không tìm thấy đơn này. Vui lòng kiểm tra lại!');
+        }
+        $xuly = $request['trangthai'];
+        $update_data = [];
+        switch ($xuly) {
+            case 0:
+                $update_data = ['trangthai' => 0, 'ghichu' => $request->ghichu, 'chuyenvien_id' => session('chuyenvien_id') ?? 'chuyenvien@gmail.com'];
+                break;
+            case 1:
+                $update_data = ['trangthai' => 1, 'ghichu' => $request->ghichu, 'chuyenvien_id' => session('chuyenvien_id') ?? 'chuyenvien@gmail.com'];
+                break;
+            case 2:
+                $update_data = ['trangthai' => 2, 'ghichu' => $request->ghichu, 'chuyenvien_id' => session('chuyenvien_id') ?? 'chuyenvien@gmail.com'];
+                break;
+            case 3:
+                $update_data = ['trangthai' => 3, 'ghichu' => $request->ghichu, 'chuyenvien_id' => session('chuyenvien_id') ?? 'chuyenvien@gmail.com'];
+                break;
+            case 4:
+                $update_data = ['trangthai' => 4, 'ghichu' => $request->ghichu, 'chuyenvien_id' => session('chuyenvien_id') ?? 'chuyenvien@gmail.com'];
+                break;
+        }
+        $update_don =  DB::table('table_don')->where('id', $don_id)->update($update_data);
+        if (!$update_don) {
+            return back()->with(['flash_level' => 'danger', 'flash_message' => 'Thất bại!']);
+        }
+        return back()->with(['flash_level' => 'success', 'flash_message' => 'Thành công!']);
+    }
+
     function tiepNhanHoSo(Request $request, $don_id)
     {
         $loai = $this->getLoaiDon($don_id);
-        $addLog =  DB::table('table_don_logs')->insert([
+        $addLog = DB::table('table_don_logs')->insert([
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'trangthai' => 1,
-            'noidung' => $loai ." đã được tiếp nhận",
+            'noidung' => $loai . " đã được tiếp nhận",
             'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         $capnhat = DB::table('table_don')
@@ -392,18 +512,17 @@ class AdDonTuController extends Controller
                 'chuyenvien_id' => session('hoten'),
                 'trangthai' => 1
             ]);
-
-        pushNotify($addLog);
         return redirect()->back();
     }
 
-    function duyet(Request $request, $don_id) {
+    function duyet(Request $request, $don_id)
+    {
         $loai = $this->getLoaiDon($don_id);
-        $addLog =  DB::table('table_don_logs')->insert([
+        $addLog = DB::table('table_don_logs')->insert([
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'trangthai' => 2,
-            'noidung' => $loai." của bạn đã được chấp nhận và chờ chuyên viên ký xác nhận",
+            'noidung' => $loai . " của bạn đã được chấp nhận và chờ chuyên viên ký xác nhận",
             'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         $capnhat = DB::table('table_don')
@@ -412,11 +531,11 @@ class AdDonTuController extends Controller
                 'trangthai' => 2
             ]);
 
-        pushNotify($addLog);
         return redirect()->back();
     }
 
-    function chuyenTiep(Request $request, $don_id){
+    function chuyenTiep(Request $request, $don_id)
+    {
         $don = DB::table('table_don')->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.id')->where('don_id', '=', $don_id)->first();
         $update = DB::table("table_don")->where('don_id', '=', $don_id)->update([
             'chuyentiep' => 1,
@@ -424,7 +543,7 @@ class AdDonTuController extends Controller
             'lydo' => $request->lydo,
             'thoigianhethan' => Carbon::make($don->thoigianhethan)->addDays($don->thoigianxuly),
         ]);
-        $addLog =  DB::table('table_don_logs')->insert([
+        $addLog = DB::table('table_don_logs')->insert([
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'noidung' => "Đơn đã được chuyển tiếp sang phòng " . DB::table('table_donvi_phongban')->where('id', $request->phongban)->first()->tenphongkhoa,
@@ -434,13 +553,14 @@ class AdDonTuController extends Controller
         return redirect()->back();
     }
 
-    function daXacNhan(Request $request, $don_id) {
+    function daXacNhan(Request $request, $don_id)
+    {
         $loai = $this->getLoaiDon($don_id);
-        $addLog =  DB::table('table_don_logs')->insert([
+        $addLog = DB::table('table_don_logs')->insert([
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'trangthai' => 4,
-            'noidung' => "Hiệu trưởng xác nhận " .$loai.". Hẹn nhận tại phòng ABC từ ".$request->thoigianhennhan,
+            'noidung' => "Hiệu trưởng xác nhận " . $loai . ". Hẹn nhận tại phòng ABC từ " . $request->thoigianhennhan,
             'chuyenvien_id' => "chuyenvien@vku.udn.vn"
         ]);
         $capnhat = DB::table('table_don')
@@ -450,7 +570,7 @@ class AdDonTuController extends Controller
                 'hoanthanh' => 1,
                 'thoigianhoanthanh' => Carbon::now()
             ]);
-        if($addLog && $capnhat){
+        if ($addLog && $capnhat) {
             pushNotify(1);
         }
         $don_info = DB::table('table_don')
@@ -461,7 +581,7 @@ class AdDonTuController extends Controller
         $to = $don_info->ftoken;
         $data = array(
             'title' => 'Bộ phân một cửa VKU',
-            'body' => $loai . ' của bạn đã được chấp nhận. Bạn có thể nhận '. $loai .' từ '.$request->thoigianhennhan
+            'body' => $loai . ' của bạn đã được chấp nhận. Bạn có thể nhận ' . $loai . ' từ ' . $request->thoigianhennhan
         );
         notify($to, $data);
         return redirect()->back();
@@ -470,7 +590,7 @@ class AdDonTuController extends Controller
     function tuchoiHoSo(Request $request, $don_id)
     {
         $loai = $this->getLoaiDon($don_id);
-        $addLog =  DB::table('table_don_logs')->insert([
+        $addLog = DB::table('table_don_logs')->insert([
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'buoc' => 4,
@@ -480,7 +600,7 @@ class AdDonTuController extends Controller
         $capnhat = DB::table('table_don')
             ->where('don_id', "=", $don_id)
             ->update(['trangthai_id' => 2]);
-        if($addLog && $capnhat){
+        if ($addLog && $capnhat) {
             pushNotify(1);
         }
         return redirect()->back();
@@ -489,7 +609,7 @@ class AdDonTuController extends Controller
     function kinhanHoSo(Request $request, $don_id)
     {
         $loai = $this->getLoaiDon($don_id);
-        $addLog =  DB::table('table_don_logs')->insert([
+        $addLog = DB::table('table_don_logs')->insert([
             'don_id' => $don_id,
             'thoigian' => Carbon::now(),
             'buoc' => 4,
@@ -499,7 +619,7 @@ class AdDonTuController extends Controller
         $capnhat = DB::table('table_don')
             ->where('don_id', "=", $don_id)
             ->update(['danhan' => 1]);
-        if($addLog && $capnhat){
+        if ($addLog && $capnhat) {
             pushNotify(1);
         }
         return redirect()->back();
@@ -510,35 +630,34 @@ class AdDonTuController extends Controller
     */
     function thuTucDashboard(Request $request)
     {
-//        $hoanthanh = DB::table('table_don')->where('hoanthanh', 1)->get(); //OK
         $listphongban = DB::table('table_donvi_phongban')
             ->orWhere('id', 2)
             ->orWhere('id', 7)
             ->orWhere('id', 8)
             ->orWhere('id', 9)
             ->orWhere('id', 10);
+
         $chuahoanthanh = DB::table('table_don')
             ->join('table_maudon', 'table_don.maudon_id', '=', 'table_maudon.id')
             ->join('table_sinhvien', 'table_don.masv', '=', 'table_sinhvien.masv')
             ->where('table_don.hoanthanh', 0);
 
-        if(isset($request->phongban)){
+        if (isset($request->phongban)) {
             $chuahoanthanh = $chuahoanthanh->where('phongban_xuly', $request->phongban)->get();
             $listphongban = $listphongban->where('id', $request->phongban)->get();
-        }else{
+        } else {
             $chuahoanthanh = $chuahoanthanh->get(['table_don.*', 'table_sinhvien.hodem', 'table_sinhvien.masv', 'table_sinhvien.ten', 'table_maudon.tenmaudon']);
             $listphongban = $listphongban->get();
         }
-//        dd(count($chuahoanthanh));
 
         // Tạo bộ đếm chưa hoàn thnahf
-        foreach ($listphongban as $key => $value){
+        foreach ($listphongban as $key => $value) {
             $value->soluong = 0;
         }
         // Đếm
-        foreach ($chuahoanthanh as $key1 => $value1){
-            foreach ($listphongban as $key2 => $value2){
-                if($value1->phongban_xuly == $value2->id){
+        foreach ($chuahoanthanh as $key1 => $value1) {
+            foreach ($listphongban as $key2 => $value2) {
+                if ($value1->phongban_xuly == $value2->id) {
                     $listphongban[$key2]->soluong += 1;
                 }
             }
@@ -552,32 +671,32 @@ class AdDonTuController extends Controller
         $hethantuannay = array();
 
 
-        foreach ($chuahoanthanh as $key => $item){
-            if($item->trangthai == 0){
+        foreach ($chuahoanthanh as $key => $item) {
+            if ($item->trangthai == 0) {
                 array_push($chotiepnhan, $item);
             }
-            if($item->trangthai > 0){
+            if ($item->trangthai > 0) {
                 array_push($dangxuly, $item);
             }
-            if ($item->thoigianhethan == Carbon::now()->toDateString()){
+            if ($item->thoigianhethan == Carbon::now()->toDateString()) {
                 array_push($hethanhomnay, $item);
             }
-            if (Carbon::make($item->thoigianhethan)->addDay()->isPast()){
+            if (Carbon::make($item->thoigianhethan)->addDay()->isPast()) {
                 array_push($dahethan, $item);
             }
-            if (Carbon::make($item->thoigianhethan)->isCurrentWeek()){
+            if (Carbon::make($item->thoigianhethan)->isCurrentWeek()) {
                 array_push($hethantuannay, $item);
             }
         }
-        $listphongban_chart = (object) [];
+        $listphongban_chart = (object)[];
         $tenphongkhoa = array();
         $soluong = array();
-        foreach ($listphongban as $item){
+        foreach ($listphongban as $item) {
             array_push($tenphongkhoa, $item->tenphongkhoa);
             array_push($soluong, $item->soluong);
         }
-        (object) $listphongban_chart->tenphongkhoa = $tenphongkhoa;
-        (object) $listphongban_chart->soluong =  $soluong;
+        (object)$listphongban_chart->tenphongkhoa = $tenphongkhoa;
+        (object)$listphongban_chart->soluong = $soluong;
 
 //        Stats
         $tongso = DB::table('table_don')->count(); //OK
@@ -589,8 +708,8 @@ class AdDonTuController extends Controller
             ->where('hoanthanh', 1)
             ->whereRaw('thoigianhoanthanh > thoigianhethan')
             ->count();
-        $dunghan_percent = ($tongso - count($chuahoanthanh) > 0) ?($dunghan / ($tongso - count($chuahoanthanh))) * 100 : 0;
-        $quahan_percent = ($tongso - count($chuahoanthanh) > 0) ?($quahan / ($tongso - count($chuahoanthanh))) * 100 : 0;
+        $dunghan_percent = ($tongso - count($chuahoanthanh) > 0) ? ($dunghan / ($tongso - count($chuahoanthanh))) * 100 : 0;
+        $quahan_percent = ($tongso - count($chuahoanthanh) > 0) ? ($quahan / ($tongso - count($chuahoanthanh))) * 100 : 0;
         $stats = [
             'tongso' => $tongso,
             'dahoanthanh' => ($tongso - count($chuahoanthanh)),
@@ -601,7 +720,6 @@ class AdDonTuController extends Controller
             'quahan_percent' => $quahan_percent
         ];
 
-//        dd($chuahoanthanh);
 
         return view('Admin/DonTu/DonTuDash')->with([
             'listphongban_chart' => $listphongban_chart,
@@ -611,14 +729,16 @@ class AdDonTuController extends Controller
             'hethanhomnay' => $hethanhomnay,
             'hethantuannay' => $hethantuannay,
             'dahethan' => $dahethan,
-            'stats' => (object) $stats
+            'stats' => (object)$stats
         ]);
     }
-    function getSinhVienData($masv){
+
+    function getSinhVienData($masv)
+    {
         $sinhvien_static = null;
-        $sinhvien_all = json_decode(file_get_contents("json_test/sinhvien_full.json"));
-        foreach ($sinhvien_all as $key => $item){
-            if($item->masv == $masv){
+        $sinhvien_all = json_decode(Storage::disk('public')->get(("config/sinhvien_full.json")));
+        foreach ($sinhvien_all as $key => $item) {
+            if ($item->masv == $masv) {
                 $sinhvien_static = $item;
                 break;
             }
@@ -626,22 +746,23 @@ class AdDonTuController extends Controller
         $sinhvien_chitiet = DB::table('table_sinhvien_chitiet')
             ->where('table_sinhvien_chitiet.masv', $masv)
             ->first();
-        $sinhvien = array_merge((array) $sinhvien_chitiet, (array) $sinhvien_static);
+        $sinhvien = array_merge((array)$sinhvien_chitiet, (array)$sinhvien_static);
         $sinhvien['email'] = DB::table('table_sinhvien')->where('masv', $masv)->first('email')->email;
-//        dd($sinhvien);
         return $sinhvien;
     }
-    function getTruongTinh($key, $data){
-        $data = (object) $data;
+
+    function getTruongTinh($key, $data)
+    {
+        $data = (object)$data;
         switch ($key) {
             case 'hoten':
-                return $data->hodem." ".$data->ten;
+                return $data->hodem . " " . $data->ten;
             case 'ngaysinh':
                 return vnDate($data->ngaysinh);
             case 'gioitinh':
                 return $data->gioitinh ? 'Nữ' : 'Nam';
             case 'tongiao':
-                if($data->tongiao == 0){
+                if ($data->tongiao == 0) {
                     return "Không";
                 }
                 return $data->tongiao;
@@ -659,8 +780,8 @@ class AdDonTuController extends Controller
             case 'hokhauthuongtru':
                 return $data->xa_phuong . ', ' . $data->quan_huyen . ', ' . $data->tinh_thanh;
             default:
-                if(property_exists($data, $key)){
-                    return ((array) $data)[$key];
+                if (property_exists($data, $key)) {
+                    return ((array)$data)[$key];
                 }
                 return "N/A";
         }
